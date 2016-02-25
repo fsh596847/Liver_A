@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="16dp">
+    
+	<!-- <RelativeLayout 
+	    android:layout_width="match_parent"
+    	android:layout_height="wrap_content">
+    	
+	    <TextView 
+	        android:id="@+id/input_username_edittext_label"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/phone_number"
+	        android:textSize="@dimen/font_size_hint"/> -->
+	        
+	    <!-- <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_inputlayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">  -->
+            
+         <RelativeLayout 
+            android:layout_width="match_parent"
+ 			android:layout_height="wrap_content"
+ 			android:orientation="horizontal">
+ 			
+		    <EditText
+		        android:id="@+id/input_username_edittext"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@drawable/edt_border"
+		        android:padding="16dp"
+		        android:drawablePadding="8dp"
+	            android:drawableLeft="@drawable/phone"
+		        android:hint="@string/phone_number"
+		        android:singleLine="true"
+		        android:inputType="phone"
+		        android:textSize="18sp"
+		        android:textColor="@color/black"
+		        android:textCursorDrawable="@null"/>
+		   
+		    <ImageView
+	               android:id="@+id/iv_clear_username"
+	               android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/clear"
+	               android:layout_alignParentRight="true"
+	               android:contentDescription="@null"
+	               android:visibility="gone" />	
+        </RelativeLayout>
+	    <!-- <View
+            style="@style/HorizontalDivideLine"
+            android:paddingBottom="@dimen/padding_for_divider"/>-->
+   <!--  </RelativeLayout> -->
+    
+	<android.support.v7.widget.AppCompatButton
+	    android:id="@+id/btn_next" 
+	    android:layout_width="match_parent"
+	    android:layout_height="40dp"
+	    android:background="@drawable/btn_small_white_selector"
+	    android:layout_gravity="center"
+	    android:layout_below="@id/iv_clear_username"
+	    android:layout_marginTop="24dp"
+	    android:paddingRight="8dp"
+	    android:paddingLeft="8dp"
+	    android:gravity="center"
+	    android:text="@string/the_next_step"
+	    android:textColor="@color/green"
+	    android:textSize="16sp"/> 
+</LinearLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/toolbar"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/appThemePrimary"
+	app:theme="@style/ThemeOverlay.AppCompat.ActionBar" >
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:paddingBottom="2dp">
+
+		<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/linearLayout">
+
+            <TextView
+                android:id="@+id/tv_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="北京"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/edt_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="8dp"
+                android:padding="8dp"
+                android:minWidth="160dp"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:background="@drawable/search_box_background"/>
+
+        </LinearLayout>
+
+		<RelativeLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+			<TextView
+				android:id="@+id/tv_country"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:drawableRight="@drawable/arrow_down"
+				android:drawablePadding="2dp"
+				android:textColor="@color/white"
+				android:textSize="16sp"
+				android:text="海淀"/>
+
+            <TextView
+                android:id="@+id/txt_character"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:text="烤鸭"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:background="@drawable/oval_line"
+                android:enabled="false"
+                android:typeface="normal" />
+		</RelativeLayout>
+
+	</LinearLayout>
+</android.support.v7.widget.Toolbar>
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:layout_marginBottom="10dp"
+    android:orientation="vertical"
+    android:background="@color/white" >
+    
+	
+    <RelativeLayout 
+        android:id="@+id/rl_00"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="16dp">
+        
+        <ImageView 
+            android:id="@+id/img_icon_app"
+            android:layout_width="72dp"
+            android:layout_height="72dp" />
+        
+        <TextView 
+            android:id="@+id/tv_profile_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_icon_app"
+            android:paddingTop="16dp"
+            android:text="版本 1.0.0"
+            android:textColor="@color/app_theme_secondary_textcolor"
+            android:textSize="14sp"/>
+        
+    </RelativeLayout>
+    
+    
+    <LinearLayout 
+        android:id="@+id/rl_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:orientation="vertical">
+             
+        <TextView
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="@string/version"
+        	android:textColor="@color/app_theme_secondary_textcolor"
+        	android:textSize="12sp"/>
+            
+       <TextView
+	       	android:layout_width="wrap_content"
+	       	android:layout_height="wrap_content"
+	       	android:layout_marginTop="10dp"
+	       	android:text="All Rights Reserved"
+	       	android:textColor="@color/app_theme_secondary_textcolor"
+        	android:textSize="12sp"/>
+            
+    </LinearLayout>
+    
+</RelativeLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/icon_person_background"
+        android:padding="16dp" >
+
+        <com.fidots.restaurant.ui.widget.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:border_color="@color/white"
+            app:border_width="2dip"
+            android:src="@drawable/widget_dface" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:text="@string/login"/>
+    </LinearLayout>
+
+    <View
+        style="@style/h_line" />
+
+    <include layout="@layout/fragment_user_center_information" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_logout"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:padding="10dp"
+        android:text="注销账号"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@color/appThemePrimary"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

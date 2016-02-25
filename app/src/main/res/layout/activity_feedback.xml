@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp" >
+    
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/feedback_suggestion"/>
+    
+	<EditText
+        android:id="@+id/edtTxt_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:background="@drawable/edt_border"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"                   
+        android:focusableInTouchMode="true"
+        android:gravity="top"
+        android:textSize="16sp"/>
+	
+	 <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text=""/>
+	 
+    <EditText
+        android:id="@+id/edtTxt_contact_info"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/edt_border"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"                   
+        android:focusableInTouchMode="true"
+        android:textSize="16sp"
+        android:textCursorDrawable="@null"
+        android:visibility="gone"/>
+    
+</LinearLayout>

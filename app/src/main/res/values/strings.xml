@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Restaurant</string>
+    
+    <string name="main_tab_home_name">首页</string>
+    <string name="main_tab_local_yellow_page">本地黄页</string>
+    <string name="main_tab_partner">合作商</string>
+    <string name="main_tab_me">我的</string>
+
+    <string name="restaurant_tab_dishes">菜品价格</string>
+    <string name="restaurant_tab_cabbage">包菜标准</string>
+    <string name="restaurant_tab_rooms">包间情况</string>
+    <string name="restaurant_tab_drinks">酒水价格</string>
+
+    <string name="loading">加载中…</string>
+    <string name="loading_no_more">已显示全部</string>
+    <string name="no_data">没有更多</string>
+    <string name="error_view_loading">加载中…</string>
+
+    <!-- 商家列表 -->
+    <string name="all_merchant">全部商家</string>
+    <string name="today_promotion">今日优惠</string>
+    <string name="food">美食</string>
+    <string name="sort">排序</string>
+    <string name="switch_address">切换地址</string>
+
+    <!-- 特产商家 -->
+    <string name="local_product">本店商品</string>
+    <string name="partner">合作商</string>
+    <string name="local_page">本地黄页</string>
+
+    <!-- 我的 -->
+    <string name="login">登录</string>
+    <string name="my">我的</string>
+    <string name="account_security">账户安全</string>
+    <string name="message_notification">消息提醒</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="feedback_suggestion">意见反馈</string>
+    <string name="check_update">检查更新</string>
+    <string name="about_us">关于我们</string>
+    <string name="exit">退出登录</string>
+
+    <!-- 登录注册 -->
+    <string name="username">用户名</string>
+    <string name="set_password">设置密码</string>
+    <string name="phone_number">手机号</string>
+    <string name="password">密码</string>
+    <string name="quick_register">快速注册</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="change_password">修改密码</string>
+    <string name="verifycode_already_send">已发送验证码到手机：</string>
+    <string name="check_code">验证码</string>
+    <string name="input_verification_code_tips">输入验证码</string>
+    <string name="regain_verify_code">获取验证码</string>
+    <string name="the_next_step">下一步</string>
+
+    <!-- 设置-->
+    <string name="version">版本</string>
+    <string name="copyright_zh">版权所有</string>
+    <string name="copyright_en">copyright</string>
+</resources>

@@ -1,0 +1,2 @@
+include ':app', ':volley-6.0.1'
+project(':volley-6.0.1').projectDir = new File('3rd_party/volley-6.0.1')
