@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="88dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:background="@drawable/tab_bg_border_line">
+
+    <ImageView
+        android:id="@+id/ivStepperMinus"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/minus"/>
+
+    <ImageView
+        android:id="@+id/ivStepperPlus"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/add_12"/>
+
+    <TextView
+        android:id="@+id/tvStepperContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@drawable/tab_bg_middle_unchecked"
+        android:layout_toLeftOf="@id/ivStepperPlus"
+        android:layout_toRightOf="@id/ivStepperMinus"
+        android:textColor="@color/appThemePrimary"
+        android:textSize="12sp"
+        tools:text="1"/>
+
+</RelativeLayout>

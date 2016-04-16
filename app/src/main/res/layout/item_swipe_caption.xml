@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.doctor.ui.widget.SwipeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/slayout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="66dp">
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="3dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            android:paddingRight="20dp">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_theme_primary_textcolor"
+                android:textSize="12sp"
+                android:text="ddd"
+                android:singleLine="true"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/app_theme_secondary_textcolor"
+                android:textSize="12sp"
+                android:text=""
+                android:singleLine="true"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/tv_content_ex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="@color/app_theme_secondary_textcolor"
+                android:textSize="12sp"
+                android:text=""
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:paddingBottom="3dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_look"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/arrow_right"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"/>
+
+        <View style="@style/h_line"
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@android:color/holo_red_light"
+        android:layout_gravity="right"
+        android:text="@string/delete"
+        android:textColor="@android:color/white"/>
+
+</com.android.doctor.ui.widget.SwipeLayout>

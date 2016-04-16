@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="vertical"
+    android:gravity="center">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tv1"
+        style="@style/view_table_row" />
+
+    <View style="@style/v_line"/>
+
+    <TextView
+        android:id="@+id/tv2"
+        style="@style/view_table_row" />
+
+    <View style="@style/v_line"/>
+
+    <TextView
+        android:id="@+id/tv3"
+        style="@style/view_table_row" />
+
+    <View style="@style/v_line"/>
+
+    <TextView
+        android:id="@+id/tv4"
+        style="@style/view_table_row" />
+
+    <View style="@style/v_line"/>
+
+    <TextView
+        android:id="@+id/tv5"
+        style="@style/view_table_row" />
+</LinearLayout>
+
+    <View
+        android:id="@+id/view_h"
+        style="@style/h_line"/>
+
+    </LinearLayout>

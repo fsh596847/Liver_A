@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:text="@string/message"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:paddingRight="15dp">
+
+            <ImageButton
+                android:id="@+id/imgbtn_selec_contact"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/ic_btn_link_white"/>
+            <ImageButton
+                android:id="@+id/imgbtn_popmenu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:layout_marginLeft="8dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_btn_edit_white"/>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.app.FragmentTabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="2"
+                    android:gravity="right|center_vertical"
+                    android:tag="sticky"
+                    android:textSize="14sp"
+                    android:layout_gravity="top"
+                    android:orientation="horizontal"/>
+
+            </LinearLayout>
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/window_bg"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </android.support.v4.app.FragmentTabHost>
+</LinearLayout>

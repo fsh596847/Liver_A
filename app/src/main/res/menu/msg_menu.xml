@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_new_conversation"
+        android:title="@string/new_conversation"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_send_group_msg"
+        android:title="@string/send_group_msg"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_add_contact"
+        android:title="@string/add_contact"
+        app:showAsAction="ifRoom" />
+
+</menu>

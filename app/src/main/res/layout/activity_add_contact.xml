@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f9f9f9">
+
+    <include layout="@layout/toolbar"/>
+
+    <View style="@style/h_line"
+        android:layout_marginTop="35dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:gravity="center_vertical"
+        android:focusableInTouchMode="true"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_btn_search"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_search_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:hint="@string/input_contact_name_hint"
+            android:gravity="center_vertical"
+            android:background="@null"
+            android:singleLine="true"
+            android:textSize="12sp"
+            android:imeOptions="actionSearch"/>
+    </LinearLayout>
+
+    <View style="@style/h_line" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_marginTop="20dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_add_doctor"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/selector_background"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_doctor_tip"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="16sp"
+                android:drawableRight="@drawable/arrow_right"/>
+        </RelativeLayout>
+
+        <View style="@style/h_line"
+            android:layout_marginLeft="16dp"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_add_patient"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/selector_background"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_patient_tip"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:drawableRight="@drawable/arrow_right"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View style="@style/h_line" />
+
+</LinearLayout>
