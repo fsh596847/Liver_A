@@ -2,71 +2,198 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:padding="16dp">
-    
-	<!-- <RelativeLayout 
-	    android:layout_width="match_parent"
-    	android:layout_height="wrap_content">
-    	
-	    <TextView 
-	        android:id="@+id/input_username_edittext_label"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:text="@string/phone_number"
-	        android:textSize="@dimen/font_size_hint"/> -->
-	        
-	    <!-- <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_inputlayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">  -->
-            
-         <RelativeLayout 
-            android:layout_width="match_parent"
- 			android:layout_height="wrap_content"
- 			android:orientation="horizontal">
- 			
-		    <EditText
-		        android:id="@+id/input_username_edittext"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:background="@drawable/edt_border"
-		        android:padding="16dp"
-		        android:drawablePadding="8dp"
-	            android:drawableLeft="@drawable/phone"
-		        android:hint="@string/phone_number"
-		        android:singleLine="true"
-		        android:inputType="phone"
-		        android:textSize="18sp"
-		        android:textColor="@color/black"
-		        android:textCursorDrawable="@null"/>
-		   
-		    <ImageView
-	               android:id="@+id/iv_clear_username"
-	               android:layout_width="wrap_content"
+    android:orientation="vertical"
+	android:background="@android:color/white">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/appThemePrimary"
+		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+		<TextView
+			android:id="@+id/toolbar_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:textColor="@android:color/white"
+			android:textSize="18sp"/>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right"
+			android:orientation="horizontal"
+			android:paddingRight="15dp">
+
+			<TextView
+				android:id="@+id/tv_cross"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:src="@drawable/clear"
-	               android:layout_alignParentRight="true"
-	               android:contentDescription="@null"
-	               android:visibility="gone" />	
-        </RelativeLayout>
-	    <!-- <View
-            style="@style/HorizontalDivideLine"
-            android:paddingBottom="@dimen/padding_for_divider"/>-->
-   <!--  </RelativeLayout> -->
+				android:drawableRight="@drawable/close"
+				android:padding="10dp"/>
+
+		</LinearLayout>
+	</android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/divider_color"/>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:orientation="horizontal"
+		android:layout_marginLeft="15dp"
+		android:layout_marginRight="15dp"
+		android:layout_marginTop="25dp"
+		android:background="@drawable/edt_border_gray">
+
+		<EditText
+			android:id="@+id/edt_input_phone_number"
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:drawablePadding="8dp"
+			android:hint="@string/please_input_phone_number"
+			android:singleLine="true"
+			android:inputType="phone"
+			android:textSize="14sp"
+			android:textColor="@color/black"
+			android:textCursorDrawable="@null"
+			android:background="@null"
+			android:layout_marginLeft="10dp" />
+
+		<ImageView
+			android:id="@+id/iv_clear_phone"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/clear"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			android:contentDescription="@null"
+			android:visibility="gone" />
+
+	</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edt_border_gray">
+
+
+        <EditText
+            android:id="@+id/edt_input_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:drawablePadding="8dp"
+            android:hint="@string/please_set_login_password"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@null"
+            android:background="@null"
+            android:layout_marginLeft="10dp" />
+
+        <ImageView
+            android:id="@+id/iv_clear_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/clear"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edt_border_gray">
+
+
+        <EditText
+            android:id="@+id/edt_input_v_code"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:drawablePadding="8dp"
+            android:hint="@string/please_input_verify_code"
+            android:singleLine="true"
+            android:inputType="number"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@null"
+            android:background="@null"
+            android:layout_marginLeft="10dp" />
+
+        <ImageView
+            android:id="@+id/iv_clear_vcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/clear"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_regain"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="获取验证码"
+            android:background="@drawable/btn_selector" />
+    </RelativeLayout>
     
 	<android.support.v7.widget.AppCompatButton
-	    android:id="@+id/btn_next" 
+	    android:id="@+id/btn_register"
 	    android:layout_width="match_parent"
 	    android:layout_height="40dp"
-	    android:background="@drawable/btn_small_white_selector"
+	    android:background="@drawable/btn_selector"
 	    android:layout_gravity="center"
-	    android:layout_below="@id/iv_clear_username"
-	    android:layout_marginTop="24dp"
+	    android:layout_marginTop="25dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
 	    android:paddingRight="8dp"
 	    android:paddingLeft="8dp"
 	    android:gravity="center"
-	    android:text="@string/the_next_step"
-	    android:textColor="@color/green"
-	    android:textSize="16sp"/> 
+	    android:text="@string/register"
+	    android:textColor="@android:color/white"
+	    android:textSize="16sp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/have_read_and_agree"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《使用条款及隐私策略》"
+            android:textColor="@color/appThemePrimary"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
 </LinearLayout>

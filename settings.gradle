@@ -1,2 +1,8 @@
-include ':app', ':volley-6.0.1'
-project(':volley-6.0.1').projectDir = new File('3rd_party/volley-6.0.1')
+include ':app', ':ptr-lib', ':material-calendarview', ':MPChartLib', ':ECAndroidKitSDK', ':FabMenu', ':FlexibleCalendar', ':SlideDateTimePicker'
+project(':ptr-lib').projectDir = new File('3rd_party/ptr-lib')
+project(':material-calendarview').projectDir = new File('3rd_party/material-calendarview')
+project(':MPChartLib').projectDir = new File('3rd_party/MPChartLib')
+project(':ECAndroidKitSDK').projectDir = new File('3rd_party/ECAndroidKitSDK')
+project(':FabMenu').projectDir = new File('3rd_party/FabMenu')
+project(':FlexibleCalendar').projectDir = new File('3rd_party/FlexibleCalendar')
+project(':SlideDateTimePicker').projectDir = new File('3rd_party/SlideDateTimePicker')

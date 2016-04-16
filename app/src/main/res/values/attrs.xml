@@ -10,5 +10,45 @@
         <attr name="allowWidthFull" format="boolean"/>
         <attr name="disableViewPager" format="boolean"/>
     </declare-styleable>
-    
+
+    <declare-styleable name="StickyScrollView">
+        <attr name="stuckShadowHeight" format="dimension" />
+        <attr name="stuckShadowDrawable" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="NumberStepper">
+        <attr name="min" format="integer"/>
+        <attr name="max" format="integer"/>
+        <attr name="value" format="integer"/>
+        <attr name="step" format="integer"/>
+        <attr name="text" format="string"/>
+        <attr name="mode" format="enum">
+            <enum name="auto" value="0"/>
+            <enum name="custom" value="1"/>
+        </attr>
+        <attr name="stepper_background" format="color|reference"/>
+        <attr name="stepper_buttonBackground" format="color|reference"/>
+        <attr name="stepper_contentBackground" format="color|reference"/>
+        <attr name="stepper_contentTextColor" format="color"/>
+        <attr name="stepper_contentTextSize" format="float"/>
+        <attr name="stepper_leftButtonBackground" format="color|reference"/>
+        <attr name="stepper_rightButtonBackground" format="color|reference"/>
+        <attr name="stepper_leftButtonResources" format="color|reference"/>
+        <attr name="stepper_rightButtonResources" format="color|reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="fl_FlatToggleButton">
+        <attr name="fl_theme" format="reference" />
+        <attr name="fl_cornerRadius" format="dimension" />
+        <attr name="fl_space" format="dimension" />
+    </declare-styleable>
+
+
+    <declare-styleable name="TimeLineMarker">
+        <attr name="markerSize" format="dimension" />
+        <attr name="marker" format="color|reference" />
+        <attr name="beginLine" format="color|reference" />
+        <attr name="endLine" format="color|reference" />
+        <attr name="lineSize" format="dimension" />
+    </declare-styleable>
 </resources>

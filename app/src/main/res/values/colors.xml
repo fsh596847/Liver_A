@@ -2,17 +2,26 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ff4081</color>
-    <color name="appThemePrimary">#f64f29</color>
+    <color name="colorAccent">#33b5e5</color>
+    <color name="appThemePrimary0">#33b5e5</color>
+    <color name="appThemePrimary">#56abe9</color>
     <color name="window_bg">#fafafa</color>
     <color name="line_color">#e7e7e7</color>
     <color name="white">#ffffff</color>
     <color name="green">#11cd6e</color>
     <color name="black">#000000</color>
-    <color name="divider_color">#DADADA</color>
+    <color name="divider_color">#e7e7e7</color>
+    <color name="bg_color">#F9F9F9</color>
 
     <color name="app_theme_primary_textcolor">#212121</color>
     <color name="app_theme_secondary_textcolor">#727272</color>
     <color name="app_theme_accent">#009688</color>
     <color name="app_theme_accent_translucent">#70009688</color>
+
+    <color name="normal_day">#ff999999</color>
+    <color name="selected_day_background">#E75F49</color>
+    <color name="selected_day_text">#fff2f2f2</color>
+
+    <color name="pop_tab_text_selected_color">#56abe9</color>
+    <color name="pop_tab_text_unselected_color">#ff111111</color>
 </resources>

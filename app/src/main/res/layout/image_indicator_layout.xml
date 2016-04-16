@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.fidots.restaurant.ui.widget.CustomDurationViewPager
+    <com.android.doctor.ui.widget.CustomDurationViewPager
         android:id="@+id/custom_view_pager"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />

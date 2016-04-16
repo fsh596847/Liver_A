@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View style="@style/h_line"
+        android:layout_marginTop="10dp"/>
+    <!-- 门诊检查 -->
+    <RelativeLayout
+        android:id="@+id/rl_label"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingRight="15dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/selector_white_background">
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review"
+            android:drawableLeft="@drawable/v_bar"
+            android:gravity="center_vertical"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/arrow_right"/>
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+
+    <LinearLayout
+        android:id="@+id/ll_items"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:animateLayoutChanges="true">
+
+
+    </LinearLayout>
+</LinearLayout>

@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Restaurant.iml" filepath="$PROJECT_DIR$/Restaurant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Doctor.iml" filepath="$PROJECT_DIR$/Doctor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3rd_party/ECAndroidKitSDK/ECAndroidKitSDK.iml" filepath="$PROJECT_DIR$/3rd_party/ECAndroidKitSDK/ECAndroidKitSDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3rd_party/FabMenu/FabMenu.iml" filepath="$PROJECT_DIR$/3rd_party/FabMenu/FabMenu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3rd_party/FlexibleCalendar/FlexibleCalendar.iml" filepath="$PROJECT_DIR$/3rd_party/FlexibleCalendar/FlexibleCalendar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3rd_party/MPChartLib/MPChartLib.iml" filepath="$PROJECT_DIR$/3rd_party/MPChartLib/MPChartLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3rd_party/SlideDateTimePicker/SlideDateTimePicker.iml" filepath="$PROJECT_DIR$/3rd_party/SlideDateTimePicker/SlideDateTimePicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/3rd_party/volley-6.0.1/volley-6.0.1.iml" filepath="$PROJECT_DIR$/3rd_party/volley-6.0.1/volley-6.0.1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3rd_party/material-calendarview/material-calendarview.iml" filepath="$PROJECT_DIR$/3rd_party/material-calendarview/material-calendarview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3rd_party/ptr-lib/ptr-lib.iml" filepath="$PROJECT_DIR$/3rd_party/ptr-lib/ptr-lib.iml" />
     </modules>
   </component>
 </project>

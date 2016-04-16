@@ -1,25 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/action_bar"
-        layout="@layout/main_actionbar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:text="@string/my_patient"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:paddingRight="15dp">
+
+            <ImageButton
+                android:id="@+id/img_stat"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/ic_btn_stat_white"/>
+            <ImageButton
+                android:id="@+id/img_add"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:layout_marginLeft="8dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_btn_add_white"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/header_view_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ptr_duration_to_close="200"
+        app:ptr_duration_to_close_header="1000"
+        app:ptr_keep_header_when_refresh="true"
+        app:ptr_pull_to_fresh="false"
+        app:ptr_ratio_of_header_height_to_refresh="1.2"
+        app:ptr_resistance="1.7">
+
+        <!--
     <ScrollView
         android:id="@+id/scrollview"
         android:layout_below="@id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical">
-
+    -->
         <FrameLayout
+            android:id="@+id/fl_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -29,59 +79,94 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <FrameLayout
-                    android:id="@+id/fl_recommend_new_shop"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"/>
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <include layout="@layout/layout_search_box"/>
+
+                    <TextView
+                        android:id="@+id/tv_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/cancel"/>
+
+                </LinearLayout>
+
+                <View style="@style/h_line"/>
+                <LinearLayout
+                    android:id="@+id/ll_tab_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:background="@android:color/white">
+
+                    <!--<TextView
+                        android:id="@+id/tv_age"
+                        style="@style/popup_option_item"
+                        android:text="@string/age" />
+
+                    <View style="@style/v_line"/>
+
+                    <TextView
+                        android:id="@+id/tv_disease"
+                        style="@style/popup_option_item"
+                        android:text="@string/disease" />
+
+                    <View style="@style/v_line"/>
+
+                    <TextView
+                        android:id="@+id/tv_illness"
+                        style="@style/popup_option_item"
+                        android:text="@string/illness" />
+
+                    <View style="@style/v_line"/>
+                    <TextView
+                        android:id="@+id/tv_state"
+                        style="@style/popup_option_item"
+                        android:text="@string/state" />-->
+
+                </LinearLayout>
+
+                <View style="@style/h_line"/>
 
                 <FrameLayout
-                    android:id="@+id/fl_category_business_dinners"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:id="@+id/fl_category_flavour_snack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    <FrameLayout
+                        android:id="@+id/fl_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"/>
 
-                <FrameLayout
-                    android:id="@+id/fl_category_midnight_stall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    <View
+                        android:id="@+id/view_mask"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#88888888"
+                        android:visibility="gone"/>
 
-                <FrameLayout
-                    android:id="@+id/fl_category_leisure_dinners"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    <FrameLayout
+                        android:id="@+id/fl_popup_menu"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                <FrameLayout
-                    android:id="@+id/fl_local_special_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"/>
-
+                    </FrameLayout>
+                </FrameLayout>
             </LinearLayout>
-
-            <View
-                android:id="@+id/view_mask"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#88888888"
-                android:visibility="gone"/>
-
-            <FrameLayout
-                android:id="@+id/fl_popup_menu"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </FrameLayout>
         </FrameLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
-    <com.fidots.restaurant.ui.widget.EmptyLayout
+    <com.android.doctor.ui.widget.EmptyLayout
         android:id="@+id/empty_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-</RelativeLayout>
+</LinearLayout>

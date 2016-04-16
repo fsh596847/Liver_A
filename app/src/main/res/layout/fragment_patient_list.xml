@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/header_view_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ptr_duration_to_close="200"
+        app:ptr_duration_to_close_header="1000"
+        app:ptr_keep_header_when_refresh="true"
+        app:ptr_pull_to_fresh="false"
+        app:ptr_ratio_of_header_height_to_refresh="1.2"
+        app:ptr_resistance="1.7">
+
+        <!--
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_below="@id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+    -->
+        <FrameLayout
+            android:id="@+id/fl_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/ll_content_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <include layout="@layout/layout_search_box"/>
+
+                    <TextView
+                        android:id="@+id/tv_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/cancel"/>
+
+                </LinearLayout>
+
+                <View style="@style/h_line"/>
+                <LinearLayout
+                    android:id="@+id/ll_tab_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:background="@android:color/white">
+
+                    <!--<TextView
+                        android:id="@+id/tv_age"
+                        style="@style/popup_option_item"
+                        android:text="@string/age" />
+
+                    <View style="@style/v_line"/>
+
+                    <TextView
+                        android:id="@+id/tv_disease"
+                        style="@style/popup_option_item"
+                        android:text="@string/disease" />
+
+                    <View style="@style/v_line"/>
+
+                    <TextView
+                        android:id="@+id/tv_illness"
+                        style="@style/popup_option_item"
+                        android:text="@string/illness" />
+
+                    <View style="@style/v_line"/>
+                    <TextView
+                        android:id="@+id/tv_state"
+                        style="@style/popup_option_item"
+                        android:text="@string/state" />-->
+
+                </LinearLayout>
+
+                <View style="@style/h_line"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include layout="@layout/fragment_recycler_view"/>
+
+                    <View
+                        android:id="@+id/view_mask"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#88888888"
+                        android:visibility="gone"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_popup_menu"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </FrameLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </FrameLayout>
+        <!--</ScrollView>-->
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+</LinearLayout>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.fidots.restaurant.ui.widget.ExpandedGridView
+    <com.fidots.doctor.ui.widget.ExpandedGridView
         android:id="@+id/gv_child"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

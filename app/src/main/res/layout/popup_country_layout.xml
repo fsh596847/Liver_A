@@ -14,7 +14,7 @@
         android:textColor="@android:color/black"
         android:textSize="18sp"/>
 
-    <com.fidots.restaurant.ui.widget.ExpandedGridView
+    <com.fidots.doctor.ui.widget.ExpandedGridView
         android:id="@+id/gv_country"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

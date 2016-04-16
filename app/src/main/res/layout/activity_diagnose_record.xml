@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:paddingRight="15dp">
+
+            <ImageButton
+                android:id="@+id/img_complete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/right"/>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:layout_marginTop="15dp"
+        style="@style/h_line"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/plan_name"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/patient_name"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/tv_patient_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+
+    <View
+        android:layout_marginTop="15dp"
+        style="@style/h_line"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_diagnose_time"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/diagnose_time"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/tv_diagnose_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/diagnose_method"
+            android:layout_centerVertical="true"/>
+
+        <RadioGroup
+            android:id="@+id/rdg_btn"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            android:divider="@color/white"
+            android:showDividers="middle"
+            android:background="@drawable/tab_rdbtn_border_line">
+
+            <RadioButton
+                android:id="@+id/rdbtn_telephone"
+                style="@style/tab_rdbtn_bg_style"
+                android:background="@drawable/tab_left_rdbtn_selector"
+                android:text="@string/telephone"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/rdbtn_interview"
+                style="@style/tab_rdbtn_bg_style"
+                android:text="@string/interview"
+                android:background="@drawable/tab_right_rdbtn_selector" />
+        </RadioGroup>
+
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:gravity="center_vertical"
+            android:text="@string/diagnose_result"/>
+
+        <EditText
+            android:id="@+id/edt_content"
+            android:layout_below="@id/tv_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@null"
+            android:textSize="14sp"
+            android:gravity="top"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/save_diagnose_record"
+        android:background="@drawable/btn_selector"/>
+</LinearLayout>

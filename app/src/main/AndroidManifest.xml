@@ -1,45 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fidots.restaurant">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.android.doctor">
 
+    <permission android:name="com.android.doctor.permission.RECEIVE_MSG" android:protectionLevel="signature"/>
+    <permission android:name="com.android.doctor.permission.INCOMING_CALL" android:protectionLevel="signature"/>
+    // 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.yuntongxun.ecdemo 替换为自己的包名
+    <uses-permission android:name="com.android.doctor.permission.RECEIVE_MSG" />
+    // 如果没有VOIP功能可以忽略
+    <uses-permission android:name="com.android.doctor.permission.INCOMING_CALL" />
+
+    <!-- 允许程序打开网络sockets -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 允许程序访问有关的网络信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允许程序访问Wi-Fi网络状态信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 允许应用写（非读）用户的外部存储器 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 允许读取电话的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 允许一个程序获取信息有关当前或最近运行的任务，一个缩略的任务状态，是否活动等等 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- 允许程序录制音频 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 允许程序读取用户联系人数据(非必选，由应用选择是否需要) -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 允许访问振动设备(非必选,由应用选择是否需要) -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- add  -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- added -->
+    <!-- 允许程序禁用键盘锁(非必选,由应用选择是否需要) -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="com.yuntongxun.ecdemo.permission.INCOMING_CALL" />
+    <uses-permission android:name="com.yuntongxun.ecdemo.permission.RECEIVE_MSG" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 允许一个程序接收到 ACTION_BOOT_COMPLETED广播在系统完成启动-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
         android:name=".app.AppContext"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme_NoActionBar">
+        tools:replace="android:theme"
+        android:theme="@style/MyAppTheme_NoActionBar">
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="570c76cd67e58e954100005d" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="live_doctor" >
+        </meta-data>
 
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity android:name=".app.AppStart"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <activity
-            android:name=".ui.activity.MerchantMainActivity"
+            android:name=".ui.activity.LoginEntryActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.patient.AddPatientMainActivity"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -47,11 +99,264 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.activity.MerchantSpecificActivity"
+            android:name=".ui.activity.MyFavoriteActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.activity.MyFavoriteActivity"
+            android:name=".ui.patient.FillPatientFormActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.ContactActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.CreateGroupActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.GroupCardActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.GroupMemberActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.GroupProfileActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.ICreatedGroupActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.SearchGroupActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.FindDoctorActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.FindPatientActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.AddContactActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.message.DoctorProfileActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.PlanListActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.AddPlanActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.PlanSchemeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.EditSchemeItemActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.EditSchemeSubItemActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.SelectMedicineListActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.SelectListItemActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.EditMedicineItemActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.DiagRecordActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.plan.DiagRecordListActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.patient.PatientInfoActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.patient.DisArchiveActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.patient.ArchiveActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.patient.ArchiveDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.topic.TopicDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.topic.PubTopicActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.EntryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+
+        <activity android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
+
+        <activity android:name=".ui.activity.RegisterPhoneActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
+
+        <activity android:name=".ui.activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+
+        // 配置所需的activity
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.ECChattingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.ECConversationListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.ECImagePreviewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CCPTheme.Holo.Transparent" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.ECImageGalleryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CCPTheme.Holo.Transparent"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.ECImageGralleryPagerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.ECFileExplorerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.ECGroupNoticeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.group.ECGroupListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.group.CreateGroupActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.group.SearchGroupActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.group.BaseSearch"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <!-- voip配置 -->
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.voip.VoIPCallActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="con.yuntongxun.ecdemo.intent.ACTION_VOICE_CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.voip.VideoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="con.yuntongxun.ecdemo.intent.ACTION_VIDEO_CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.yuntongxun.kitsdk.ui.voip.VideoCallInActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="con.yuntongxun.ecdemo.intent.ACTION_VIDEO_CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- *****************************ECSDK核心服务类 （必须配置）Start******************************************** -->
+        // SDK核心服务配置(必选配置)
+        <service android:name="com.yuntongxun.ecsdk.ECClientService" android:enabled="true" android:process=":push" />
+        // 以下两项为SDK事件提醒广播(必选配置)
+        <receiver android:name="com.yuntongxun.ecsdk.booter.CCPReceivers$AlarmReceiver" android:process=":push" />
+        // v5.1.9r增加配置选项(必选配置)
+        <receiver android:name="com.yuntongxun.ecsdk.booter.Alarm" android:exported="false" android:process=":push"/>
+        // SDK网络改变广播(必选配置)
+        <receiver
+            android:name="com.yuntongxun.ecsdk.booter.CCPReceivers$ConnectionReceiver"
+            android:process=":push">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        // SDK广播通知配置（开机广播）
+        // 可选广播、如果应用想做开机重启，可以实现该广播通知即可
+        <receiver
+            android:name="com.yuntongxun.ecsdk.booter.CCPReceivers$BootReceiver"
+            android:process=":push">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        // 	配置SDK消息通知广播 ,SDK通知会分三种提醒方式
+        //  1、直接通过设置的回调接口（OnChatReceiveListener）Push给应用
+        //  2、如果应用没有设置回调接口则采用（BroadcastReceiver）广播通知（v5.1.8版本）此时如果应用处于未运行状态则会直接唤醒应用处理
+        //  3、如果应用未处于运行状态并且不想被唤醒应用运行则采用状态栏通知处理（SDK直接提醒，不会通知应用）,比如调用
+        //  ECDevice#logout(ECDevice.NotifyMode, ECDevice.OnLogoutListener)退出接口传入后台接收消息才会有提醒
+
+        //  注意：以上在a和b的场景下，SDK都会将消息直接给应用处理，只有在c的情况SDK才会直接处理消息提醒，所以应用需要处理a和b两种情况
+        // 声明自定义通知的广播接收器，第三方 APP 集成时，action 中的 com.yuntongxun.ecdemo 请替换为自己的包名 -->
+        <!-- 需要权限声明 <uses-permission android:name="com.yuntongxun.ecdemo.permission.RECEIVE_MSG"/> -->
+        // 如果没有VOIP功能可以忽略
+        <!-- 需要权限声明 <uses-permission android:name="com.yuntongxun.ecdemo.permission.INCOMING_CALL"/> -->
+        <receiver
+            android:name="com.yuntongxun.kitsdk.service.YuntxNotifyReceiver"
+            android:exported="false">
+            <intent-filter>
+                // 接收push消息
+                // action匹配规则{packageName + ".action" + "功能"}
+                <action android:name="com.yuntongxun.eckitimdemo.action.VOIP_CALL" />
+                <action android:name="com.yuntongxun.eckitimdemo.action.MESSAGE" />
+                <action android:name="com.yuntongxun.eckitimdemo.action.NOTIFICATION_CLICK" />
+                <action android:name="com.yuntongxun.eckitimdemo.action.PERSON_VERSION" />
+
+            </intent-filter>
+        </receiver>
+
+        // *****************************ECSDK核心服务类 End*******************************************
+        // 应用处理程序逻辑服务
+        <service android:name="com.yuntongxun.kitsdk.service.YuntxNotifyReceiver$NotifyService" />
     </application>
 </manifest>

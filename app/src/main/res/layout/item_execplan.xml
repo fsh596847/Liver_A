@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/repeat_exec"/>
+
+        <TextView
+            android:id="@+id/tv_repeat_times"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:padding="8dp"
+            android:text="@string/custom"
+            android:textColor="@color/appThemePrimary"/>
+
+        <com.android.doctor.ui.widget.NumberStepper
+            android:id="@+id/num_repeat_times"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/tv_repeat_times_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/appThemePrimary"
+            android:layout_marginLeft="8dp"
+            android:padding="8dp"
+            android:text="@string/month"/>
+    </LinearLayout>
+
+    <View style="@style/h_line"
+        android:layout_marginLeft="15dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="@string/start_time"/>
+
+    <TextView
+        android:id="@+id/tv_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:padding="8dp"
+        android:text="@string/after_care"
+        android:textColor="@color/appThemePrimary"/>
+
+    <com.android.doctor.ui.widget.NumberStepper
+        android:id="@+id/num_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_start_time_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/appThemePrimary"
+        android:layout_marginLeft="8dp"
+        android:padding="8dp"
+        android:text="@string/day"/>
+    </LinearLayout>
+
+    <View style="@style/h_line"
+    android:layout_marginLeft="15dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/duration_time"/>
+
+        <TextView
+            android:id="@+id/tv_duration_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:padding="8dp"
+            android:text="@string/custom"
+            android:textColor="@color/appThemePrimary"/>
+
+        <com.android.doctor.ui.widget.NumberStepper
+            android:id="@+id/num_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_dtime_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/appThemePrimary"
+            android:layout_marginLeft="8dp"
+            android:padding="8dp"
+            android:text="@string/year"/>
+    </LinearLayout>
+</LinearLayout>

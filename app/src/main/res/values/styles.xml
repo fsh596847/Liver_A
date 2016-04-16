@@ -8,12 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme_NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@color/window_bg</item>
+    <style name="MyAppTheme_NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg_color</item>
         <item name="android:actionModeBackground">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
+        <item name="popupMenuStyle">@style/CustomPopupMenu</item>
+        <item name="alertDialogTheme">@style/dialogStyle</item>
+    </style>
+
+    <style name="dialogStyle" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -24,6 +32,15 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">15dp</item>
+    </style>
+
+    <style name="popup_option_item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">8dp</item>
     </style>
 
     <style name="option_item_text">
@@ -42,7 +59,7 @@
     <style name="h_line">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">1dip</item>
-        <item name="android:background">#e7e7e7</item>
+        <item name="android:background">@color/divider_color</item>
     </style>
 
     <!-- 纵向线条 -->
@@ -60,10 +77,27 @@
         <item name="android:paddingRight">16dp</item>
     </style>
 
+    <!-- 视图内边距 -->
+    <style name="view_table_row">
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:layout_width">66dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/app_theme_secondary_textcolor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!-- Popup window动画-->
     <style name="popwin_anim_style">
         <item name="android:windowEnterAnimation">@anim/dd_menu_in</item>
         <item name="android:windowExitAnimation">@anim/dd_menu_out</item>
+    </style>
+
+    <style name="CustomPopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/appThemePrimary</item>
+        <item name="android:actionMenuTextColor">@android:color/white</item>
     </style>
 
     <!-- Tab radio button 样式-->
@@ -73,6 +107,31 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:button">@null</item>
         <item name="android:layout_weight">1.0</item>
-        <item name="android:textColor">@drawable/tab_rdbtn_text_color_selector</item>
+        <item name="android:textColor">@drawable/tab_text_selector</item>
+    </style>
+
+    <style name="tab_rdbtn_bg_style">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:textColor">@drawable/tab_text_color_selector</item>
+    </style>
+
+    <style name="Animation.Activity" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/common_slide_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/common_slide_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/common_slide_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/common_slide_right_out</item>
+    </style>
+
+    <style name="TreeNodeStyleDivided">
+        <item name="android:showDividers">middle</item>
+        <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
+    </style>
+
+    <style name="TreeNodeStyleCustom">
+        <item name="android:paddingLeft">20dp</item>
     </style>
 </resources>

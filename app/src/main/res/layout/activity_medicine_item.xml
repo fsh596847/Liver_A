@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:paddingRight="15dp">
+
+            <ImageButton
+                android:id="@+id/img_complete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/right"/>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:layout_marginTop="15dp"
+        style="@style/h_line"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white"
+        android:focusableInTouchMode="true">
+
+        <EditText
+            android:id="@+id/edt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="80dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:hint="@string/medicine_name"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+        <TextView
+            android:id="@+id/tv_select_medicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_medicine"
+            android:textColor="@color/appThemePrimary"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/arrow_right"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+
+    <View
+        android:layout_marginTop="15dp"
+        style="@style/h_line"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingLeft="15dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:paddingRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="@string/usage"
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/app_theme_primary_textcolor"/>
+
+            <TextView
+                android:id="@+id/tv_usage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/appThemePrimary"
+                android:layout_alignParentRight="true"
+                android:drawableRight="@drawable/arrow_right"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <View style="@style/h_line"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:paddingRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="@string/use_level"
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/app_theme_primary_textcolor"/>
+
+            <TextView
+                android:id="@+id/tv_use_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/appThemePrimary"
+                android:layout_alignParentRight="true"
+                android:drawableRight="@drawable/arrow_right"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <View style="@style/h_line"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="@android:color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/duration_time"/>
+
+            <TextView
+                android:id="@+id/tv_duration_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:padding="8dp"
+                android:text="@string/custom"
+                android:textColor="@color/appThemePrimary"/>
+
+            <com.android.doctor.ui.widget.NumberStepper
+                android:id="@+id/num_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:padding="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_dtime_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/appThemePrimary"
+                android:layout_marginLeft="8dp"
+                android:padding="8dp"
+                android:text="@string/year"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View style="@style/h_line"/>
+
+    <View
+        android:layout_marginTop="15dp"
+        style="@style/h_line"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:paddingTop="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/attention_maters"/>
+
+        <View
+            android:id="@+id/h_line"
+            style="@style/h_line"
+            android:layout_below="@id/tv_label"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/edt_content"
+            android:layout_below="@id/h_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@null"
+            android:textSize="14sp"
+            android:gravity="top"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+
+</LinearLayout>
