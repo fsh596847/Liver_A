@@ -48,6 +48,10 @@ public class PlanDetaAdapter<T extends Object> extends BaseAdapter implements Vi
         return mData == null ? null : mData.get(position);
     }
 
+    public List<T> getmData() {
+        return mData;
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -83,7 +87,6 @@ public class PlanDetaAdapter<T extends Object> extends BaseAdapter implements Vi
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
        int type = getItemViewType(position);
-        Log.d("1PlanDetaListAdapter" , "" + position + ", " + type);
         if (convertView == null) {
             if (type == HEADER) {
                 PlanBaseViewHolder viewHolder;
@@ -110,7 +113,6 @@ public class PlanDetaAdapter<T extends Object> extends BaseAdapter implements Vi
             }
         } else {
             if (type == HEADER) {
-                Log.d("1PlanDetaListAdapter", "PlanList.DataEntity.class");
                 PlanBaseViewHolder viewHolder = (PlanBaseViewHolder) convertView.getTag();
                 setBaseViewData(viewHolder, (PlanList.DataEntity) getItem(position));
             } else {
@@ -161,12 +163,12 @@ public class PlanDetaAdapter<T extends Object> extends BaseAdapter implements Vi
         if (d.getClass().equals(PlanDeta.DataEntity.class)) {
             position = getItemById(((PlanDeta.DataEntity)d).get_id());
         }
+        Log.d("updateData", "" + position);
         if (position == -1) {
             mData.add(d);
             notifyDataSetChanged();
         } else if (0 <= position && position < mData.size()) {
-            mData.remove(position);
-            mData.add(position, d);
+            mData.set(position, d);
             notifyDataSetChanged();
         }
     }

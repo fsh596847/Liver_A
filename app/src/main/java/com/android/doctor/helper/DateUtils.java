@@ -53,6 +53,11 @@ public class DateUtils {
 		return sDateTime;
 	}
 
+	public static String getDateString_(long systime) {
+		java.util.Date dt = new Date(systime);
+		String sDateTime = dateFormater2.get().format(dt);
+		return sDateTime;
+	}
 
     /**
      *

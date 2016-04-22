@@ -37,7 +37,7 @@ public class DisArchiveActivity extends BaseActivity implements OnListItemClickL
     private void initRecycler() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        TimeLineAdapter adapter = new TimeLineAdapter(getData());
+        TimeLineAdapter adapter = new TimeLineAdapter();
         adapter.setItemClickListener(this);
         mRecycler.setLayoutManager(layoutManager);
         mRecycler.setAdapter(adapter);

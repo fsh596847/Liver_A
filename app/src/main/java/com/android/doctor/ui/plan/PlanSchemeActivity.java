@@ -3,27 +3,36 @@ package com.android.doctor.ui.plan;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.DialogHelper;
+import com.android.doctor.helper.JsonUtil;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.AdjustPlanParam;
 import com.android.doctor.model.DataText;
+import com.android.doctor.model.DiagList;
+import com.android.doctor.model.NewPlanRecord;
 import com.android.doctor.model.PlanDeta;
 import com.android.doctor.model.PlanList;
 import com.android.doctor.model.RespEntity;
+import com.android.doctor.model.TreatPlanList;
+import com.android.doctor.model.UpdatePlanDetaParam;
+import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.PlanDetaAdapter;
 import com.android.doctor.ui.base.BaseActivity;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,35 +54,14 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
     public static final int REQUEST_DOCTOR_REMIND_CODE = 9;
     public static final int REQUEST_DOCTOR_FOLLOW_CODE = 10;
 
-
-
     @InjectView(R.id.listView)
     protected ListView mListView;
 
-    /*@InjectView(R.id.ll_doctor_advice)
-    protected LinearLayout mDoctorAdviceLayout;
-    @InjectView(R.id.ll_doctor_review)
-    protected LinearLayout mDoctorReviewLayout;
-    @InjectView(R.id.ll_doctor_check)
-    protected LinearLayout mDoctorCheckLayout;
-    @InjectView(R.id.ll_doctor_checkout)
-    protected LinearLayout mDoctorCheckoutLayout;
-    @InjectView(R.id.ll_doctor_medicine)
-    protected LinearLayout mDoctorMedicineLayout;
-    @InjectView(R.id.ll_doctor_remind)
-    protected LinearLayout mDoctorRemindLayout;
-    @InjectView(R.id.ll_doctor_follow)
-    protected LinearLayout mDoctorFollowLayout;
-
-    private ArrayList<DataText> mListDoctorAdvice;
-    private ArrayList<DataText> mListDoctorReview;
-    private ArrayList<DataText> mListDoctorCheck;
-    private ArrayList<DataText> mListDoctorCheckout;
-    private ArrayList<DataText> mListDoctorMedicine;
-    private ArrayList<DataText> mListDoctorRemind;
-    private ArrayList<DataText> mListDoctorFollow;*/
     private PlanDetaAdapter mAdapter;
     private PlanList.DataEntity mPlItem;
+    private PlanDeta mPlanDeta;
+    private DiagList mDiagList;
+    private TreatPlanList mTreatPlanList;
 
     public static void startAty(Context context, PlanList.DataEntity pItem) {
         Intent intent = new Intent(context, PlanSchemeActivity.class);
@@ -107,19 +95,61 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
     @Override
     protected void initData() {
         super.initData();
-        onLoad();
+        onLoadPlanDeta();
+        //onLoadDiagList();
+        //onLoadTreatPlan();
+    }
+
+    private void setPlanViewData(List data) {
+        Log.d("PlanSchemeActivity", "setPlanViewData");
+        if (data == null) return;
+        data.add(0, mPlItem);
+        mAdapter.setmData(data);
     }
 
     @OnClick(R.id.img_complete)
     protected void onComplete() {
+        if (isFastDoubleClick()) return;
+        AdjustPlanParam planParam = new AdjustPlanParam();
+        planParam.setPid(mPlItem.getPid());
+        planParam.setRef_tplid(mPlItem.getTplid());
 
+        List<PlanDeta.DataEntity> list = new ArrayList<>();
+        List<PlanDeta.DataEntity> data = mAdapter.getmData();
+        for (int i = 1; i < data.size(); ++i) {
+            list.add(data.get(i));
+        }
+        planParam.setTpldetails(list);
+        Log.d("onComplete: " , "pid, Ref_tplid " + planParam.getPid() + ", " + planParam.getRef_tplid());
+        onUpdatePlanDeta(planParam);
+
+        //JsonObject jo = new JsonObject();
+        //JsonParser parser = new JsonParser();
+        //JsonObject obj = parser.parse(planDeta).getAsJsonObject();
+
+        /*UpdatePlanDetaParam param = new UpdatePlanDetaParam();
+        param.setUid(mPlItem.getDuid());
+        param.setUsername(mPlItem.getDname());
+
+        User u = AppContext.context().getUser();
+        User.UserEntity userEntity = u.getUser();
+        param.setHisid(userEntity.getHosid());
+        param.setHisname(userEntity.getHosname());
+        param.setName(mPlItem.getPlanname());
+        Gson g = new Gson();
+        if (mDiagList != null)
+        param.setTreat(g.toJson(mDiagList));
+        if (mTreatPlanList != null)
+        param.setDiag(g.toJson(mTreatPlanList));
+        param.setPlan(mPlanDeta);*/
+        //JsonObject jso = (JsonObject)new JsonParser().parse(g.toJson(planParam));
     }
 
     private void setBaseViewData() {
         /*mTvTitle.setText(mPlItem.getPlanname());
         mTvPatient.setText(mPlItem.getPname());
         mTvDoctor.setText(mPlItem.getDname());
-        mTvDate.setText(DateUtils.getDateString(mPlItem.getCreateTime()));
+        mTvDate.setText(DateUtils.getDateString2(mPlItem.getCreateTime()));
         int stat = mPlItem.getStatus();
         mTvState.setText(stat == 1 ? "执行中" : stat == 2 ? "已完成" : "未创建");*/
     }
@@ -137,10 +167,12 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
                             case 0 ://终止当前计划
                                 break;
                             case 1://添加随访记录
-                                UIHelper.showtAty(PlanSchemeActivity.this, DiagRecordActivity.class);
+                                NewPlanRecord record =new NewPlanRecord();
+                                record.setNewPlanRecord(mPlItem);
+                                PlanRecordInfoActivity.startAty(PlanSchemeActivity.this, record);
                                 break;
                             case 2://查看随访记录
-                                UIHelper.showtAty(PlanSchemeActivity.this, DiagRecordListActivity.class);
+                                PlanRecordListActivity.startAty(PlanSchemeActivity.this, "" + mPlItem.getPid());
                                 break;
                             case 3://查看提醒事件
                                 break;
@@ -153,28 +185,18 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
 
     private void onStartEditAtyForResult(int code, PlanDeta.DataEntity data) {
         Intent intent = new Intent();
-        intent.setClass(this, EditSchemeItemActivity.class);
+        intent.setClass(this, EditPlanItemActivity.class);
         intent.putExtra("requestCode", code);
         intent.putExtra("data", data);
         startActivityForResult(intent, code);
     }
 
-    private View createCaptionView(DataText o) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.item_caption, null);
-        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        TextView tvContent = (TextView) view.findViewById(R.id.tv_content);
-        TextView tvContentEx = (TextView) view.findViewById(R.id.tv_content_ex);
-        tvTitle.setText(o.getTitle());
-        tvContent.setText(o.getContent());
-        tvContentEx.setText(o.getContent_ex());
-        return view;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             PlanDeta.DataEntity d = data.getParcelableExtra("data");
+            Log.d("onActivityResult", new Gson().toJson(d));
             mAdapter.updateData(d);
         }
     }
@@ -189,18 +211,6 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
         return true;
     }
 
-    private void updateView(LinearLayout container, List<DataText> data) {
-        container.removeAllViews();
-        for (DataText o : data) {
-            View v = createCaptionView(o);
-            container.addView(v);
-        }
-    }
-
-    private void closeView(LinearLayout container, List<DataText> data) {
-        container.removeAllViews();
-    }
-
     @Override
     public void onItemClick(int position, View view) {
         PlanDeta.DataEntity entity = (PlanDeta.DataEntity) mAdapter.getItem(position);
@@ -209,7 +219,7 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
         }
     }
 
-    private void onLoad() {
+    private void onLoadPlanDeta() {
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity<PlanDeta>> call = service.getPlanDeta("" + mPlItem.getPid());
         call.enqueue(new Callback<RespEntity<PlanDeta>>() {
@@ -220,7 +230,8 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
                     if (data == null) {
                         return;
                     } else if (data.getResponse_params() != null) {
-                        setPlanViewData(data.getResponse_params().getData());
+                        PlanDeta planDeta = data.getResponse_params();
+                        setPlanViewData(planDeta.getData());
                     }
                 } else {
                     String errMsg = "";
@@ -237,10 +248,99 @@ public class PlanSchemeActivity extends BaseActivity implements OnListItemClickL
         });
     }
 
-    private void setPlanViewData(List data) {
-        Log.d("PlanSchemeActivity", "setPlanViewData");
-        if (data == null) return;
-        data.add(0, mPlItem);
-        mAdapter.setmData(data);
+
+    private void onLoadDiagList() {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<DiagList>> call = service.getDiagList();
+        call.enqueue(new Callback<RespEntity<DiagList>>() {
+            @Override
+            public void onResponse(Call<RespEntity<DiagList>> call, Response<RespEntity<DiagList>> response) {
+                RespEntity<DiagList> data = response.body();
+                if (response.isSuccessful()) {
+                    if (data == null) {
+                        return;
+                    } else if (data.getResponse_params() != null) {
+                        mDiagList = data.getResponse_params();
+                    }
+                } else {
+                    String errMsg = "";
+                    if (data != null) {
+                        errMsg = data.getError_msg();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespEntity<DiagList>> call, Throwable t) {
+                Log.d("PlanSchemeActivity",t.toString());
+            }
+        });
+    }
+
+
+    private void onLoadTreatPlan() {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<TreatPlanList>> call = service.getTreatPlanList();
+        call.enqueue(new Callback<RespEntity<TreatPlanList>>() {
+            @Override
+            public void onResponse(Call<RespEntity<TreatPlanList>> call, Response<RespEntity<TreatPlanList>> response) {
+                RespEntity<TreatPlanList> data = response.body();
+                if (response.isSuccessful()) {
+                    if (data == null) {
+                        return;
+                    } else if (data.getResponse_params() != null) {
+                        mTreatPlanList = data.getResponse_params();
+                    }
+                } else {
+                    String errMsg = "";
+                    if (data != null) {
+                        errMsg = data.getError_msg();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespEntity<TreatPlanList>> call, Throwable t) {
+                Log.d("PlanSchemeActivity",t.toString());
+            }
+        });
+    }
+
+    private void onUpdatePlanDeta(final AdjustPlanParam param) {
+        showProcessDialog();
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<PlanDeta>> call = service.adjustPlan(JsonUtil.toJson(new Gson().toJson(param)));
+        call.enqueue(new Callback<RespEntity<PlanDeta>>() {
+            @Override
+            public void onResponse(Call<RespEntity<PlanDeta>> call, Response<RespEntity<PlanDeta>> response) {
+                RespEntity<PlanDeta> data = response.body();
+                onResult(data);
+                if (response.isSuccessful()) {
+                    if (data == null) {
+                        return;
+                    } else if (data.getResponse_params() != null) {
+                        PlanDeta planDeta = data.getResponse_params();
+                        setPlanViewData(planDeta.getData());
+                        //mTreatPlanList = data.getResponse_params();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespEntity<PlanDeta>> call, Throwable t) {
+                Log.d("PlanSchemeActivity.", t.toString());
+            }
+        });
+    }
+
+    private void onResult(RespEntity resp) {
+        dismissProcessDialog();
+        if (resp != null) {
+            String text = resp.getError_msg();
+            UIHelper.showToast(this, text);
+            if (resp.getError_code() == 0) {
+                onBackPressed();
+            }
+        }
     }
 }

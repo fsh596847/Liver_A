@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:paddingLeft="16dp"
-    android:background="@android:color/white">
+    android:background="@drawable/selector_white_background">
 
     <ImageView
         android:id="@+id/avatar_view"
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/avatar_view"
         android:paddingTop="10dp"
+        android:paddingBottom="8dp"
         android:layout_marginLeft="10dp">
 
         <LinearLayout
@@ -33,7 +34,9 @@
                 android:text="闻一多"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_dis_type"
@@ -41,7 +44,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
         </LinearLayout>
 
         <LinearLayout
@@ -55,15 +60,19 @@
                 android:text="就诊:2015-06-24"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="@color/app_theme_secondary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_leave_hospital"
-                android:text="出院:2015-08-01"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="@color/app_theme_secondary_textcolor"/>
         </LinearLayout>
 
             <TextView
@@ -71,7 +80,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="地址:"/>
+                android:text=""
+                android:textSize="12sp"
+                android:textColor="@color/app_theme_secondary_textcolor"/>
 
      </LinearLayout>
 

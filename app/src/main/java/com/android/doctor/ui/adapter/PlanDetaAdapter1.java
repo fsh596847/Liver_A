@@ -47,7 +47,7 @@ public class PlanDetaAdapter1<T> extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_timeline, viewGroup, false);
+                .inflate(R.layout.item_timeline_base, viewGroup, false);
         TimeLineViewHolder vh = new TimeLineViewHolder(v, viewType);
         vh.setItemClickListener(this.itemClickListener);
         return vh;

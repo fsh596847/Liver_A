@@ -11,7 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.yuntongxun.ecsdk.ECMessage;
+import com.yuntongxun.kitsdk.beans.CommonUserData;
+import com.yuntongxun.kitsdk.beans.NoticeUserData;
 import com.yuntongxun.kitsdk.db.ConversationSqlManager;
 import com.yuntongxun.kitsdk.db.GroupNoticeSqlManager;
 import com.yuntongxun.kitsdk.db.GroupSqlManager;
@@ -57,7 +60,7 @@ public class CustomConversationAdapter extends BaseAdapter implements OnMessageC
     /**
      * 构造方法
      * @param ctx
-     * @param t
+     * @param type
      */
     public CustomConversationAdapter(Context ctx, int type) {
         mContext = ctx;
@@ -194,6 +197,7 @@ public class CustomConversationAdapter extends BaseAdapter implements OnMessageC
         }
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -218,11 +222,23 @@ public class CustomConversationAdapter extends BaseAdapter implements OnMessageC
 
         com.yuntongxun.kitsdk.ui.chatting.model.ECConversation conversation = (com.yuntongxun.kitsdk.ui.chatting.model.ECConversation)getItem(position);
         if(conversation != null) {
-            if(TextUtils.isEmpty(conversation.getUsername())) {
-                mViewHolder.nickname_tv.setText(conversation.getSessionId());
-            } else {
-                mViewHolder.nickname_tv.setText(conversation.getUsername());
+
+            Gson g = new Gson();
+            String userName = null;
+            String userdata = conversation.getUserdata();
+            if (userdata != null) {
+                if (mConvType == CONV_TYPE_NOTICE) {
+                    NoticeUserData uEntity = g.fromJson(userdata, NoticeUserData.class);
+                    userName = uEntity.getName();
+                } else {
+                    CommonUserData uEntity = g.fromJson(userdata, CommonUserData.class);
+                    userName = uEntity.getFrom().getName();
+                }
             }
+            if (!TextUtils.isEmpty(userName)) {
+                mViewHolder.nickname_tv.setText(userName);
+            }
+
             mViewHolder.last_msg_tv.setEmojiText(getConversationSnippet(conversation));
             mViewHolder.last_msg_tv.setCompoundDrawables(getChattingSnippentCompoundDrawables(mContext, conversation), null, null, null);
             String msgCount = conversation.getUnreadCount() > 100 ? "..." : String.valueOf(conversation.getUnreadCount());
@@ -231,11 +247,10 @@ public class CustomConversationAdapter extends BaseAdapter implements OnMessageC
             mViewHolder.image_input_text.setVisibility(View.GONE);
             mViewHolder.update_time_tv.setText(getConversationTime(conversation));
             if(conversation.getSessionId().toUpperCase().startsWith("G")) {
-                mViewHolder.user_avatar.setImageResource(com.yuntongxun.eckitsdk.R.drawable.group_head);
-
+                //mViewHolder.user_avatar.setImageResource(com.yuntongxun.eckitsdk.R.drawable.group_head);
 
             } else {
-                mViewHolder.user_avatar.setImageResource(com.yuntongxun.eckitsdk.R.drawable.default_avatar);
+                //mViewHolder.user_avatar.setImageResource(com.yuntongxun.eckitsdk.R.drawable.default_avatar);
                 if(conversation.getSessionId().equals(GroupNoticeSqlManager.CONTACT_ID)) {
                 } else {
                 }
@@ -275,12 +290,14 @@ public class CustomConversationAdapter extends BaseAdapter implements OnMessageC
                 ECConversation e = (ECConversation)getItem(cursor);
                 Log.d("ConversationAdapter", e.toString());
                 try {
-                    JSONObject jsonObject = new JSONObject(e.getUserdata());
-                    String itype = (String)jsonObject.get("type");
+                    String udata = e.getUserdata();
+                    if (udata == null) continue;
+                    JSONObject jsonObject = new JSONObject(udata);
+                    String itype = "" + jsonObject.get("type");
                     if ("0".equals(itype)) {
                         JSONObject jsonObject1 = (JSONObject)jsonObject.get("to");
-                        String id = (String)jsonObject1.get("id");
-                        String typec = (String)jsonObject1.get("type");
+                        String id = "" + jsonObject1.get("id");
+                        String typec = "" + jsonObject1.get("type");
                         if (id != null && id.toUpperCase().startsWith("G")) {
                             mDataGroup.add(e);
                         } else if ("2".equals(typec)) {
@@ -288,6 +305,8 @@ public class CustomConversationAdapter extends BaseAdapter implements OnMessageC
                         } else if ("0".equals(typec)) {
                             mDataPatient.add(e);
                         }
+                    } else {
+                        mDataNotice.add(e);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

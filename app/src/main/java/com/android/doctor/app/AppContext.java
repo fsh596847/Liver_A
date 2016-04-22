@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.yuntongxun.kitsdk.core.CCPAppManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,7 +63,7 @@ public class AppContext extends Application {
 		context = this;
         //CrashHandler crashHandler = CrashHandler.getInstance();
         //crashHandler.init(getApplicationContext());
-
+		CCPAppManager.setContext(this);
         initDisplayImageOptions();
 		initImageLoader();
 		initLogin();
@@ -261,5 +262,15 @@ public class AppContext extends Application {
         isLogin  = false;
         clearUser();
 		clearAppCache();
+	}
+
+	public void AppExit(Context context) {
+		try {
+			// 杀死该应用进程
+			//AppContext.context().getmAppLocate().stopLocate();
+			AppManager.getAppManager().AppExit(context);
+
+		} catch (Exception e) {
+		}
 	}
 }

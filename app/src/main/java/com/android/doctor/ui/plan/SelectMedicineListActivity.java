@@ -1,31 +1,39 @@
 package com.android.doctor.ui.plan;
 
-import android.annotation.SuppressLint;
-import android.os.Build;
+import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTabHost;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabContentFactory;
-import android.widget.TabHost.TabSpec;
-import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.model.MedicClassify;
+import com.android.doctor.model.RespEntity;
+import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
-import com.yuntongxun.kitsdk.utils.LogUtil;
+import com.android.doctor.ui.widget.PageEnableViewPager;
 
-public class SelectMedicineListActivity extends BaseActivity implements
-		OnTabChangeListener,
-		OnTouchListener,
-		OnClickListener {
+import java.util.List;
+
+import butterknife.InjectView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class SelectMedicineListActivity extends BaseActivity implements OnClickListener {
 
 	private static final String TAG = SelectMedicineListActivity.class.getSimpleName();
 	private FragmentTabHost mTabHost;
-    private String tabs[] = new String[4];
+    //private String tabs[] = new String[4];
+    @InjectView(R.id.viewPager)
+    protected PageEnableViewPager mViewPager;
+    @InjectView(R.id.tabLayout)
+    protected TabLayout mTabLayout;
 
 	@Override
 	protected void setContentLayout() {
@@ -34,25 +42,37 @@ public class SelectMedicineListActivity extends BaseActivity implements
 
 	protected void initView(){
         setActionBar("");
-        mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
-        mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+        mViewPager.setPagingEnabled(false);
+        /*mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         if (Build.VERSION.SDK_INT > 10) {
             mTabHost.getTabWidget().setShowDividers(0);
-        }
-        mTabHost.setOnTabChangedListener(this);
-        tabs[0] = "抗病毒";
-        tabs[1] = "调节";
-        tabs[2] = "保肝";
-        tabs[3] = "抗纤维化";
-		initTabs();
+        }*/
+        //mTabHost.setOnTabChangedListener(this);
+        //initTabHost();
+        onLoad();
 	}
 
+    private void initTabLayout() {
 
-	private void initTabs() {
-        final int size = tabs.length;
+    }
+
+    /*private void initTabHost() {
+        TabSpec tab1 = mTabHost.newTabSpec("First Tab");
+        tab1.setIndicator("First Tab");
+        tab1.setContent(new Intent(this, SelectMedicineListActivity.class));
+        mTabHost.addTab(tab1);
+    }*/
+
+	private void initTabs(List<MedicClassify.MedicEntity> tabs) {
+        if (tabs == null) return;
+        final int size = tabs.size();
         for (int i = 0; i < size; i++) {
-            String t = tabs[i];
-            TabSpec tab = mTabHost.newTabSpec(t);
+            MedicClassify.MedicEntity e = tabs.get(i);
+            if (e == null) continue;
+            String t = e.getName();
+            mTabLayout.addTab(mTabLayout.newTab().setText(t));
+           /* TabSpec tab = mTabHost.newTabSpec(t);
             View indicator = LayoutInflater.from(getApplicationContext())
                     .inflate(R.layout.textview, null);
             
@@ -70,10 +90,43 @@ public class SelectMedicineListActivity extends BaseActivity implements
             if (tab == null) {
                 LogUtil.e(LogUtil.getLogUtilsTag(SelectMedicineListActivity.class), "tab is null");
             }
-            mTabHost.addTab(tab, FragmentTextList.class, null);
-            mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
+            mTabHost.addTab(tab, FragmentTextLists.class, null);
+            mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);*/
         }
+        TextFragmentPagerAdapter adapter = new TextFragmentPagerAdapter(getSupportFragmentManager(),
+                this);
+        adapter.setmData(tabs);
+        mViewPager.setAdapter(adapter);
+        mTabLayout.setupWithViewPager(mViewPager);
 	}
+
+    private void onLoad() {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<MedicClassify>> call = service.getMedicClassify();
+        call.enqueue(new Callback<RespEntity<MedicClassify>>() {
+            @Override
+            public void onResponse(Call<RespEntity<MedicClassify>> call, Response<RespEntity<MedicClassify>> response) {
+                RespEntity<MedicClassify> data = response.body();
+                if (response.isSuccessful()) {
+                    if (data == null) {
+                        return;
+                    } else if (data.getResponse_params() != null) {
+                        initTabs(data.getResponse_params().getList());
+                    }
+                } else {
+                    String errMsg = "";
+                    if (data != null) {
+                        errMsg = data.getError_msg();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespEntity<MedicClassify>> call, Throwable t) {
+                Log.d("PlanSchemeActivity",t.toString());
+            }
+        });
+    }
 
 
 	@Override
@@ -82,39 +135,35 @@ public class SelectMedicineListActivity extends BaseActivity implements
 			return;
 		}
 	}
-	
-	@SuppressLint("ClickableViewAccessibility")
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		super.onTouchEvent(event);
-        boolean consumed = false;
-        // use getTabHost().getCurrentTabView to decide if the current tab is
-        // touched again
-        if (event.getAction() == MotionEvent.ACTION_DOWN
-                && v.equals(mTabHost.getCurrentTabView())) {
+
+    class TextFragmentPagerAdapter extends FragmentPagerAdapter {
+        private List<MedicClassify.MedicEntity> mData;
+        private Context context;
+
+        public TextFragmentPagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            this.context = context;
         }
-        return consumed;
-	}
-	
-	private Fragment getCurrentFragment() {
-        return getSupportFragmentManager().findFragmentByTag(
-                mTabHost.getCurrentTabTag());
+
+        @Override
+        public Fragment getItem(int position) {
+            if (mData == null) return null;
+            MedicClassify.MedicEntity e = mData.get(position);
+            return FragmentMedicInfoList.newInstance("" + e.getCode());
+        }
+
+        @Override
+        public int getCount() {
+            return mData == null ? 0 : mData.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mData == null ? "" : mData.get(position) == null ? null : mData.get(position).getName();
+        }
+
+        public void setmData(List<MedicClassify.MedicEntity> mData) {
+            this.mData = mData;
+        }
     }
-
-	@Override
-	public void onTabChanged(String tabId) {
-		final int size = mTabHost.getTabWidget().getTabCount();
-        for (int i = 0; i < size; i++) {
-            View v = mTabHost.getTabWidget().getChildAt(i);
-            if (i == mTabHost.getCurrentTab()) {
-                v.setSelected(true);                
-            } else {
-                v.setSelected(false);
-            }
-        }
-        invalidateOptionsMenu();
-        System.out.println("MainActivity.onTabChanged()");
-        supportInvalidateOptionsMenu();
-	}
-
 }

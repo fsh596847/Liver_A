@@ -2,6 +2,7 @@ package com.android.doctor.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,11 +14,14 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
+import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.ECSDKCoreHelper;
+import com.android.doctor.helper.SDKCoreHelper;
 import com.android.doctor.ui.base.BaseActivity;
 import com.android.doctor.ui.tabs.MainTab;
 import com.android.doctor.ui.widget.MainFragmentTabHost;
 import com.android.doctor.R;
+import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.kitsdk.ECDeviceKit;
 import com.yuntongxun.kitsdk.fragment.ConversationListFragment;
 
@@ -51,8 +55,12 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     protected void initData() {
-        ECDeviceKit.init("", getApplicationContext(), ECSDKCoreHelper.getInstance());
+        if (SDKCoreHelper.getConnectState() != ECDevice.ECConnectState.CONNECT_SUCCESS
+                && !SDKCoreHelper.isKickOff()) {
+            SDKCoreHelper.getInstance().init(AppContext.context());
+        }
     }
+
 
     @Override
 	protected boolean hasActionBar() {

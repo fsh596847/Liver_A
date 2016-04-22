@@ -6,8 +6,8 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.android.doctor.ui.activity.CommonFragmentActivity;
-import com.android.doctor.ui.patient.AddPatientMainActivity;
-import com.android.doctor.ui.patient.FillPatientFormActivity;
+import com.android.doctor.ui.patient.HospitalPatientMainActivity;
+import com.android.doctor.ui.patient.InvitePatientActivity;
 import com.android.doctor.ui.activity.MyFavoriteActivity;
 
 /**
@@ -16,7 +16,7 @@ import com.android.doctor.ui.activity.MyFavoriteActivity;
 public class UIHelper {
 
     public static void showMerchantListAty(Context context) {
-        Intent intent = new Intent(context, AddPatientMainActivity.class);
+        Intent intent = new Intent(context, HospitalPatientMainActivity.class);
         context.startActivity(intent);
     }
 
@@ -68,12 +68,12 @@ public class UIHelper {
     }
 
     public static void showAddPatientAty(Context context) {
-        Intent intent = new Intent(context, AddPatientMainActivity.class);
+        Intent intent = new Intent(context, HospitalPatientMainActivity.class);
         context.startActivity(intent);
     }
 
     public static void showFillPatientFormAty(Context context) {
-        Intent intent = new Intent(context, FillPatientFormActivity.class);
+        Intent intent = new Intent(context, InvitePatientActivity.class);
         context.startActivity(intent);
     }
 }

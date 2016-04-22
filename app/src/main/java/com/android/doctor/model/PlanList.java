@@ -74,7 +74,7 @@ public class PlanList implements Parcelable {
             this.puid = puid;
         }
 
-        public Object getPuuid() {
+        public String getPuuid() {
             return puuid;
         }
 
@@ -202,7 +202,7 @@ public class PlanList implements Parcelable {
             this.lastmonth = lastmonth;
         }
 
-        public Object getLastpubtime() {
+        public String getLastpubtime() {
             return lastpubtime;
         }
 
@@ -226,7 +226,7 @@ public class PlanList implements Parcelable {
             this.updlasttime = updlasttime;
         }
 
-        public Object getType() {
+        public String getType() {
             return type;
         }
 
@@ -234,7 +234,7 @@ public class PlanList implements Parcelable {
             this.type = type;
         }
 
-        public Object getHosid() {
+        public String getHosid() {
             return hosid;
         }
 

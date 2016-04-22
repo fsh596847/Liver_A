@@ -1,8 +1,9 @@
 package com.android.doctor.ui.tabs;
 
 import com.android.doctor.R;
+import com.android.doctor.ui.chat.FragmentMainMsg;
 import com.android.doctor.ui.fragment.FragmentHome;
-import com.android.doctor.ui.message.FragmentMainMsg;
+import com.android.doctor.ui.chat.FragmentMainMsg1;
 import com.android.doctor.ui.fragment.FragmentMyInfo;
 import com.android.doctor.ui.topic.FragmentTopic;
 import com.android.doctor.ui.plan.FragmentVisitPlan;

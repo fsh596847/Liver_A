@@ -57,6 +57,7 @@ public class ConversationListFragment extends BaseFragment implements
 		OnListAdapterCallBackListener {
 
 	private static final String TAG = "ConversationListFragment";
+	public static final String ARG_TYPE = "ARG_TYPE";
 
 	/** 会话消息列表ListView */
 	private ListView mListView;
@@ -64,6 +65,7 @@ public class ConversationListFragment extends BaseFragment implements
 	private CustomConversationAdapter mAdapter;
 	private OnUpdateMsgUnreadCountsListener mAttachListener;
 	private ECProgressDialog mPostingdialog;
+	private int type = 0;
 
 	final private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 
@@ -234,7 +236,10 @@ public class ConversationListFragment extends BaseFragment implements
      *
      */
 	private void initView() {
-
+		Bundle b = getArguments();
+		if (b != null) {
+			type = b.getInt(ARG_TYPE);
+		}
 		if (mListView != null) {
 			mListView.setAdapter(null);
 
@@ -253,7 +258,7 @@ public class ConversationListFragment extends BaseFragment implements
 		mListView.setOnItemClickListener(mItemClickListener);
 		mBannerView = new NetWarnBannerView(getActivity());
 		mListView.addHeaderView(mBannerView);
-		mAdapter = new CustomConversationAdapter(getActivity(), getArguments().getInt("type"));
+		mAdapter = new CustomConversationAdapter(getActivity(), type);
 		mListView.setAdapter(mAdapter);
 
 		registerForContextMenu(mListView);
@@ -371,4 +376,12 @@ public class ConversationListFragment extends BaseFragment implements
 		// }
 	}
 
+
+	public static ConversationListFragment newInstance(int arg) {
+		Bundle args = new Bundle();
+		args.putInt(ARG_TYPE, arg);
+		ConversationListFragment fragment = new ConversationListFragment();
+		fragment.setArguments(args);
+		return fragment;
+	}
 }

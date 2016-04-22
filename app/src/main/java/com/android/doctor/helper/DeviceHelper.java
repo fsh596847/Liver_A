@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.List;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -740,11 +741,14 @@ public class DeviceHelper {
         return netType;
     }
     
-    public static String getDeviceId(Context context) {
+    public static String getDeviceId(Activity context) {
     	TelephonyManager telephonyManager;
-        telephonyManager =      
-             (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);    
-        return telephonyManager.getDeviceId();  
+        telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (PermissionUtil.checkPermission(context, Manifest.permission.READ_PHONE_STATE)) {
+            return telephonyManager.getDeviceId();
+        } else {
+            return "";
+        }
     }
 
 }

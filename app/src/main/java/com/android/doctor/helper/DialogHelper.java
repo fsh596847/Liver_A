@@ -1,5 +1,6 @@
 package com.android.doctor.helper;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,9 +8,14 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.android.doctor.R;
 import com.android.doctor.ui.base.SimpleListAdapter;
+import com.android.doctor.ui.widget.progress_dialog.ProcessDialog;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
@@ -43,6 +49,13 @@ public class DialogHelper {
             waitDialog.setMessage(message);
         }
         return waitDialog;
+    }
+
+    public static ProcessDialog getProgressDialog(Context context, ProcessDialog.Style style, String message) {
+        ProcessDialog dialog = ProcessDialog.create(context)
+                .setStyle(style)
+                .setLabel(message);
+        return dialog;
     }
 
     /***

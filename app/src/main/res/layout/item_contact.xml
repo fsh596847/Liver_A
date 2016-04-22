@@ -30,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_male"
+                android:textColor="@color/app_theme_primary_textcolor"
                 android:gravity="center_vertical"/>
 
             <TextView

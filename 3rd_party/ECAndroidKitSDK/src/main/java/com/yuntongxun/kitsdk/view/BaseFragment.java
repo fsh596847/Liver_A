@@ -45,7 +45,9 @@ public abstract class BaseFragment extends CCPFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAudioManager = AudioManagerTools.getInstance().getAudioManager();
-        mMusicMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        if (mAudioManager != null) {
+            mMusicMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        }
     }
 
     /**

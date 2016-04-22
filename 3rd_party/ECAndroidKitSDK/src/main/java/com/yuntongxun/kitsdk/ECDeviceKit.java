@@ -40,7 +40,6 @@ public class ECDeviceKit {
 		if (sInstance == null) {
 			synchronized (ECDeviceKit.class) {
 				sInstance = new ECDeviceKit();
-
 			}
 		}
 

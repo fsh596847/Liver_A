@@ -31,6 +31,7 @@ import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.DeviceHelper;
 import com.android.doctor.helper.UIHelper;
+import com.android.doctor.interf.OnRefreshDataListener;
 import com.android.doctor.model.User;
 import com.android.doctor.ui.adapter.PopDownMenuAdapter;
 import com.android.doctor.ui.base.BaseFragment;
@@ -136,9 +137,9 @@ public class FragmentHome extends BaseFragment {
                 mPtrFrame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mPtrFrame.refreshComplete();
+                        mFragmentPatient.onRefresh();
                     }
-                }, 1000);
+                }, 500);
             }
         });
     }
@@ -148,6 +149,12 @@ public class FragmentHome extends BaseFragment {
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction trans = fm.beginTransaction();
         trans.replace(R.id.fl_container, mFragmentPatient).commit();
+        mFragmentPatient.setRefreshDataListener(new OnRefreshDataListener() {
+            @Override
+            public void onRefreshComplete(String msg) {
+                mPtrFrame.refreshComplete();
+            }
+        });
     }
         /*
         // the following are default settings
@@ -286,7 +293,7 @@ public class FragmentHome extends BaseFragment {
             String word = mEdtSearch.getText().toString().trim();
             if (!TextUtils.isEmpty(word)) {
                 DeviceHelper.hideSoftKeyboard(v);
-                mFragmentPatient.onSearch(word);
+                mFragmentPatient.onSearch("keywords", word);
             }
             return true;
         }

@@ -8,7 +8,7 @@ import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.interf.OnListItemSlideListener;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
-import com.android.doctor.ui.message.GroupMemberActivity;
+import com.android.doctor.ui.chat.GroupMemberActivity;
 import com.android.doctor.ui.viewholder.GroupMemberViewHolder;
 import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
 

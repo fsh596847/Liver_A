@@ -17,8 +17,7 @@ import com.yuntongxun.kitsdk.listener.OnInitSDKListener;
 import com.yuntongxun.kitsdk.listener.OnLogoutSDKListener;
 import com.yuntongxun.kitsdk.utils.LogUtil;
 
-public class ECSDKCoreHelper implements OnInitSDKListener, OnConnectSDKListener,
-		OnLogoutSDKListener {
+public class ECSDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDeviceConnectListener,ECDevice.OnLogoutListener {
 
 	private static final String TAG = "ECSDKCoreHelper";
 	public static final String ACTION_LOGOUT = "com.yuntongxun.ECDemo_logout";
@@ -57,7 +56,7 @@ public class ECSDKCoreHelper implements OnInitSDKListener, OnConnectSDKListener,
 		parameters.setAppToken("17E24E5AFDB6D0C1EF32F3533494502B");
 		parameters.setLoginMode(LoginMode.AUTO);
 		parameters.setLoginType(LoginAuthType.NORMAL_AUTH);
-		ECDeviceKit.login(parameters, getInstance());
+		//ECDeviceKit.login(parameters, getInstance());
 
 
 	}

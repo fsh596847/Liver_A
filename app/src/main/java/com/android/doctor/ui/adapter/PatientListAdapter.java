@@ -4,10 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.HosPaitentList;
 import com.android.doctor.model.PatientList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
-import com.android.doctor.ui.viewholder.PatientViewHolder;
+import com.android.doctor.ui.viewholder.DocPatientViewHolder;
+import com.android.doctor.ui.viewholder.HosPatientViewHolder;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -28,11 +31,15 @@ public class PatientListAdapter extends BaseRecyViewAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int pos) {
         int viewType = viewHolder.getItemViewType();
-        if (viewType == VIEW_TYPE_ITEM) {
-            if (PatientViewHolder.class.equals(viewHolder.getClass())) {
+        if (viewType == VIEW_TYPE_ITEM && viewHolder != null) {
+            if (DocPatientViewHolder.class.equals(viewHolder.getClass())) {
                 PatientList.DataEntity obj = (PatientList.DataEntity) this.getItem(pos);
-                PatientViewHolder holder = (PatientViewHolder) viewHolder;
-                holder.fillUI(obj);
+                DocPatientViewHolder holder = (DocPatientViewHolder) viewHolder;
+                holder.setViewData(obj);
+            } else if (HosPatientViewHolder.class.equals(viewHolder.getClass())) {
+                HosPaitentList.HosPatientEntity obj = (HosPaitentList.HosPatientEntity) this.getItem(pos);
+                HosPatientViewHolder holder = (HosPatientViewHolder) viewHolder;
+                holder.setViewData(obj);
             }
         }
     }
@@ -41,8 +48,15 @@ public class PatientListAdapter extends BaseRecyViewAdapter {
     @Override
     protected RecyclerView.ViewHolder getViewHolder(ViewGroup viewGroup, int viewType) {
         View view = inflater.inflate(layout, viewGroup, false);
-        PatientViewHolder viewHolder = new PatientViewHolder(view);
-        viewHolder.setItemClickListener(itemOptionClickListener);
-        return viewHolder;
+        if (layout == R.layout.item_patient) {
+            DocPatientViewHolder viewHolder = new DocPatientViewHolder(view);
+            viewHolder.setItemClickListener(itemOptionClickListener);
+            return viewHolder;
+        } else if (layout == R.layout.item_patient_invite) {
+            HosPatientViewHolder viewHolder = new HosPatientViewHolder(view);
+            viewHolder.setItemClickListener(itemOptionClickListener);
+            return viewHolder;
+        }
+        return null;
     }
 }

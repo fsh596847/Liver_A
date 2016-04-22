@@ -126,9 +126,7 @@ public abstract class BaseRecyViewFragment<T>
 
 	protected void onLoad(int pageNum, int limit) {}
 
-	protected void onLoadMore(int pageNum, int limit) {
-		//onLoad(pageNum, limit);
-	}
+	protected void onLoadMore(int pageNum, int limit) {}
 
 	public BaseRecyViewAdapter<T> getAdapter() {
 		return adapter;

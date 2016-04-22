@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.ContactList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
 import com.android.doctor.ui.viewholder.ContactViewHolder;
 import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
@@ -27,9 +28,9 @@ public class ContactListAdapter extends BaseRecyViewAdapter {
         int viewType = viewHolder.getItemViewType();
         if (viewType == VIEW_TYPE_ITEM) {
             if (ContactViewHolder.class.equals(viewHolder.getClass())) {
-                ECContacts obj = (ECContacts) this.getItem(pos);
+                ContactList.ContactEntity obj = (ContactList.ContactEntity) this.getItem(pos);
                 ContactViewHolder holder = (ContactViewHolder) viewHolder;
-                holder.fillUI(obj);
+                holder.setViewData(obj);
             }
         }
     }

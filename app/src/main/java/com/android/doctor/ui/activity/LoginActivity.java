@@ -129,7 +129,7 @@ public class LoginActivity extends BaseActivity {
 
 		HashMap<String, String> map = new HashMap<String, String>();
         map.put("source", "android");
-        map.put("uuid", DeviceHelper.getDeviceId(AppContext.context()));
+        map.put("uuid", DeviceHelper.getDeviceId(this));
         map.put("version", "1.0");
         map.put("device_type", "3");
         map.put("password", passwd);

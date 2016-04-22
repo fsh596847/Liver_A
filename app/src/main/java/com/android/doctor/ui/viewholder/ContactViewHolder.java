@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.ContactList;
 import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
 
 /**
@@ -36,20 +37,22 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
 
     public void initView(View view) {
         mAvatar = (ImageView) view.findViewById(R.id.avatar_iv);
-        name_tv = (TextView) view.findViewById(R.id.name_tv);
+        name_tv = (TextView) view.findViewById(R.id.tv_username);
         //account = (TextView) view.findViewById(R.id.account);
         //checkBox = (CheckBox) view.findViewById(R.id.contactitem_select_cb);
     }
 
-    public void fillUI(ECContacts contacts) {
-        //name_tv.setText(contacts.getNickname());
+    public void setViewData(ContactList.ContactEntity contacts) {
+        String text = contacts.getName() + "  (" + contacts.getLinktype() + ")";
+        name_tv.setText(contacts.getName());
+        int sex = contacts.getSex() == 0 ? R.drawable.ic_female : R.drawable.ic_male;
+        name_tv.setCompoundDrawablesWithIntrinsicBounds(0,sex,0,0);
         //account.setText(contacts.getContactid());
     }
 
     public void setItemClickListener(OnListItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
-
 
     @Override
     public void onClick(View v) {

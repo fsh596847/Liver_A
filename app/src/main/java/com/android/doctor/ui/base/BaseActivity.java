@@ -7,9 +7,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.android.doctor.app.AppManager;
+import com.android.doctor.helper.DialogHelper;
 import com.android.doctor.helper.StringHelper;
 import com.android.doctor.R;
 import com.android.doctor.ui.widget.EmptyLayout;
+import com.android.doctor.ui.widget.progress_dialog.ProcessDialog;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
@@ -21,11 +23,12 @@ public class BaseActivity extends AppCompatActivity {
 	private long lastClickTime = 0;
 	protected EmptyLayout emptyLayout;
 	protected ActionBar mActionBar;
-	
+    protected ProcessDialog mProgressDialog;
+
 	@Override
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//AppManager.getAppManager().addActivity(this);
+		AppManager.getAppManager().addActivity(this);
 		setContentLayout();
         ButterKnife.inject(this);
 		if (hasActionBar()) {
@@ -41,7 +44,9 @@ public class BaseActivity extends AppCompatActivity {
 	protected void init() {
 	}
 
-	protected void initView() {}
+	protected void initView() {
+        mProgressDialog = DialogHelper.getProgressDialog(this, ProcessDialog.Style.SPIN_INDETERMINATE, "请稍后");
+    }
 
 	protected void initData() {}
 
@@ -89,7 +94,6 @@ public class BaseActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			onBackPressed();
-			//AppManager.getAppManager().finishActivity();
 			break;
 
 		default:
@@ -97,8 +101,14 @@ public class BaseActivity extends AppCompatActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
+
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		AppManager.getAppManager().finishActivity();
+	}
+
 	protected boolean isFastDoubleClick() {
 		long curMillis = System.currentTimeMillis();
 		if (curMillis - lastClickTime <= MIN_CLICK_DELAY_TIME) {
@@ -107,6 +117,18 @@ public class BaseActivity extends AppCompatActivity {
 		lastClickTime = curMillis;
 		return false;
 	}
+
+    protected void dismissProcessDialog() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    protected void showProcessDialog() {
+        if (mProgressDialog != null) {
+            mProgressDialog.show();
+        }
+    }
 
 	@Override
 	protected void onPause() {

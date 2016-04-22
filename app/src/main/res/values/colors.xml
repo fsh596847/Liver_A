@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#1B85C0</color>
+    <color name="colorPrimaryDark">#1B85C0</color>
     <color name="colorAccent">#33b5e5</color>
-    <color name="appThemePrimary0">#33b5e5</color>
+    <color name="appThemePrimary0">#1B85C0</color>
     <color name="appThemePrimary">#56abe9</color>
     <color name="window_bg">#fafafa</color>
     <color name="line_color">#e7e7e7</color>
@@ -24,4 +24,7 @@
 
     <color name="pop_tab_text_selected_color">#56abe9</color>
     <color name="pop_tab_text_unselected_color">#ff111111</color>
+
+    <color name="kprogresshud_default_color">#b1000000</color>
+    <color name="kprogresshud_grey_color">#449E9E9E</color>
 </resources>

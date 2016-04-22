@@ -16,7 +16,6 @@ import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.DateUtils;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.PatientList;
-import com.android.doctor.model.PatientStats;
 import com.android.doctor.model.PlanList;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
@@ -25,7 +24,6 @@ import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.TimeLineAdapter;
 import com.android.doctor.ui.base.BaseActivity;
 import com.android.doctor.ui.widget.TimeLineMarker;
-import com.yuntongxun.kitsdk.utils.DateUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +96,7 @@ public class PatientInfoActivity extends BaseActivity{
     private void setArchViewData(int cnt) {
         for (int i = 0; i < cnt; ++i) {
             PlanList.DataEntity d = null;
-            View v = LayoutInflater.from(this).inflate(R.layout.item_timeline, mDiseaseArc, false);
+            View v = LayoutInflater.from(this).inflate(R.layout.item_timeline_base, mDiseaseArc, false);
             initItem(v, i == 0 ? TimeLineAdapter.START : TimeLineAdapter.NORMAL);
             TextView t1 = (TextView) v.findViewById(R.id.tv_1);
             TextView t2 = (TextView) v.findViewById(R.id.tv_2);
@@ -126,7 +124,7 @@ public class PatientInfoActivity extends BaseActivity{
         if (pData == null) return;
         for (int i = 0; i < pData.size(); ++i) {
             PlanList.DataEntity d = pData.get(i);
-            View v = LayoutInflater.from(this).inflate(R.layout.item_timeline, mVisitPlan, false);
+            View v = LayoutInflater.from(this).inflate(R.layout.item_timeline_base, mVisitPlan, false);
             initItem(v, i == 0 ? TimeLineAdapter.START : TimeLineAdapter.NORMAL);
             TextView t1 = (TextView) v.findViewById(R.id.tv_1);
             TextView t2 = (TextView) v.findViewById(R.id.tv_2);

@@ -31,25 +31,9 @@
             android:src="@drawable/icon_touxiang_persion_gray"
             android:background="@color/transparent" />
 
-        <TextView
-            android:id="@+id/tipcnt_tv"
-            style="@style/UnreadCountTipsStyle"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/SmallerPadding"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/avatar_prospect_iv"
-            style="@style/UnreadDotStyle"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/BasicPaddingSize"
-            android:layout_marginTop="@dimen/OneDPPadding"
-            android:visibility="gone" />
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginRight="@dimen/NormalPadding"
@@ -57,6 +41,7 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/ll_0"
             android:layout_width="fill_parent"
             android:layout_height="24.0dip"
             android:layout_marginTop="@dimen/OneDPPadding"
@@ -92,6 +77,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_below="@id/ll_0"
             android:layout_width="fill_parent"
             android:layout_height="22.0dip"
             android:gravity="center_vertical"
@@ -132,6 +118,22 @@
 
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/avatar_prospect_iv"
+            style="@style/UnreadDotStyle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/BasicPaddingSize"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tipcnt_tv"
+            style="@style/UnreadCountTipsStyle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/SmallerPadding"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </LinearLayout>

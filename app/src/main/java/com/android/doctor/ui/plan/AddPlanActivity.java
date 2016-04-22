@@ -8,7 +8,7 @@ import com.android.doctor.R;
 import com.android.doctor.helper.DateUtils;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.ui.base.BaseActivity;
-import com.android.doctor.ui.message.FindPatientActivity;
+import com.android.doctor.ui.chat.FindPatientActivity;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.yuntongxun.kitsdk.utils.LogUtil;

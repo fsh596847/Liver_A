@@ -78,8 +78,9 @@
 
         </activity>
 
-        <activity android:name=".app.AppStart"
-            android:screenOrientation="portrait">
+        <activity android:name=".app.AppLauncher"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -91,7 +92,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.patient.AddPatientMainActivity"
+            android:name=".ui.patient.HospitalPatientMainActivity"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -103,51 +104,51 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.patient.FillPatientFormActivity"
+            android:name=".ui.patient.InvitePatientActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.ContactActivity"
+            android:name=".ui.chat.ContactActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.CreateGroupActivity"
+            android:name=".ui.chat.CreateGroupActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.GroupCardActivity"
+            android:name=".ui.chat.GroupCardActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.GroupMemberActivity"
+            android:name=".ui.chat.GroupMemberActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.GroupProfileActivity"
+            android:name=".ui.chat.GroupProfileActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.ICreatedGroupActivity"
+            android:name=".ui.chat.ICreatedGroupActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.SearchGroupActivity"
+            android:name=".ui.chat.SearchGroupActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.FindDoctorActivity"
+            android:name=".ui.chat.FindDoctorActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.FindPatientActivity"
+            android:name=".ui.chat.FindPatientActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.AddContactActivity"
+            android:name=".ui.chat.AddContactActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.message.DoctorProfileActivity"
+            android:name=".ui.chat.DoctorProfileActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.plan.PlanListActivity"
@@ -159,25 +160,26 @@
         <activity android:name=".ui.plan.PlanSchemeActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.plan.EditSchemeItemActivity"
+        <activity android:name=".ui.plan.EditPlanItemActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.plan.EditSchemeSubItemActivity"
+        <activity android:name=".ui.plan.EditPlanItemDetaActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.plan.SelectMedicineListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name=".ui.plan.SelectUseItemActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.plan.SelectListItemActivity"
+        <activity android:name=".ui.plan.EditPlanMedicItemActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.plan.EditMedicineItemActivity"
+        <activity android:name=".ui.plan.PlanRecordInfoActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.plan.DiagRecordActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ui.plan.DiagRecordListActivity"
+        <activity android:name=".ui.plan.PlanRecordListActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.patient.PatientInfoActivity"
