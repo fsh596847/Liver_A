@@ -53,7 +53,6 @@
         android:layout_height="match_parent"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:animateLayoutChanges="true"
         android:divider="@null"
         android:scrollbars="none"/>
 
