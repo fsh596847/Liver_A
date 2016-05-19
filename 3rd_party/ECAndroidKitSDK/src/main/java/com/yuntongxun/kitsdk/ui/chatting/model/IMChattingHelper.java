@@ -292,6 +292,13 @@ public class IMChattingHelper implements OnChatReceiveListener,
 		if (msg == null) {
 			return;
 		}
+		try {
+			DemoUtils.playNotifycationMusic(
+					CCPAppManager.getContext(),
+					"received_msg.mp3");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		postReceiveMessage(msg, true);
 
 	}
@@ -350,7 +357,7 @@ public class IMChattingHelper implements OnChatReceiveListener,
 					body.setFileName(FileAccessor.getFileName(body
 							.getRemoteUrl()));
 				}
-				msg.setUserData("fileName=" + body.getFileName());
+				//msg.setUserData("fileName=" + body.getFileName());
 				if (IMessageSqlManager.insertIMessage(msg, msg.getDirection()
 						.ordinal()) > 0) {
 					return;

@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.android.doctor.ui.activity.CommonFragmentActivity;
-import com.android.doctor.ui.patient.HospitalPatientMainActivity;
+import com.android.doctor.app.AppContext;
+import com.android.doctor.ui.app.CommonFragmentActivity;
+import com.android.doctor.ui.patient.HosPatientMainActivity;
 import com.android.doctor.ui.patient.InvitePatientActivity;
-import com.android.doctor.ui.activity.MyFavoriteActivity;
 
 /**
  * Created by Yong on 2016-02-18.
@@ -16,7 +16,7 @@ import com.android.doctor.ui.activity.MyFavoriteActivity;
 public class UIHelper {
 
     public static void showMerchantListAty(Context context) {
-        Intent intent = new Intent(context, HospitalPatientMainActivity.class);
+        Intent intent = new Intent(context, HosPatientMainActivity.class);
         context.startActivity(intent);
     }
 
@@ -50,8 +50,8 @@ public class UIHelper {
         toast.show();
     }
 
-    public static void showToast(Context context, String str) {
-        Toast toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
+    public static void showToast(String str) {
+        Toast toast = Toast.makeText(AppContext.context(), str, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
@@ -68,7 +68,7 @@ public class UIHelper {
     }
 
     public static void showAddPatientAty(Context context) {
-        Intent intent = new Intent(context, HospitalPatientMainActivity.class);
+        Intent intent = new Intent(context, HosPatientMainActivity.class);
         context.startActivity(intent);
     }
 

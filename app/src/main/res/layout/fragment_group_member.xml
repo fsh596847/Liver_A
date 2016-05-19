@@ -34,20 +34,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/edit"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/fl_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:paddingLeft="15dp"/>
 </LinearLayout>

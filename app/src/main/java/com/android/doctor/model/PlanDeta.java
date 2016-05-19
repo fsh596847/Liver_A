@@ -12,17 +12,17 @@ import java.util.List;
 public class PlanDeta {
 
 
-    private List<DataEntity> data;
+    private List<PlanDetaEntity> data;
 
-    public List<DataEntity> getData() {
+    public List<PlanDetaEntity> getData() {
         return data;
     }
 
-    public void setData(List<DataEntity> data) {
+    public void setData(List<PlanDetaEntity> data) {
         this.data = data;
     }
 
-    public static class DataEntity implements Parcelable {
+    public static class PlanDetaEntity implements Parcelable {
         private String _id;
         private int pid;
         private String tplid;
@@ -808,10 +808,10 @@ public class PlanDeta {
             dest.writeTypedList(items);
         }
 
-        public DataEntity() {
+        public PlanDetaEntity() {
         }
 
-        private DataEntity(Parcel in) {
+        private PlanDetaEntity(Parcel in) {
             this._id = in.readString();
             this.pid = in.readInt();
             this.tplid = in.readString();
@@ -832,13 +832,13 @@ public class PlanDeta {
             in.readTypedList(this.items, ItemsEntity.CREATOR);
         }
 
-        public static final Parcelable.Creator<DataEntity> CREATOR = new Parcelable.Creator<DataEntity>() {
-            public DataEntity createFromParcel(Parcel source) {
-                return new DataEntity(source);
+        public static final Parcelable.Creator<PlanDetaEntity> CREATOR = new Parcelable.Creator<PlanDetaEntity>() {
+            public PlanDetaEntity createFromParcel(Parcel source) {
+                return new PlanDetaEntity(source);
             }
 
-            public DataEntity[] newArray(int size) {
-                return new DataEntity[size];
+            public PlanDetaEntity[] newArray(int size) {
+                return new PlanDetaEntity[size];
             }
         };
     }

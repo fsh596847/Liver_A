@@ -56,8 +56,8 @@ public class PlanRecordListActivity extends BaseActivity {
     @OnClick(R.id.img_add)
     protected void onAdd() {
         NewPlanRecord record = new NewPlanRecord();
-        if (mFrag != null && mFrag.getAdapter() != null) {
-            List<PlanRecordList.RecordEntity> list = mFrag.getAdapter().getData();
+        if (mFrag != null && mFrag.getmAdapter() != null) {
+            List<PlanRecordList.RecordEntity> list = mFrag.getmAdapter().getData();
             if (list != null && !list.isEmpty()) {
                 PlanRecordList.RecordEntity e = list.get(0);
                 record.setNewPlanRecord(e);

@@ -38,8 +38,17 @@ public class TreeNodeWrapperView extends LinearLayout {
         nodeItemsContainer.setOrientation(LinearLayout.VERTICAL);
         nodeItemsContainer.setVisibility(View.GONE);
 
+        LinearLayout subItemsContainer = new LinearLayout(newContext, null, containerStyle);
+        subItemsContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        subItemsContainer.setOrientation(LinearLayout.HORIZONTAL);
+        View view = new View(getContext());
+        view.setLayoutParams(new LinearLayout.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT));
+        view.setBackgroundColor(getResources().getColor(R.color.divider_color));
+        subItemsContainer.addView(view);
+        subItemsContainer.addView(nodeItemsContainer);
+
         addView(nodeContainer);
-        addView(nodeItemsContainer);
+        addView(subItemsContainer);
     }
 
 

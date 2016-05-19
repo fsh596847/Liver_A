@@ -88,7 +88,7 @@ public class SelectMedicineListActivity extends BaseActivity implements OnClickL
             });
 
             if (tab == null) {
-                LogUtil.e(LogUtil.getLogUtilsTag(SelectMedicineListActivity.class), "tab is null");
+
             }
             mTabHost.addTab(tab, FragmentTextLists.class, null);
             mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);*/
@@ -123,7 +123,7 @@ public class SelectMedicineListActivity extends BaseActivity implements OnClickL
 
             @Override
             public void onFailure(Call<RespEntity<MedicClassify>> call, Throwable t) {
-                Log.d("PlanSchemeActivity",t.toString());
+                Log.d("PlanDetaActivity",t.toString());
             }
         });
     }

@@ -11,7 +11,7 @@
         android:id="@+id/avatar_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_doctor_photo"/>
+        android:src="@drawable/doctor_photo"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,11 +25,13 @@
 
             <TextView
                 android:id="@+id/tv_username"
-                android:text="name"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
+                android:textSize="13sp"
+                android:textColor="@color/app_theme_primary_textcolor"
                 android:drawableRight="@drawable/ic_female"/>
         </RelativeLayout>
 
@@ -39,10 +41,12 @@
         android:layout_alignParentBottom="true">
 
         <TextView
-            android:id="@+id/tv_diagnose"
+            android:id="@+id/tv_other"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="诊断:缺"/>
+            android:text=""
+            android:textSize="12sp"
+            android:textColor="@color/app_theme_secondary_textcolor"/>
 
         </RelativeLayout>
     </RelativeLayout>

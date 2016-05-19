@@ -1,6 +1,8 @@
 package com.android.doctor.ui.base;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -31,16 +33,22 @@ public abstract class BaseRecyViewFragment<T>
 	@InjectView(R.id.recyc_view)
 	protected RecyclerView recyclerView;
 	protected LayoutManager layoutManager;
-	protected BaseRecyViewAdapter<T> adapter;
+	protected BaseRecyViewAdapter<T> mAdapter;
 	protected int mCurPage = 0;
 
     @Override
     protected void initView(View view) {
 		super.initView(view);
-        setupRecyclerView(view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyc_view);
+		setupRecyclerView(view);
     }
 
-    protected void setupRecyclerView(View view) {
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+	}
+
+	protected void setupRecyclerView(View view) {
 		setLayoutManager();		
 		setAdapter();
 		setupListener();
@@ -48,7 +56,7 @@ public abstract class BaseRecyViewFragment<T>
 	
 	protected void setRecyclerViewHeight(int cellLayout) {
 		View view = LayoutInflater.from(getActivity()).inflate(cellLayout, null, false);
-		int viewHeight = view.getMeasuredHeight() * adapter.getItemCount();
+		int viewHeight = view.getMeasuredHeight() * mAdapter.getItemCount();
 		ViewGroup.LayoutParams lp = recyclerView.getLayoutParams();
 		lp.height = viewHeight;
 		recyclerView.setLayoutParams(lp);
@@ -77,38 +85,37 @@ public abstract class BaseRecyViewFragment<T>
 					mCurPage--;
 				}
 			}
-			adapter.setState(BaseRecyViewAdapter.STATE_NETWORK_ERROR);
+			mAdapter.setState(BaseRecyViewAdapter.STATE_NETWORK_ERROR);
 			return;
 		}
 		
 		int adapterState = BaseRecyViewAdapter.STATE_EMPTY_ITEM;
-        if ((data.size() + adapter.getItemCount()) == 0) {
+        if ((data.size() + mAdapter.getItemCount()) == 0) {
             adapterState = BaseRecyViewAdapter.STATE_EMPTY_ITEM;
-        } else if (data.size() == 0 || (data.size() < PAGE_SIZE)) {
+        } else if (data.size() == 0 || (data.size() != PAGE_SIZE)) {
             adapterState = BaseRecyViewAdapter.STATE_NO_MORE;
-            adapter.setFooterViewText("");
+            mAdapter.setFooterViewText("");
         } else {
             adapterState = BaseRecyViewAdapter.STATE_LOAD_MORE;
         }
-        adapter.setState(adapterState);
+        mAdapter.setState(adapterState);
 	}
 	
 	protected void setAdapterData(List<T> data, int curState) {
-		if (data == null || adapter == null) {
-			Log.e(TAG, "setAdapterData() data or adapter is null, pagestate: " + curState);
+		if (data == null || mAdapter == null) {
+			Log.e(TAG, "setAdapterData() data or madapter is null, pagestate: " + curState);
 			return;
 		}
 		
-		if (data.isEmpty()) {
-            setEmptyLayout(View.VISIBLE, EmptyLayout.OTHER_ERROR, "没有内容");
-			Log.e(TAG, "setAdapterData() data is Empty, pageState: " + curState);
-		}
-		
 		if (curState == PAGE_STATE_REFRESH) {
-			adapter.removeAll();			
-			adapter.setData(data);
+			if (data.isEmpty()) {
+				setMaskLayout(View.VISIBLE, EmptyLayout.OTHER_ERROR, "");
+				Log.e(TAG, "setAdapterData() data is Empty, pageState: " + curState);
+			}
+			mAdapter.removeAll();
+			mAdapter.setData(data);
 		} else if (curState == PAGE_STATE_LOADMORE) {
-			List<T> list = adapter.getData();
+			List<T> list = mAdapter.getData();
 			for (int i = 0; i < data.size(); ++i) {
 				T e = data.get(i);
 				if (compareTo(list, e)) {
@@ -120,21 +127,23 @@ public abstract class BaseRecyViewFragment<T>
 				Log.w(TAG, "data is empty");
 				return;
 			}
-			adapter.addData(data);
+			mAdapter.addData(data);
 		} 
 	}
 
 	protected void onLoad(int pageNum, int limit) {}
 
-	protected void onLoadMore(int pageNum, int limit) {}
+	protected void onLoadMore(int pageNum, int limit) {
+		onLoad(pageNum, limit);
+	}
 
-	public BaseRecyViewAdapter<T> getAdapter() {
-		return adapter;
+	public BaseRecyViewAdapter<T> getmAdapter() {
+		return mAdapter;
 	}
 
 	@Override
 	public void onRefresh() {
-		if (mState == PAGE_STATE_REFRESH) {
+		if (mState == PAGE_STATE_REFRESH || mState == PAGE_STATE_LOADMORE) {
 			Log.i(TAG, "fragment is already in refrshing");
 			return;
 		}
@@ -153,7 +162,7 @@ public abstract class BaseRecyViewFragment<T>
 	protected void onFail(String msg) {
 		setAdapterState(null);
 		setViewStateNone(mState);
-        setEmptyLayout(View.VISIBLE, EmptyLayout.OTHER_ERROR, msg);
+        setMaskLayout(View.VISIBLE, EmptyLayout.OTHER_ERROR, msg);
 		LogUtil.d(LogUtil.getLogUtilsTag(BaseRecyViewFragment.class), msg);
 	}
 
@@ -179,8 +188,8 @@ public abstract class BaseRecyViewFragment<T>
 	}
 	
 	protected void onScrollChanged() {
-		if (adapter == null || 
-			adapter.getItemCount() == 0) {
+		if (mAdapter == null ||
+			mAdapter.getItemCount() == 0) {
             return;
         }
         
@@ -192,13 +201,13 @@ public abstract class BaseRecyViewFragment<T>
         boolean scrollEnd = false;
         int lastPos = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
         View lastView = layoutManager.findViewByPosition(lastPos);
-        if (lastView == adapter.getFooterView()) {
+        if (lastView == mAdapter.getFooterView()) {
         	scrollEnd = true;
         }
         
 		mCurPage = (lastPos / PAGE_SIZE -1);
 		
-        int adapterState = adapter.getState();
+        int adapterState = mAdapter.getState();
         
         if (mState == PAGE_STATE_NONE && scrollEnd) {
             if (adapterState == BaseRecyViewAdapter.STATE_LOAD_MORE
@@ -206,7 +215,7 @@ public abstract class BaseRecyViewFragment<T>
 
             	mCurPage++;
                 mState = PAGE_STATE_LOADMORE;
-                adapter.setFooterViewLoading();
+                mAdapter.setFooterViewLoading();
                 onLoadMore(mCurPage, PAGE_SIZE);
             }
         }

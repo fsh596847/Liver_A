@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="60dp"
-    android:gravity="center"
+    android:id="@+id/rl_root"
+    android:layout_width="50dp"
     android:layout_centerHorizontal="true"
     android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/tv_unread_msg_number"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/aii"
-        android:visibility="gone"
-        android:gravity="center"
-        android:text=""
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:textSize="8sp"
         android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:gravity="center"
+        android:background="@drawable/aii"
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tab_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:drawablePadding="8dp"
         android:text="资讯"

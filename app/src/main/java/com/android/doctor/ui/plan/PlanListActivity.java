@@ -1,27 +1,34 @@
 package com.android.doctor.ui.plan;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.helper.DeviceHelper;
 import com.yuntongxun.kitsdk.view.ECProgressDialog;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import butterknife.OnEditorAction;
 import butterknife.OnTextChanged;
 
 /**
@@ -29,7 +36,7 @@ import butterknife.OnTextChanged;
  *
  */
 public class PlanListActivity extends AppCompatActivity  {
-    private ECProgressDialog mPostingdialog;
+
     private static final String TAG = "PlanListActivity";
     private static final String TAB1 = "state_all";
     private static final String TAB2 = "state_ing";
@@ -49,6 +56,12 @@ public class PlanListActivity extends AppCompatActivity  {
     protected EditText mEdtSearch;
 
 
+    public static void startAty(Context context, String uid) {
+        Intent intent = new Intent(context, PlanListActivity.class);
+        intent.putExtra(FragmentDoctorPlanList.ARG_ID, uid);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -59,38 +72,21 @@ public class PlanListActivity extends AppCompatActivity  {
     }
 
     protected void init() {
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle b = intent.getExtras();
-            if (b != null) {
-                //parentId = b.getString("pid");
-                //childId = b.getString("cid");
-                //item = b.getParcelable("item");
-                //LogUtil.d(LogUtil.getLogUtilsTag(ActivityActivityContactList.class), item.toJson());
-            }
-        }
     }
 
     protected void initView() {
         setActionBar();
+        Intent intent = getIntent();
+        String uid = intent.getStringExtra(FragmentDoctorPlanList.ARG_ID);
 
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
-        Bundle b1 = new Bundle();
-        Bundle b2 = new Bundle();
-        Bundle b3 = new Bundle();
-        b1.putInt(FragmentPlanList.EXTRA_PARAM, FragmentPlanList.TYPE_STATE_ALL);
-        b2.putInt(FragmentPlanList.EXTRA_PARAM, FragmentPlanList.TYPE_STATE_ING);
-        b3.putInt(FragmentPlanList.EXTRA_PARAM, FragmentPlanList.TYPE_STATE_FINISHED);
+        mTabHost.addTab(mTabHost.newTabSpec(TAB1).setIndicator(TAB1), FragmentDoctorPlanList.class, getBundle(FragmentDoctorPlanList.TYPE_STATE_ALL, uid));
+        mTabHost.addTab(mTabHost.newTabSpec(TAB2).setIndicator(TAB2), FragmentDoctorPlanList.class, getBundle(FragmentDoctorPlanList.TYPE_STATE_ING, uid));
+        mTabHost.addTab(mTabHost.newTabSpec(TAB3).setIndicator(TAB3), FragmentDoctorPlanList.class, getBundle(FragmentDoctorPlanList.TYPE_STATE_FINISHED, uid));
 
-        mTabHost.addTab(mTabHost.newTabSpec(TAB1).setIndicator(TAB1), FragmentPlanList.class, b1);
-        mTabHost.addTab(mTabHost.newTabSpec(TAB2).setIndicator(TAB2), FragmentPlanList.class, b2);
-        mTabHost.addTab(mTabHost.newTabSpec(TAB3).setIndicator(TAB3), FragmentPlanList.class, b3);
-        mTabHost.setCurrentTabByTag(TAB1);
-        //mRdoGrp = (RadioGroup) findViewById(R.id.rdg_btn);
-        //mRdoGrp.setOnCheckedChangeListener(this);
-        //onActivityCreate();
+        setTab1();
     }
 
     private void setActionBar() {
@@ -99,6 +95,18 @@ public class PlanListActivity extends AppCompatActivity  {
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
+    }
+
+    private Bundle getBundle(int stat, String uid) {
+        Bundle b = new Bundle();
+        b.putString(FragmentDoctorPlanList.ARG_ID, uid);
+        b.putInt(FragmentDoctorPlanList.ARG_TYPE, stat);
+        return b;
+    }
+
+    private Fragment getCurrentFragment() {
+        return getSupportFragmentManager().findFragmentByTag(
+                mTabHost.getCurrentTabTag());
     }
 
     @Override
@@ -146,9 +154,23 @@ public class PlanListActivity extends AppCompatActivity  {
         mIvClear.setVisibility(TextUtils.isEmpty(s) ? View.INVISIBLE : View.VISIBLE);
     }
 
+    @OnEditorAction(R.id.edt_search_box)
+    protected boolean onSearch(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            String word = mEdtSearch.getText().toString().trim();
+            if (!TextUtils.isEmpty(word)) {
+                DeviceHelper.hideSoftKeyboard(v);
+                ((FragmentDoctorPlanList)getCurrentFragment()).onSearch(word);
+            }
+            return true;
+        }
+        return false;
+    }
+
     @OnClick(R.id.iv_clear)
     public void onClear() {
         mEdtSearch.setText("");
+        ((FragmentDoctorPlanList)getCurrentFragment()).onClearSearch();
     }
 
 }

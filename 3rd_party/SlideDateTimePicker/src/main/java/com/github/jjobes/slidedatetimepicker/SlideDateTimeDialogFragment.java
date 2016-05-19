@@ -37,7 +37,7 @@ public class SlideDateTimeDialogFragment extends DialogFragment implements DateF
 {
     public static final String TAG_SLIDE_DATE_TIME_DIALOG_FRAGMENT = "tagSlideDateTimeDialogFragment";
 
-    private static SlideDateTimeListener mListener;
+    private SlideDateTimeListener mListener;
 
     private Context mContext;
     private CustomViewPager mViewPager;
@@ -85,8 +85,6 @@ public class SlideDateTimeDialogFragment extends DialogFragment implements DateF
             Date initialDate, Date minDate, Date maxDate, boolean isClientSpecified24HourTime,
             boolean is24HourTime, int theme, int indicatorColor)
     {
-        mListener = listener;
-
         // Create a new instance of SlideDateTimeDialogFragment
         SlideDateTimeDialogFragment dialogFragment = new SlideDateTimeDialogFragment();
 
@@ -99,6 +97,7 @@ public class SlideDateTimeDialogFragment extends DialogFragment implements DateF
         bundle.putBoolean("is24HourTime", is24HourTime);
         bundle.putInt("theme", theme);
         bundle.putInt("indicatorColor", indicatorColor);
+        bundle.putSerializable("listener", listener);
         dialogFragment.setArguments(bundle);
 
         // Return the fragment with its bundle
@@ -177,6 +176,7 @@ public class SlideDateTimeDialogFragment extends DialogFragment implements DateF
         mIs24HourTime = args.getBoolean("is24HourTime");
         mTheme = args.getInt("theme");
         mIndicatorColor = args.getInt("indicatorColor");
+        mListener = (SlideDateTimeListener) args.getSerializable("listener");
     }
 
     private void setupViews(View v)

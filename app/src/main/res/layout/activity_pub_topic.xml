@@ -26,7 +26,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/tv_complete"
+                android:id="@+id/tv_pub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -64,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tv_topic_"
             android:layout_marginLeft="10dp"
+            android:textColor="@color/app_theme_primary_textcolor"
             android:layout_centerVertical="true" />
     </RelativeLayout>
 
@@ -88,7 +89,7 @@
         <EditText
             android:id="@+id/edt_title"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:minWidth="100dp"
             android:background="@null"
             android:singleLine="true"
@@ -103,19 +104,16 @@
     <View
         style="@style/h_line"/>
 
-    <LinearLayout
-        android:padding="15dp"
-        android:background="@android:color/white"
+    <com.android.doctor.ui.widget.ExpandedGridView
+        android:id="@+id/grid_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/add_pic"/>
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:numColumns="4"
+        android:scrollbars="none"
+        android:verticalSpacing="5dp"/>
 
     <View
         style="@style/h_line"/>
@@ -131,7 +129,7 @@
         <TextView
             android:id="@+id/tv_label0"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:text="@string/content"/>
 

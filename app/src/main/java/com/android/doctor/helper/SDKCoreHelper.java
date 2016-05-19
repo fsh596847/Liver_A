@@ -81,7 +81,7 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
 
     public static void init(Context ctx , ECInitParams.LoginMode mode) {
         getInstance().mKickOff = false;
-        LogUtil.d(TAG , "[init] start regist..");
+        Log.d(TAG , "[init] start regist..");
         ctx = AppContext.context();
         ECDeviceKit.setmContext(ctx);
         getInstance().mMode = mode;
@@ -95,7 +95,7 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
             postConnectNotify();
             return ;
         }
-        LogUtil.d(TAG, " SDK has inited , then regist..");
+        Log.d(TAG, " SDK has inited , then regist..");
         // 已经初始化成功，直接进行注册
         getInstance().onInitialized();
     }
@@ -127,7 +127,7 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
 
     @Override
     public void onInitialized() {
-        LogUtil.d(TAG, "ECSDK is ready");
+        Log.d(TAG, "ECSDK is ready");
         
         // 设置消息提醒
         ECDevice.setNotifyOptions(mOptions);
@@ -138,7 +138,8 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
         ECDevice.setOnChatReceiveListener(IMChattingHelper.getInstance());
         ECDevice.setOnDeviceConnectListener(this);
 
-        User.UserEntity.YtxsubaccountEntity account = AppContext.context().getUser().getUser().getYtxsubaccount();
+        User.UserEntity.YtxsubaccountEntity account = AppContext.context().getUser().getYtxsubaccount();
+        ECDeviceKit.setUserId(account.getVoipaccount());
         if (mInitParams == null){
             mInitParams = ECInitParams.createParams();
         }
@@ -192,7 +193,7 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
 
     @Override
     public void onConnectState(ECDevice.ECConnectState state, ECError error) {
-        LogUtil.d(TAG, "state, error " + state + ", " + error.errorMsg);
+        Log.d(TAG, "state, error " + state + ", " + error.errorMsg);
         if(state == ECDevice.ECConnectState.CONNECT_FAILED && error.errorCode == SdkErrorCode.SDK_KICKED_OFF) {
             try {
                 ECPreferences.savePreference(ECPreferenceSettings.SETTINGS_REGIST_AUTO, "", true);
@@ -236,7 +237,7 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
 
     @Override
     public void onError(Exception exception) {
-        LogUtil.e(TAG, "ECSDK couldn't start: " + exception.getLocalizedMessage());
+        Log.e(TAG, "ECSDK couldn't start: " + exception.getLocalizedMessage());
         Intent intent = new Intent(ACTION_SDK_CONNECT);
         intent.putExtra("error", ERROR_CODE_INIT);
         mContext.sendBroadcast(intent);
@@ -278,7 +279,7 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
      */
     public static ECChatManager getECChatManager() {
         ECChatManager ecChatManager = ECDevice.getECChatManager();
-        LogUtil.d(TAG, "ecChatManager :" + ecChatManager);
+        Log.d(TAG, "ecChatManager :" + ecChatManager);
         return ecChatManager;
     }
 

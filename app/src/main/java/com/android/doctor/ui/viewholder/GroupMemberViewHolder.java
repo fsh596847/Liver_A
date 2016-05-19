@@ -1,6 +1,8 @@
 package com.android.doctor.ui.viewholder;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -9,6 +11,9 @@ import android.widget.TextView;
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.interf.OnListItemSlideListener;
+import com.android.doctor.model.GroupMemberList;
+import com.android.doctor.ui.base.SingleTapConfirm;
+import com.android.doctor.ui.chat.GroupCardActivity;
 import com.android.doctor.ui.chat.GroupMemberActivity;
 import com.android.doctor.ui.widget.BothSlideLayout;
 import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
@@ -41,12 +46,15 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder
 
     GroupMemberActivity aty;
 
+    private GestureDetector gestureDetector;
+
     private OnListItemClickListener itemClickListener;
 
     public GroupMemberViewHolder(View view, GroupMemberActivity aty){
         super(view);
         initView(view);
         this.aty = aty;
+        gestureDetector = new GestureDetector(aty, new SingleTapConfirm());
     }
 
     public void initView(View view) {
@@ -56,16 +64,36 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder
         desc = (TextView) view.findViewById(R.id.tv_member_desc);
         tvDelete = (TextView)view.findViewById(R.id.tv_delete);
         slideLayout = (BothSlideLayout) view.findViewById(R.id.slide_layout);
+
+        setListener(view);
+    }
+
+    private void setListener(View view) {
         slideLayout.setOnSlideListener(this);
         mLabel.setOnClickListener(this);
         tvDelete.setOnClickListener(this);
-        view.setOnClickListener(this);
-        //checkBox = (CheckBox) view.findViewById(R.id.contactitem_select_cb);
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (gestureDetector.onTouchEvent(event)) {
+                    onClick(v);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
-    public void fillUI(ECContacts contacts) {
-        name_tv.setText(contacts.getNickname());
-        //account.setText(contacts.getContactid());
+    public void setViewData(GroupMemberList.GroupMemberEntity mem) {
+        name_tv.setText(mem.getDisplay());
+        String ownerType = "0".equals(mem.getOwnertype()) ? "医生 " : "患者 ";
+        boolean isOwner = mem.isManager();
+        String tx = ownerType + (isOwner ? "管理员" : "");
+        desc.setText(tx);
+        if (isOwner) {
+            slideLayout.setCanSlide(false);
+        }
     }
 
     public void setItemClickListener(OnListItemClickListener itemClickListener) {
@@ -87,6 +115,7 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder
      **/
     @Override
     public void onItemSlide(int state) {
+
         if (state == 0) {
             slideLayout.closeSlide();
         } else if (state == 1) {

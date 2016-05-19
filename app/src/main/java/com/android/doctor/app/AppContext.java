@@ -21,25 +21,22 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.umeng.socialize.PlatformConfig;
 import com.yuntongxun.kitsdk.core.CCPAppManager;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 import java.util.Properties;
 
 public class AppContext extends Application {
-	private static final String TAG 						= AppContext.class.getSimpleName();
+	public static final String TAG = "Doctor";
     public static Md5FileNameGenerator md5FileNameGenerator = new Md5FileNameGenerator();
 	private static Context context;
 	private static ImageLoader imageLoader;
 	private DisplayImageOptions imageOptions;
-    private AppLocate mAppLocate;
 	private boolean isLogin = false;
 	private boolean mHttps;
+    private User user;
 
 	public AppContext() {
 		Log.i(TAG, "AppContext()");
@@ -56,33 +53,44 @@ public class AppContext extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+        //LeakCanary.install(this);
 		init();
 	}
 	
 	private void init() {
-		context = this;
+		context = getApplicationContext();
         //CrashHandler crashHandler = CrashHandler.getInstance();
         //crashHandler.init(getApplicationContext());
 		CCPAppManager.setContext(this);
-        initDisplayImageOptions();
+        initImageOptions();
 		initImageLoader();
 		initLogin();
+        initSocialShareSDK();
         //mAppLocate = new AppLocate(this);
 	}
 
 	public void initLogin() {
-        String token = getProperty("user.token");
-        if (token != null && !token.isEmpty()) {
+        user = initUser();
+        if (user != null) {
             isLogin = true;
         }
 	}
 
+    private void initSocialShareSDK() {
+        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
+        //微信 appid appsecret
+        PlatformConfig.setSinaWeibo("3921700954","04b48b094faeb16683c32669824ebdad");
+        //新浪微博 appkey appsecret
+        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        // QQ和Qzone appid appkey
+        PlatformConfig.setAlipay("2015111700822536");
+    }
 
 	public boolean isLogin() {
 		return isLogin;
 	}
 
-	private void initDisplayImageOptions() {
+	private void initImageOptions() {
 		imageOptions = new DisplayImageOptions.Builder()
 			//.showStubImage(R.drawable.image_holder_color)
 			//.showImageForEmptyUri(R.drawable.image_holder_color)
@@ -121,10 +129,6 @@ public class AppContext extends Application {
 		return imageOptions;
 	}
 
-	public AppLocate getmAppLocate() {
-		return mAppLocate;
-	}
-
 	public boolean containsProperty(String key) {
 		Properties props = getProperties();
 		return props.containsKey(key);
@@ -141,42 +145,6 @@ public class AppContext extends Application {
 	public void setProperty(String key, String value) {
 		AppConfig.getAppConfig(this).set(key, value);
 	}
-
-	public void saveUser(User u) {
-        if (u == null) return;
-        /*User.UserEntity ue = u.getUser();
-        if (ue == null) return;
-        try {
-            File dirConf = getDir(AppConfig.APP_CONFIG, Context.MODE_PRIVATE);
-            FileOutputStream fos = new FileOutputStream(dirConf.getPath() + File.separator + "user.data");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(u);
-            oos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-		setProperty("user.token", u.getToken());
-        setProperty("config.user", u.toJson());
-        //setProperty("user.duid", "" + ue.getDuid());
-        initLogin();
-	}
-
-    public User getUser() {
-        /*try {
-            File dirConf = getDir(AppConfig.APP_CONFIG, Context.MODE_PRIVATE);
-            FileInputStream fis = new FileInputStream(dirConf.getPath() + File.separator + "user.data");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            User u = (User)ois.readObject();
-            ois.close();
-            return u;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        Gson gson = new Gson();
-        return gson.fromJson(getProperty("config.user"), User.class);
-    }
 
 	/**
 	 * 获取cookie时传AppConfig.CONF_COOKIE
@@ -237,6 +205,46 @@ public class AppContext extends Application {
         return getPreferences().getFloat(key, defValue);
     }
 
+    public void saveUser(User u) {
+        if (u == null) return;
+        set(AppConfig.APP_CONFIG_USER, u.toJson());
+        //setProperty("user.duid", "" + ue.getDuid());
+        initLogin();
+    }
+
+    public synchronized User.UserEntity getUser() {
+        if (user != null) {
+            return user.getUser();
+        }
+        return null;
+    }
+    public synchronized User initUser() {
+        Gson gson = new Gson();
+        User u = gson.fromJson(get(AppConfig.APP_CONFIG_USER, ""), User.class);
+        if (u == null) {
+            Log.d(AppConfig.TAG, "[AppContext-> getUser] u == null");
+            return null;
+        }
+        return u;
+    }
+
+
+    public Object getUserFieldValue(String name) {
+        User.UserEntity userEntity = getUser();
+        if (userEntity == null) return null;
+
+        Class<?> classType = userEntity.getClass();
+        String firstLetter = name.substring(0, 1).toUpperCase();
+        String getMethodName = "get" + firstLetter + name.substring(1);
+        try {
+            Method getMethod = classType.getMethod(getMethodName,new Class[] {});
+            return getMethod.invoke(userEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * 清除app缓存
      */
@@ -254,6 +262,7 @@ public class AppContext extends Application {
     }
 
     public void clearUser() {
+        removeProperty("config.user");
         removeProperty("user.uid");
         removeProperty("user.token");
     }

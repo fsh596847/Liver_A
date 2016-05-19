@@ -4,12 +4,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.doctor.app.AppManager;
-import com.android.doctor.helper.DialogHelper;
+import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.StringHelper;
 import com.android.doctor.R;
+import com.android.doctor.helper.UIHelper;
+import com.android.doctor.model.RespEntity;
 import com.android.doctor.ui.widget.EmptyLayout;
 import com.android.doctor.ui.widget.progress_dialog.ProcessDialog;
 import com.umeng.analytics.MobclickAgent;
@@ -45,7 +48,8 @@ public class BaseActivity extends AppCompatActivity {
 	}
 
 	protected void initView() {
-        mProgressDialog = DialogHelper.getProgressDialog(this, ProcessDialog.Style.SPIN_INDETERMINATE, "请稍后");
+        mProgressDialog = DialogUtils.getProgressDialog(this, ProcessDialog.Style.SPIN_INDETERMINATE, "请稍后");
+		emptyLayout = (EmptyLayout) findViewById(R.id.empty_layout);
     }
 
 	protected void initData() {}
@@ -88,7 +92,15 @@ public class BaseActivity extends AppCompatActivity {
             mActionBar.setTitle(title);
         }
     }
-	
+
+    protected void setMaskLayout(int visibility, int type, String msg) {
+        if (emptyLayout != null) {
+            emptyLayout.setVisibility(visibility);
+            emptyLayout.setErrorType(type);
+            emptyLayout.setErrorMessage(msg);
+        }
+    }
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -105,8 +117,8 @@ public class BaseActivity extends AppCompatActivity {
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		AppManager.getAppManager().finishActivity();
+		super.onBackPressed();
 	}
 
 	protected boolean isFastDoubleClick() {
@@ -128,6 +140,26 @@ public class BaseActivity extends AppCompatActivity {
         if (mProgressDialog != null) {
             mProgressDialog.show();
         }
+    }
+
+	protected void onProResult(RespEntity resp) {
+		dismissProcessDialog();
+		if (resp != null) {
+			String text = resp.getError_msg();
+			UIHelper.showToast(text);
+			if (resp.getError_code() == 0) {
+				AppManager.getAppManager().finishActivity();
+			}
+		}
+	}
+
+    protected void onLoadResult(RespEntity resp) {
+        String text = resp.getError_msg();
+        if (resp.getError_code() == 0) {
+            setMaskLayout(View.GONE, EmptyLayout.HIDE_LAYOUT, "");
+            return;
+        }
+        setMaskLayout(View.VISIBLE, EmptyLayout.SHOW_LAYOUT, text);
     }
 
 	@Override

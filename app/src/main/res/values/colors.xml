@@ -3,8 +3,8 @@
     <color name="colorPrimary">#1B85C0</color>
     <color name="colorPrimaryDark">#1B85C0</color>
     <color name="colorAccent">#33b5e5</color>
-    <color name="appThemePrimary0">#1B85C0</color>
-    <color name="appThemePrimary">#56abe9</color>
+    <color name="appThemePrimary">#1B85C0</color>
+    <color name="appThemePrimary0">#56abe9</color>
     <color name="window_bg">#fafafa</color>
     <color name="line_color">#e7e7e7</color>
     <color name="white">#ffffff</color>

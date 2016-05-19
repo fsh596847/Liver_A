@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.fidots.doctor.ui.message.DoctorProfileActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:orientation="vertical"
@@ -24,7 +23,7 @@
             android:paddingRight="16dp"
             android:paddingBottom="10dp">
 
-            <com.fidots.doctor.ui.widget.CircleImageView
+            <com.android.doctor.ui.widget.CircleImageView
                 android:id="@+id/iv_avatar"
                 android:layout_width="66dp"
                 android:layout_height="66dp"
@@ -40,7 +39,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="14dp"
-                android:text="果饮"/>
+                android:text=""/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -69,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
-                    android:text="@string/patient"
+                    android:text="@string/article"
                     android:layout_marginLeft="10dp"/>
 
                 <TextView
@@ -89,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:layout_marginLeft="10dp"
-                    android:text="@string/patient" />
+                    android:text="@string/attention" />
 
                 <TextView
                     android:id="@+id/tv_attention_num"
@@ -106,7 +105,7 @@
         <RadioGroup
             android:id="@+id/rdg_btn"
             android:layout_width="240dp"
-            android:layout_height="32dp"
+            android:layout_height="35dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:divider="@color/white"
@@ -136,13 +135,14 @@
 
 
     <io.github.yavski.fabspeeddial.FabSpeedDial
-        android:id="@+id/fab"
+        android:id="@+id/fabspeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
-        app:fabMenu="@menu/doctor_menu"
+        app:fabMenu="@menu/doctor_menu_"
         app:fabGravity="bottom_end"
+        app:miniFabTitleBackgroundTint="@color/appThemePrimary"
         app:miniFabBackgroundTint="@android:color/white"
         app:miniFabDrawableTint="@color/appThemePrimary"
         app:miniFabTitleTextColor="@android:color/white" />

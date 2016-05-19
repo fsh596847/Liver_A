@@ -5,6 +5,8 @@
     android:minHeight="48dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
     android:background="@android:color/white">
 
 
@@ -23,20 +25,24 @@
             android:layout_centerVertical="true"/>
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_reply_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/arrow_icon"
             android:layout_centerVertical="true"
-            android:text="guo"/>
+            android:textColor="@color/appThemePrimary"
+            android:textSize="14sp"
+            android:text=""/>
 
         <TextView
-            android:id="@+id/tv_date_time"
+            android:id="@+id/tv_reply_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="2016-01-03"/>
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/app_theme_secondary_textcolor"/>
     </RelativeLayout>
 
     <View
@@ -45,11 +51,30 @@
         android:layout_marginTop="5dp"
         android:layout_below="@id/rl"/>
 
-    <TextView
-        android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+    <LinearLayout
         android:layout_below="@id/h_line"
-        android:text="这是一条评论"/>
+        android:id="@+id/ll_reply_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
+
+        <TextView
+            android:id="@+id/tv_reply_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/h_line"
+            android:text="bbbb"
+            android:textSize="14sp"
+            android:textColor="@color/app_theme_secondary_textcolor"/>
+
+        <LinearLayout
+            android:id="@+id/ll_images"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

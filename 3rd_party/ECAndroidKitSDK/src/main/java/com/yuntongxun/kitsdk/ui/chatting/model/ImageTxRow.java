@@ -63,6 +63,7 @@ public class ImageTxRow extends BaseChattingRow {
         ImageRowViewHolder holder = (ImageRowViewHolder) baseHolder;
         ECFileMessageBody body = (ECFileMessageBody) detail.getBody();
         String userData = detail.getUserData();
+        //String userData = body.getFileName();
         if(TextUtils.isEmpty(userData)) {
             return ;
         }

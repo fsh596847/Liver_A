@@ -1,5 +1,8 @@
 package com.android.doctor.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -23,7 +26,7 @@ public class TreatPlanList {
         this.list = list;
     }
 
-    public static class TreatPlanEntity {
+    public static class TreatPlanEntity implements Parcelable {
         private String _id;
         private int code;
         private String name;
@@ -51,5 +54,39 @@ public class TreatPlanList {
         public void setName(String name) {
             this.name = name;
         }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeInt(this.code);
+            dest.writeString(this.name);
+        }
+
+        public TreatPlanEntity() {
+        }
+
+        protected TreatPlanEntity(Parcel in) {
+            this._id = in.readString();
+            this.code = in.readInt();
+            this.name = in.readString();
+        }
+
+        public static final Parcelable.Creator<TreatPlanEntity> CREATOR = new Parcelable.Creator<TreatPlanEntity>() {
+            @Override
+            public TreatPlanEntity createFromParcel(Parcel source) {
+                return new TreatPlanEntity(source);
+            }
+
+            @Override
+            public TreatPlanEntity[] newArray(int size) {
+                return new TreatPlanEntity[size];
+            }
+        };
     }
 }

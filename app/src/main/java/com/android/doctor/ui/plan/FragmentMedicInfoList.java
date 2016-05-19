@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.android.doctor.R;
+import com.android.doctor.app.AppManager;
 import com.android.doctor.model.MedicInfo;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.rest.ApiService;
@@ -51,9 +52,9 @@ public class FragmentMedicInfoList extends BaseRecyViewFragment {
 
     @Override
     protected void setAdapter() {
-        adapter = new SimpleTextListAdapter();
-        adapter.setItemOptionClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new SimpleTextListAdapter();
+        mAdapter.setItemOptionClickListener(this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -99,11 +100,11 @@ public class FragmentMedicInfoList extends BaseRecyViewFragment {
     public void onItemClick(int position, View view) {
         Activity aty = getActivity();
         if (aty != null) {
-            MedicInfo.MedicInfoEntity infoEntity = (MedicInfo.MedicInfoEntity) adapter.getItem(position);
+            MedicInfo.MedicInfoEntity infoEntity = (MedicInfo.MedicInfoEntity) mAdapter.getItem(position);
             Intent intent = new Intent();
             intent.putExtra("data", infoEntity);
             aty.setResult(Activity.RESULT_OK, intent);
-            aty.finish();
+            AppManager.getAppManager().finishActivity(aty);
         }
     }
 

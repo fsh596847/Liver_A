@@ -31,5 +31,5 @@
     <string name="auth_failed" translatable="false">认证失败</string>
     
     <string name="error_locate_failed">定位失败, 请检查网络连接</string>
-    <string name="error_locate_service_not_open">没有打开定位服务，请到设置->应用权限->近淘，允许使用定位</string>
+    <string name="error_locate_service_not_open">没有打开定位服务，请到设置->应用权限->医生，允许使用定位</string>
 </resources>

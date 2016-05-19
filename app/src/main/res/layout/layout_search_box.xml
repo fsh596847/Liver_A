@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="280dp"
+    android:layout_width="match_parent"
     android:layout_height="30dp"
-    android:orientation="horizontal"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="10dp"
-    android:paddingRight="10dp"
-    android:background="@drawable/search_box_background"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:focusableInTouchMode="true"
-    android:gravity="center_vertical">
+    style="@style/search_box_style">
 
     <EditText
         android:id="@+id/edt_search_box"
@@ -35,4 +27,5 @@
         android:layout_alignParentRight="true"
         android:contentDescription="@null"
         android:visibility="gone" />
+
 </RelativeLayout>

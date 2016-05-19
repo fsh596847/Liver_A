@@ -8,7 +8,9 @@ import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.ContactGroupList;
 import com.android.doctor.model.ContactList;
+import com.android.doctor.model.User;
 import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
 
 /**
@@ -23,7 +25,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
     /**名称*/
     TextView name_tv;
     /**账号*/
-    TextView account;
+    TextView tv_desc;
     /**选择状态*/
     CheckBox checkBox;
 
@@ -38,16 +40,23 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
     public void initView(View view) {
         mAvatar = (ImageView) view.findViewById(R.id.avatar_iv);
         name_tv = (TextView) view.findViewById(R.id.tv_username);
+        tv_desc = (TextView) view.findViewById(R.id.tv_diagnose);
         //account = (TextView) view.findViewById(R.id.account);
         //checkBox = (CheckBox) view.findViewById(R.id.contactitem_select_cb);
     }
 
     public void setViewData(ContactList.ContactEntity contacts) {
         String text = contacts.getName() + "  (" + contacts.getLinktype() + ")";
-        name_tv.setText(contacts.getName());
+        name_tv.setText(text);
+        tv_desc.setText(contacts.getDesc());
         int sex = contacts.getSex() == 0 ? R.drawable.ic_female : R.drawable.ic_male;
-        name_tv.setCompoundDrawablesWithIntrinsicBounds(0,sex,0,0);
+        //name_tv.setCompoundDrawablesWithIntrinsicBounds(0,0,sex,0);
         //account.setText(contacts.getContactid());
+    }
+
+    public void setViewData(ContactGroupList.GroupsEntity group) {
+        String text = group.getName();
+        name_tv.setText(text);
     }
 
     public void setItemClickListener(OnListItemClickListener itemClickListener) {

@@ -16,23 +16,27 @@ import java.util.Properties;
  * @author Yong
  */
 public class AppConfig {
-
+    public static final String TAG = "Doctor";
     public final static String APP_CONFIG = "config";
     public final static String CONF_SHARED_PREFERENCES = "shared_pref";
-
+    public final static String APP_CONFIG_USER = "config.user";
+    public final static String APP_CONTACT_PEER = "contacts.peer";
+    public final static String APP_CONTACT_GROUP = "contacts.group";
+    public final static String APP_MY_COLLECT_ARTICLE = "articles.collect";
+    public final static String APP_MY_SUBSCRIBE_SUBJECT= "subject.subscribe";
 
     // 默认存放图片的路径
     public final static String DEFAULT_SAVE_IMAGE_PATH = Environment
             .getExternalStorageDirectory()
             + File.separator
-            + "restaurant"
-            + File.separator + "rest_img" + File.separator;
+            + "doctor"
+            + File.separator + "images" + File.separator;
 
     // 默认存放文件下载的路径
     public final static String DEFAULT_SAVE_FILE_PATH = Environment
             .getExternalStorageDirectory()
             + File.separator
-            + "restaurant"
+            + "doctor"
             + File.separator + "download" + File.separator;
 
     private Context mContext;

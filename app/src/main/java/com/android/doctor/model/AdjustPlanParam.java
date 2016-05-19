@@ -9,7 +9,7 @@ public class AdjustPlanParam {
 
     private int pid;
     private String ref_tplid;
-    private List<PlanDeta.DataEntity> tpldetails;
+    private List<PlanDeta.PlanDetaEntity> tpldetails;
 
     public int getPid() {
         return pid;
@@ -19,11 +19,11 @@ public class AdjustPlanParam {
         this.pid = pid;
     }
 
-    public List<PlanDeta.DataEntity> getTpldetails() {
+    public List<PlanDeta.PlanDetaEntity> getTpldetails() {
         return tpldetails;
     }
 
-    public void setTpldetails(List<PlanDeta.DataEntity> tpldetails) {
+    public void setTpldetails(List<PlanDeta.PlanDetaEntity> tpldetails) {
         this.tpldetails = tpldetails;
     }
 

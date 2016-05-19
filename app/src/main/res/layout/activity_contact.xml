@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@android:color/white"
-            android:text="@string/message"
+            android:text="@string/contact"
             android:textSize="18sp"/>
 
         <LinearLayout
@@ -31,7 +31,6 @@
                 android:id="@+id/imgbtn_add"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:visibility="gone"
                 android:background="@null"
                 android:padding="10dp"
                 android:src="@drawable/ic_btn_add_white"/>

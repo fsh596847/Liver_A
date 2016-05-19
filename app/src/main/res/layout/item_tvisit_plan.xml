@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.doctor.ui.widget.SwipeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/slide_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@drawable/selector_white_background"
+    android:animateLayoutChanges="true">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text=""
+                    android:textColor="@color/app_theme_primary_textcolor"/>
+
+                <TextView
+                    android:id="@+id/tv_name_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/app_theme_secondary_textcolor"
+                    android:text=""/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_import_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:text=""
+                android:textSize="12sp"
+                android:textColor="@color/appThemePrimary"/>
+
+            <View style="@style/v_line"
+                android:layout_toLeftOf="@id/tv_import_state"
+                android:layout_margin="10dp"/>
+
+        </RelativeLayout>
+
+        <View style="@style/h_line"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@android:color/holo_red_light"
+        android:layout_gravity="right"
+        android:text="@string/delete"
+        android:textColor="@android:color/white"/>
+
+</com.android.doctor.ui.widget.SwipeLayout>

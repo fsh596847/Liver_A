@@ -42,12 +42,13 @@ public class DocPatientViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void setViewData(PatientList.DataEntity e) {
         if (e != null) {
+            mImgAvatar.setImageResource(e.getSex() == 0 ? R.drawable.patient_photo_f : R.drawable.patient_photo_m);
             mTvName.setText(e.getName());
             List<String> list = e.getGroups();
             if (list != null) {
                 String desc = "";
                 for (String str: list) {
-                    desc = desc + "." + str;
+                    desc = desc + " " + str;
                 }
                 mTvDiagnose.setText(desc);
             }

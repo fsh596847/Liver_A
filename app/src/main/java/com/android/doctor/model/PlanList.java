@@ -11,17 +11,17 @@ import java.util.List;
  */
 public class PlanList implements Parcelable {
 
-    private List<DataEntity> data;
+    private List<PlanBaseEntity> data;
 
-    public List<DataEntity> getData() {
+    public List<PlanBaseEntity> getData() {
         return data;
     }
 
-    public void setData(List<DataEntity> data) {
+    public void setData(List<PlanBaseEntity> data) {
         this.data = data;
     }
 
-    public static class DataEntity implements Parcelable {
+    public static class PlanBaseEntity implements Parcelable {
         private String _id;
         private String planname;
         private int puid;
@@ -39,7 +39,7 @@ public class PlanList implements Parcelable {
         private String tplid;
         private String ref_tplid;
         private int isaccept;
-        private long time;
+        private String time;
         private int lastmonth;
         private String lastpubtime;
         private long lastruntime;
@@ -186,11 +186,11 @@ public class PlanList implements Parcelable {
             this.isaccept = isaccept;
         }
 
-        public long getTime() {
+        public String getTime() {
             return time;
         }
 
-        public void setTime(long time) {
+        public void setTime(String time) {
             this.time = time;
         }
 
@@ -291,7 +291,7 @@ public class PlanList implements Parcelable {
             dest.writeString(this.tplid);
             dest.writeString(this.ref_tplid);
             dest.writeInt(this.isaccept);
-            dest.writeLong(this.time);
+            dest.writeString(this.time);
             dest.writeInt(this.lastmonth);
             dest.writeString(this.lastpubtime);
             dest.writeLong(this.lastruntime);
@@ -303,10 +303,10 @@ public class PlanList implements Parcelable {
             dest.writeList(this.months);
         }
 
-        public DataEntity() {
+        public PlanBaseEntity() {
         }
 
-        private DataEntity(Parcel in) {
+        private PlanBaseEntity(Parcel in) {
             this._id = in.readString();
             this.planname = in.readString();
             this.puid = in.readInt();
@@ -324,7 +324,7 @@ public class PlanList implements Parcelable {
             this.tplid = in.readString();
             this.ref_tplid = in.readString();
             this.isaccept = in.readInt();
-            this.time = in.readLong();
+            this.time = in.readString();
             this.lastmonth = in.readInt();
             this.lastpubtime = in.readString();
             this.lastruntime = in.readLong();
@@ -337,13 +337,13 @@ public class PlanList implements Parcelable {
             in.readList(this.months, List.class.getClassLoader());
         }
 
-        public static final Parcelable.Creator<DataEntity> CREATOR = new Parcelable.Creator<DataEntity>() {
-            public DataEntity createFromParcel(Parcel source) {
-                return new DataEntity(source);
+        public static final Parcelable.Creator<PlanBaseEntity> CREATOR = new Parcelable.Creator<PlanBaseEntity>() {
+            public PlanBaseEntity createFromParcel(Parcel source) {
+                return new PlanBaseEntity(source);
             }
 
-            public DataEntity[] newArray(int size) {
-                return new DataEntity[size];
+            public PlanBaseEntity[] newArray(int size) {
+                return new PlanBaseEntity[size];
             }
         };
     }
@@ -363,7 +363,7 @@ public class PlanList implements Parcelable {
     }
 
     private PlanList(Parcel in) {
-        in.readTypedList(data, DataEntity.CREATOR);
+        in.readTypedList(data, PlanBaseEntity.CREATOR);
     }
 
     public static final Parcelable.Creator<PlanList> CREATOR = new Parcelable.Creator<PlanList>() {

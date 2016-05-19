@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:text="@string/diagnose_plan"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:id="@+id/ll_menu_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:id="@+id/tv_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:text="@string/save"/>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+            <!-- 基本信息-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/plan_scheme_name"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+        <EditText
+            android:id="@+id/edt_plan_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:background="@null"
+            android:textSize="14sp"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+    </LinearLayout>
+
+    <View style="@style/h_line"/>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/tx1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dis_diag"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+        <EditText
+            android:id="@+id/edt_dis_diag"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:layout_toRightOf="@id/tx1"
+            android:background="@null"
+            android:textSize="14sp"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+        <TextView
+            android:id="@+id/tv_diag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/arrow_right"/>
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/tx2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/treatment"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+        <EditText
+            android:id="@+id/edt_treatment"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tx2"
+            android:paddingLeft="8dp"
+            android:textSize="14sp"
+            android:background="@null"
+            android:textColor="@color/app_theme_primary_textcolor"/>
+
+        <TextView
+            android:id="@+id/tv_treat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/arrow_right"/>
+    </RelativeLayout>
+
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:animateLayoutChanges="true"
+        android:divider="@null"
+        android:scrollbars="none"/>
+
+</LinearLayout>

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.android.doctor.R;
 import com.android.doctor.helper.DateUtils;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.HealthRecordList;
 import com.android.doctor.model.PlanRecordList;
 import com.android.doctor.ui.adapter.TimeLineAdapter;
 import com.android.doctor.ui.widget.TimeLineMarker;
@@ -64,6 +65,18 @@ public class TimeLineViewHolder extends RecyclerView.ViewHolder implements View.
                 buffer.append("\n");
             }
         }
+        mTvDesc.setText(buffer.toString());
+    }
+
+    public void setData(HealthRecordList.HealthrecordEntity d) {
+        if (d == null) return;
+        mTvTitle.setText(DateUtils.getDateString_(d.getCreatedatetime()));
+        StringBuffer buffer = new StringBuffer();
+        if (!TextUtils.isEmpty(d.getSubtitle())) {
+            buffer.append(d.getSubtitle());
+            buffer.append("\n");
+        }
+        buffer.append(d.getContent());
         mTvDesc.setText(buffer.toString());
     }
 

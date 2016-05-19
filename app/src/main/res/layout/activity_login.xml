@@ -77,7 +77,6 @@
                     android:textColor="@color/black"
                     android:textCursorDrawable="@null"
                     android:background="@null"
-                    android:layout_toRightOf="@id/textView25"
                     android:layout_marginLeft="10dp" />
 
                 <ImageView

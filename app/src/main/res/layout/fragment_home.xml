@@ -85,7 +85,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
 
-                    <include layout="@layout/layout_search_box"/>
+                    <include layout="@layout/layout_search_box"
+                        style="@style/search_box_style"/>
 
                     <TextView
                         android:id="@+id/tv_cancel"
@@ -140,7 +141,7 @@
                     <FrameLayout
                         android:id="@+id/fl_container"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@android:color/white"/>
 
                     <View
@@ -154,7 +155,8 @@
                         android:id="@+id/fl_popup_menu"
                         android:visibility="gone"
                         android:layout_width="match_parent"
-                        android:layout_height="260dp">
+                        android:layout_height="260dp"
+                        android:paddingBottom="10dp">
 
                     </FrameLayout>
                 </FrameLayout>

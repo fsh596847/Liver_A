@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@android:color/white"
-            android:text="@string/main_tab_topic"
+            android:text="设置"
             android:textSize="18sp"/>
 
         <TextView
@@ -42,6 +42,7 @@
         android:paddingLeft="16dp">
 
         <RelativeLayout
+            android:id="@+id/rl_change_passwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -55,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/change_password"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,7 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/message_no_disturb"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"
                 android:layout_centerVertical="true"/>
 
             <ToggleButton
@@ -118,7 +121,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/clear_history_message"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -158,12 +162,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/contact_service"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:text="@string/service_mobile"
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"
                 android:drawableRight="@drawable/arrow_right" />
         </RelativeLayout>
 
@@ -186,12 +195,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/feedback_suggestion"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16dp"
                 android:layout_alignParentRight="true"
                 android:drawableRight="@drawable/arrow_right"/>
         </RelativeLayout>
@@ -215,14 +224,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/about_us"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:drawableRight="@drawable/arrow_right"
-                android:textSize="16dp" />
+                android:drawableRight="@drawable/arrow_right" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -238,5 +247,5 @@
         android:background="@drawable/btn_selector"
         android:layout_marginRight="30dp"
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        android:layout_height="40dp" />
 </LinearLayout>

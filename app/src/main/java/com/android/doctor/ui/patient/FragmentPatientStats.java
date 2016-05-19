@@ -10,6 +10,7 @@ import com.android.doctor.model.PatientStats;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseFragment;
 import com.github.mikephil.charting.animation.Easing;
@@ -85,8 +86,8 @@ public class FragmentPatientStats extends BaseFragment {
         // add a selection listener
         //pieChart.setOnChartValueSelectedListener(this);
 
-        pieChart.animateY(2000, Easing.EasingOption.EaseInOutQuad);
-        // mChart.spin(2000, 0, 360);
+        pieChart.animateY(3000, Easing.EasingOption.EaseOutElastic);
+        pieChart.spin(3000, 0, 360,Easing.EasingOption.EaseOutElastic);
 
         Legend l = pieChart.getLegend();
         l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
@@ -95,9 +96,9 @@ public class FragmentPatientStats extends BaseFragment {
         l.setYOffset(0f);
         //l.setExtra(null, Arrays.asList(new String[]{"按状态"}));
         // undo all highlights
-        pieChart.highlightValues(null);
+        /*pieChart.highlightValues(null);
         pieChart.setBackgroundResource(android.R.color.white);
-        pieChart.invalidate();
+        pieChart.invalidate();*/
     }
 
 
@@ -170,35 +171,22 @@ public class FragmentPatientStats extends BaseFragment {
     }
 
     private void onLoad() {
-        User u = AppContext.context().getUser();
-        if (u == null || u.getUser() == null) {
+        User.UserEntity u = AppContext.context().getUser();
+        if (u == null) {
             return;
         }
         ApiService service = RestClient.createService(ApiService.class);
-        Call<RespEntity<PatientStats>> call = service.getDoctorPStats("" + u.getUser().getDuid());
-        call.enqueue(new Callback<RespEntity<PatientStats>>() {
+        Call<RespEntity<PatientStats>> call = service.getDoctorPStats(u.getDuid());
+        call.enqueue(new RespHandler<PatientStats>() {
             @Override
-            public void onResponse(Call<RespEntity<PatientStats>> call, Response<RespEntity<PatientStats>> response) {
-                RespEntity<PatientStats> data = response.body();
-                if (response.isSuccessful()) {
-                    if (data == null) {
-                        //onSuccess(new ArrayList());
-                        return;
-                    } else if (data.getResponse_params() != null) {
-                        onSuccess(data.getResponse_params());
-                    }
-                } else {
-                    String errMsg = "";
-                    if (data != null) {
-                        errMsg = data.getError_msg();
-                    }
-                    //onFail(errMsg);
-                }
+            public void onSucceed(RespEntity<PatientStats> resp) {
+                if (resp != null)
+                onSuccess(resp.getResponse_params());
             }
 
             @Override
-            public void onFailure(Call<RespEntity<PatientStats>> call, Throwable t) {
-                //onFail("加载失败");
+            public void onFailed(RespEntity<PatientStats> resp) {
+
             }
         });
     }
@@ -207,7 +195,7 @@ public class FragmentPatientStats extends BaseFragment {
         if (data == null) return;
         PatientStats.DataEntity de = data.getData();
         if (de != null) {
-            Log.d("FragmentPatientStats", "onSuccess");
+            Log.d("FragmentPatientStats", "onSucceed");
             setPieChartData(de.getStatus());
             setDiagChartData(de.getDiag());
             setRegionChartData(de.getRegion());
@@ -232,6 +220,8 @@ public class FragmentPatientStats extends BaseFragment {
         ArrayList<Integer> colors = new ArrayList<Integer>();
         for (int c : ColorTemplate.VORDIPLOM_COLORS)
             colors.add(c);
+        colors.add(Color.rgb(255, 255, 255));
+
         /*for (int c : ColorTemplate.JOYFUL_COLORS)
             colors.add(c);
         for (int c : ColorTemplate.COLORFUL_COLORS)
@@ -249,6 +239,8 @@ public class FragmentPatientStats extends BaseFragment {
         pdata.setValueTextColor(Color.WHITE);
         //data.setValueTypeface(tf);
         mCharState.setData(pdata);
+        mCharState.highlightValues(null);
+        mCharState.invalidate();
     }
 
     private void setDiagChartData( List<PatientStats.DataEntity.DiagEntity> data) {

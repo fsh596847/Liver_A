@@ -171,7 +171,7 @@ public class GroupListFragment extends CCPFragment implements GroupService.Callb
             View view = null;
             ViewHolder mViewHolder = null;
             if(convertView == null || convertView.getTag() == null) {
-                view = View.inflate(mContext , R.layout.group_item, null);
+                view = View.inflate(mContext , R.layout.item_mine_group, null);
 
                 mViewHolder = new ViewHolder();
                 mViewHolder.groupitem_avatar_iv = (ImageView) view.findViewById(R.id.groupitem_avatar_iv);

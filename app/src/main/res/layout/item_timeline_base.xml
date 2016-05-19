@@ -13,20 +13,20 @@
         android:id="@+id/item_time_line_mark"
         android:layout_width="16dp"
         android:layout_height="match_parent"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
         app:beginLine="@color/appThemePrimary"
         app:endLine="@color/appThemePrimary"
         app:lineSize="1dp"
         app:marker="@drawable/timeline_default_marker"
-        app:markerSize="10dp" />
+        app:markerSize="8dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
 
         <TextView
             android:id="@+id/tv_1"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_1"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="2dp">
 
             <TextView
                 android:id="@+id/tv_2"

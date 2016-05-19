@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:focusableInTouchMode="true"
+        android:background="@drawable/search_box_background">
+
+        <EditText
+            android:id="@+id/edt_search_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:background="@null"
+            android:hint=""
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:imeOptions="actionSearch"/>
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/clear"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+   <include layout="@layout/fragment_recycler_view"/>
+
+</LinearLayout>

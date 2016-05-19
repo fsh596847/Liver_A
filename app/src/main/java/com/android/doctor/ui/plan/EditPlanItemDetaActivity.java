@@ -15,10 +15,13 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.android.doctor.R;
-import com.android.doctor.helper.DialogHelper;
-import com.android.doctor.helper.LogUtil;
+import com.android.doctor.app.AppConfig;
+import com.android.doctor.app.AppManager;
+import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.UIHelper;
+import com.android.doctor.model.CheckOutItemList;
 import com.android.doctor.model.PlanDeta;
+import com.android.doctor.model.TestItemList;
 import com.android.doctor.ui.base.BaseActivity;
 import com.android.doctor.ui.widget.NumberStepper;
 import com.android.doctor.ui.widget.NumberStepperValueChangeListener;
@@ -38,7 +41,6 @@ import butterknife.OnClick;
  * Created by Yong on 2016/3/30.
  */
 public class EditPlanItemDetaActivity extends BaseActivity implements View.OnClickListener {
-    public static final String TAG = LogUtil.getLogUtilsTag(EditPlanItemDetaActivity.class);
 
     @InjectView(R.id.rl_title)
     protected RelativeLayout mRlTitle;
@@ -62,7 +64,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
 
     private int mReqCode;
     private int index;
-    private PlanDeta.DataEntity.ItemsEntity mItemEntity;
+    private PlanDeta.PlanDetaEntity.ItemsEntity mItemEntity;
 
     @Override
     protected void setContentLayout() {
@@ -83,7 +85,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
     private void setViewData() {
         if (mItemEntity == null) {
             setActionBar(R.string.new_project);
-            mItemEntity = new PlanDeta.DataEntity.ItemsEntity();
+            mItemEntity = new PlanDeta.PlanDetaEntity.ItemsEntity();
         } else {
             setActionBar(mItemEntity.getName());
         }
@@ -94,12 +96,12 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
         mEdtContent.setSelection(mEdtContent.getText().length());
         mTvscHint.setText(mItemEntity.getHint());
 
-        if (mReqCode == PlanSchemeActivity.REQUEST_DOCTOR_ADVICE_CODE ||
-                mReqCode == PlanSchemeActivity.REQUEST_DOCTOR_REMIND_CODE) {
+        if (mReqCode == PlanDetaActivity.REQUEST_DOCTOR_ADVICE_CODE ||
+                mReqCode == PlanDetaActivity.REQUEST_DOCTOR_REMIND_CODE) {
             mLlScheme.setVisibility(View.GONE);
         }
-        if (mReqCode == PlanSchemeActivity.REQUEST_DOCTOR_CHECK_CODE ||
-                mReqCode == PlanSchemeActivity.REQUEST_DOCTOR_CHECKOUT_CODE) {
+        if (mReqCode == PlanDetaActivity.REQUEST_DOCTOR_TEST_CODE ||
+                mReqCode == PlanDetaActivity.REQUEST_DOCTOR_CHECKOUT_CODE) {
             mTvArrow.setVisibility(View.VISIBLE);
             mRlTitle.setOnClickListener(this);
         }
@@ -116,7 +118,16 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
         intent.putExtra("data", mItemEntity);
         intent.putExtra("index", index);
         setResult(RESULT_OK, intent);
-        finish();
+        AppManager.getAppManager().finishActivity(EditPlanItemDetaActivity.class);
+    }
+
+    @OnClick(R.id.tv_arrow)
+    protected void selectClass() {
+        if (mReqCode == PlanDetaActivity.REQUEST_DOCTOR_TEST_CODE ) {
+            SelectTxItemActivity.startAty(this, FragmentTxItemList.REQUEST_LOAD_TYPE_TEST_ITEM);
+        } else if (mReqCode == PlanDetaActivity.REQUEST_DOCTOR_CHECKOUT_CODE) {
+            SelectTxItemActivity.startAty(this, FragmentTxItemList.REQUEST_LOAD_TYPE_CHECKOUT_ITEM);
+        }
     }
 
     @OnCheckedChanged(R.id.toggle_btn)
@@ -134,10 +145,10 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
         mToggleBtn.setChecked(check);
         mLlScContainer.setVisibility(check ? View.INVISIBLE : View.VISIBLE);
         //if (!check) {
-            List<PlanDeta.DataEntity.ItemsEntity.ExecplanEntity> list = mItemEntity.getExecplan();
+            List<PlanDeta.PlanDetaEntity.ItemsEntity.ExecplanEntity> list = mItemEntity.getExecplan();
             if (list != null && 0 < list.size()) {
                 LayoutInflater inflater = LayoutInflater.from(this);
-                for (PlanDeta.DataEntity.ItemsEntity.ExecplanEntity e : list) {
+                for (PlanDeta.PlanDetaEntity.ItemsEntity.ExecplanEntity e : list) {
                     View view = inflater.inflate(R.layout.item_execplan, null);
                     ExecPlanViewHolder vh = new ExecPlanViewHolder(this, view);
                     view.setTag(vh);
@@ -149,9 +160,9 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
     }
 
     private void setDefaultPlan() {
-        List<PlanDeta.DataEntity.ItemsEntity.DefaultplanEntity> list = mItemEntity.getDefaultplan();
+        List<PlanDeta.PlanDetaEntity.ItemsEntity.DefaultplanEntity> list = mItemEntity.getDefaultplan();
         if (list != null && 0 < list.size()) {
-            PlanDeta.DataEntity.ItemsEntity.DefaultplanEntity e = list.get(0);
+            PlanDeta.PlanDetaEntity.ItemsEntity.DefaultplanEntity e = list.get(0);
             String hint = String.format(getString(R.string.execplan_hint), e.getBeginprefix(), e.getBegin(), e.getBeginunit(),
                     e.getFreq(), e.getFrequnit(), e.getEnd(), e.getEndunit());
             mTvscHint.setText(hint);
@@ -163,27 +174,39 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
         String title = mEdtTitle.getText().toString();
         String content = mEdtContent.getText().toString();
         if (TextUtils.isEmpty(title)) {
-            UIHelper.showToast(this, "请填写标题");
+            UIHelper.showToast("请填写标题");
             return false;
         }
         mItemEntity.setName(title);
         mItemEntity.setContent(content);
         Gson g = new Gson();
-        Log.d(TAG + " before", g.toJson(mItemEntity.getExecplan()));
+        Log.d(AppConfig.TAG + " before", g.toJson(mItemEntity.getExecplan()));
         if (mLlScContainer.getVisibility() == View.INVISIBLE) return true;
         setExecPlan();
-        Log.d(TAG + ", end", g.toJson(mItemEntity.getExecplan()));
+        Log.d(AppConfig.TAG + ", end", g.toJson(mItemEntity.getExecplan()));
         return true;
     }
 
     private void setExecPlan() {
-        List<PlanDeta.DataEntity.ItemsEntity.ExecplanEntity> list = mItemEntity.getExecplan();
+        List<PlanDeta.PlanDetaEntity.ItemsEntity.ExecplanEntity> list = mItemEntity.getExecplan();
         if (list != null && 0 < list.size()) {
-            PlanDeta.DataEntity.ItemsEntity.ExecplanEntity e = list.get(0);
+            PlanDeta.PlanDetaEntity.ItemsEntity.ExecplanEntity e = list.get(0);
             String hint = String.format(getString(R.string.execplan_hint), e.getBeginprefix(), e.getBegin(), e.getBeginunit(),
                     e.getFreq(), e.getFrequnit(), e.getEnd(), e.getEndunit());
             mTvscHint.setText(hint);
             mItemEntity.setHint(hint);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) return;
+        if (requestCode == PlanDetaActivity.REQUEST_DOCTOR_TEST_CODE) {
+            TestItemList.ClasslistEntity clsEntity = data.getParcelableExtra("data");
+            mEdtTitle.setText(clsEntity.getName());
+        } else if (requestCode == PlanDetaActivity.REQUEST_DOCTOR_CHECKOUT_CODE) {
+            CheckOutItemList.CKOEntity clsEntity = data.getParcelableExtra("data");
+            mEdtTitle.setText(clsEntity.getName());
         }
     }
 
@@ -223,7 +246,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
         protected TextView mTvDtimeUnit;
 
         private Context context;
-        private PlanDeta.DataEntity.ItemsEntity.ExecplanEntity viewData;
+        private PlanDeta.PlanDetaEntity.ItemsEntity.ExecplanEntity viewData;
 
         public ExecPlanViewHolder(Context context, View view) {
             ButterKnife.inject(this, view);
@@ -231,7 +254,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
             setListener();
         }
 
-        public void setViewData(PlanDeta.DataEntity.ItemsEntity.ExecplanEntity viewData) {
+        public void setViewData(PlanDeta.PlanDetaEntity.ItemsEntity.ExecplanEntity viewData) {
             this.viewData = viewData;
             int freq = viewData.getFreq();
             String freqUnit = viewData.getFrequnit();
@@ -288,6 +311,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
             mTvSTimeUnit.setText(value);
         }
 
+
         @Override
         public void onValueChange(View view, int value) {
             int id = view.getId();
@@ -310,7 +334,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
         @OnClick(R.id.tv_repeat_times)
         protected void onRepeatTypeClick() {
             final List<String> list = Arrays.asList(context.getResources().getStringArray(R.array.repeat_execute));
-            DialogHelper.showBottomListDialog(context, list,
+            DialogUtils.showBottomListDialog(context, list,
                     new OnItemClickListener() {
                         @Override
                         public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
@@ -348,7 +372,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
         @OnClick(R.id.tv_duration_time)
         protected void onDurationTypeClick() {
             final List<String> list = Arrays.asList(context.getResources().getStringArray(R.array.duration_time));
-            DialogHelper.showBottomListDialog(context, list,
+            DialogUtils.showBottomListDialog(context, list,
                     new OnItemClickListener() {
                         @Override
                         public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
@@ -372,7 +396,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
 
         private void showUnitListView(final TextView tv) {
             final List<String> list = Arrays.asList(context.getResources().getStringArray(R.array.unit_date));
-            DialogHelper.showBottomListDialog(context, list,
+            DialogUtils.showBottomListDialog(context, list,
                     new OnItemClickListener() {
                         @Override
                         public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
@@ -392,7 +416,7 @@ public class EditPlanItemDetaActivity extends BaseActivity implements View.OnCli
                     }, null);
         }
 
-        public PlanDeta.DataEntity.ItemsEntity.ExecplanEntity getViewData() {
+        public PlanDeta.PlanDetaEntity.ItemsEntity.ExecplanEntity getViewData() {
             return viewData;
         }
     }

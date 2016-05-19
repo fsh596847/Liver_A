@@ -1,5 +1,7 @@
 package com.android.doctor.ui.chat;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,8 +24,9 @@ import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.helper.DeviceHelper;
-import com.android.doctor.helper.DialogHelper;
+import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.UIHelper;
+import com.android.doctor.model.Constants;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.yuntongxun.kitsdk.utils.LogUtil;
@@ -30,7 +34,6 @@ import com.yuntongxun.kitsdk.view.ECProgressDialog;
 import com.yuntongxun.kitsdk.view.TopBarView;
 
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -45,8 +48,9 @@ import butterknife.OnTextChanged;
  */
 public class ContactActivity extends AppCompatActivity implements
         View.OnClickListener {
+    private static final String ARG_REQ_CODE = "ARG_REQ_CODE";
     private ECProgressDialog mPostingdialog;
-    private static final String TAG = "ActivityActivityContactList";
+    private static final String TAG = "ContactActivity";
     private static final String TAB1 = "doctor";
     private static final String TAB2 = "patient";
     private static final String TAB3 = "group";
@@ -68,9 +72,14 @@ public class ContactActivity extends AppCompatActivity implements
 
     /**查看群组*/
     public static final int REQUEST_CODE_VIEW_GROUP_OWN = 0x2a;
+    public static final int REQUEST_CODE_CREATE_GROUP = 0x2b;
+    public static final int REQUEST_CODE_FOR_NEW_CONVERSATION = 100;
+    public static final int REQUEST_CODE_FOR_ADD_MEMBER = 101;
+
     private TopBarView mTopBarView;
     private boolean mNeedResult;
     private boolean mShowGroup;
+    public int mRCode;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -81,16 +90,17 @@ public class ContactActivity extends AppCompatActivity implements
         initView();
     }
 
+    public static void startAty(Activity context, int reqcode) {
+        Intent intent = new Intent(context, ContactActivity.class);
+        intent.putExtra(ARG_REQ_CODE, reqcode);
+        context.startActivityForResult(intent, reqcode);
+    }
+
     protected void init() {
         Intent intent = getIntent();
         if (intent != null) {
-            Bundle b = intent.getExtras();
-            if (b != null) {
-                //parentId = b.getString("pid");
-                //childId = b.getString("cid");
-                //item = b.getParcelable("item");
-                //LogUtil.d(LogUtil.getLogUtilsTag(ActivityActivityContactList.class), item.toJson());
-            }
+            mRCode = intent.getIntExtra(ARG_REQ_CODE, 0);
+            Log.d(TAG, "[ContactActivity-> init] " + mRCode);
         }
     }
 
@@ -103,9 +113,9 @@ public class ContactActivity extends AppCompatActivity implements
         Bundle b1 = new Bundle();
         Bundle b2 = new Bundle();
         Bundle b3 = new Bundle();
-        b1.putInt(FragmentContactList.EXTRA_TYPE,0);
-        b2.putInt(FragmentContactList.EXTRA_TYPE, 1);
-        b3.putInt(FragmentContactList.EXTRA_TYPE, 2);
+        b1.putInt(FragmentContactList.EXTRA_TYPE, Constants.CONTACT_TYPE_DOCTOR);
+        b2.putInt(FragmentContactList.EXTRA_TYPE, Constants.CONTACT_TYPE_PATIENT);
+        b3.putInt(FragmentContactList.EXTRA_TYPE, Constants.CONTACT_TYPE_GROUP);
 
         mTabHost.addTab(mTabHost.newTabSpec(TAB1).setIndicator(TAB1), FragmentContactList.class, b1);
         mTabHost.addTab(mTabHost.newTabSpec(TAB2).setIndicator(TAB2), FragmentContactList.class, b2);
@@ -125,14 +135,15 @@ public class ContactActivity extends AppCompatActivity implements
         //mActionBar.setIcon(R.color.transparent);
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
-        //mActionBar.setDisplayShowCustomEnabled(true);
-        //mActionBar.setElevation(0);
-        //ActionBarUtil.ChangeActionBarHomeUpDrawable(this,R.drawable.icon_fanhui);
+
     }
 
-    private Fragment getCurrentFragment() {
-        return getSupportFragmentManager().findFragmentByTag(
-                mTabHost.getCurrentTabTag());
+    private Fragment getFragmentByTag(String tag) {
+        return getSupportFragmentManager().findFragmentByTag(tag);
+    }
+
+    public int getRCode() {
+        return mRCode;
     }
 
     @Override
@@ -158,7 +169,7 @@ public class ContactActivity extends AppCompatActivity implements
     protected void setTab1() {
         if (mRdbPatient.isChecked()) {
             mTabHost.setCurrentTabByTag(TAB2);
-            switchMenu(View.GONE);
+            //switchMenu(View.GONE);
         }
     }
 
@@ -166,7 +177,7 @@ public class ContactActivity extends AppCompatActivity implements
     protected void setTab2() {
         if (mRdbDoctor.isChecked()) {
             mTabHost.setCurrentTabByTag(TAB1);
-            switchMenu(View.GONE);
+            //switchMenu(View.GONE);
         }
     }
 
@@ -174,7 +185,7 @@ public class ContactActivity extends AppCompatActivity implements
     protected void setTab3() {
         if (mRdbGroup.isChecked()) {
             mTabHost.setCurrentTabByTag(TAB3);
-            switchMenu(View.VISIBLE);
+            //switchMenu(View.VISIBLE);
         }
     }
 
@@ -186,7 +197,7 @@ public class ContactActivity extends AppCompatActivity implements
     @OnClick(R.id.iv_clear)
     public void onClear() {
         mEdtSearch.setText("");
-        Fragment curFragment = getCurrentFragment();
+        Fragment curFragment = getFragmentByTag(mTabHost.getCurrentTabTag());
         if (curFragment != null && curFragment.getClass().equals(FragmentContactList.class)) {
             FragmentContactList frag = (FragmentContactList) curFragment;
             frag.onClearSearch();
@@ -200,7 +211,7 @@ public class ContactActivity extends AppCompatActivity implements
             String word = mEdtSearch.getText().toString().trim();
             if (!TextUtils.isEmpty(word)) {
                 DeviceHelper.hideSoftKeyboard(v);
-                Fragment curFragment = getCurrentFragment();
+                Fragment curFragment = getFragmentByTag(mTabHost.getCurrentTabTag());
                 if (curFragment != null && curFragment.getClass().equals(FragmentContactList.class)) {
                     FragmentContactList frag = (FragmentContactList) curFragment;
                     frag.onSearch( word);
@@ -216,39 +227,26 @@ public class ContactActivity extends AppCompatActivity implements
     }
 
     @OnClick(R.id.imgbtn_add)
-    protected void onGroup() {
-        DialogHelper.showBottomListDialog(this,
+    protected void onAdd() {
+        int tab = mTabHost.getCurrentTab();
+        if (tab == 0 || tab == 1) {
+            UIHelper.showtAty(this, AddContactActivity.class);
+            return;
+        }
+        DialogUtils.showBottomListDialog(this,
                 Arrays.asList(getResources().getStringArray(R.array.group_option_menu)),
                 new OnItemClickListener() {
                     @Override
                     public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
                         dialog.dismiss();
                         if (position == 0) {
-                            UIHelper.showtAty(ContactActivity.this, CreateGroupActivity.class);
+                            EditGroupActivity.startAtyForCreate(ContactActivity.this, REQUEST_CODE_CREATE_GROUP);
                         } else if (position == 1) {
                             UIHelper.showtAty(ContactActivity.this, SearchGroupActivity.class);
                         }
                     }
                 }, null);
     }
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FragmentManager fm = getSupportFragmentManager();
-
-        mNeedResult = getIntent().getBooleanExtra("group_select_need_result", false);
-        mShowGroup = getIntent().getBooleanExtra("select_type", true);
-        // Create the list fragment and add it as our sole content.
-        *//*if (fm.findFragmentById(R.id.contact_container) == null) {
-            ContactListFragment list = ContactListFragment.newInstance(mShowGroup ? ContactListFragment.TYPE_SELECT : ContactListFragment.TYPE_NON_GROUP);
-            fm.beginTransaction().add(R.id.contact_container, list).commit();
-        }
-        mTopBarView = getTopBarView();
-        String actionBtn = getString(R.string.radar_ok_count, getString(R.string.dialog_ok_button) , 0);
-        mTopBarView.setTopBarToStatus(1, R.drawable.topbar_back_bt, R.drawable.btn_style_green, null, actionBtn, getString(R.string.select_contacts), null, this);
-        mTopBarView.setRightBtnEnable(false);*//*
-    }*/
 
     @Override
     public void onClick(View v) {
@@ -258,31 +256,6 @@ public class ContactActivity extends AppCompatActivity implements
                 finish();
                 break;
             case R.id.text_right:
-                List<Fragment> fragments = getSupportFragmentManager().getFragments();
-
-                /*if(fragments.get(0) instanceof ContactListFragment) {
-                    String chatuser = ((ContactListFragment) fragments.get(0) ).getChatuser();
-                    String[] split = chatuser.split(",");
-                    if(split.length == 1 && !mNeedResult) {
-                        //Intent intent = new Intent(ActivityContactActivity.this , ChattingActivity.class);
-                        //intent.putExtra(ChattingFragment.RECIPIENTS, split[0]);
-                        //startActivity(intent);
-                        finish();
-                        return ;
-                    }
-
-                    if(mNeedResult) {
-                        Intent intent = new Intent();
-                        intent.putExtra("Select_Conv_User", split);
-                        setResult(-1, intent);
-                        finish();
-                        return ;
-                    }
-
-                    if(split.length > 0) {
-                        postCreatePrivateChatroom(split);
-                    }
-                }*/
                 break;
             default:
                 break;
@@ -301,25 +274,6 @@ public class ContactActivity extends AppCompatActivity implements
     private void postCreatePrivateChatroom(String[] split) {
         mPostingdialog = new ECProgressDialog(this, R.string.create_chatroom_posting);
         mPostingdialog.show();
-        /*
-        GroupService.doCreateGroup(split, new ECGroupManager.OnInviteJoinGroupListener() {
-
-
-            @Override
-            public void onInviteJoinGroupComplete(ECError error, String groupId,
-                                                  String[] members) {
-                if ("000000".equals(error.errorCode)) {
-                    GroupMemberSqlManager.insertGroupMembers(groupId, members);
-                    ArrayList<String> contactName = ContactSqlManager.getContactName(members);
-                    String users = DemoUtils.listToString(contactName, ",");
-                    Intent intent = new Intent(ActivityActivityContactList.this, ChattingActivity.class);
-                    intent.putExtra(ChattingFragment.RECIPIENTS, groupId);
-                    intent.putExtra(ChattingFragment.CONTACT_USER, users);
-                    startActivity(intent);
-                }
-                dismissPostingDialog();
-            }
-        });*/
     }
 
     @Override
@@ -333,29 +287,16 @@ public class ContactActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtil.d(TAG, "onActivityResult: requestCode=" + requestCode
+        LogUtil.d(TAG, "[ContactActivity -> onActivityResult]: requestCode=" + requestCode
                 + ", resultCode=" + resultCode + ", data=" + data);
-
-        // If there's no data (because the user didn't select a picture and
-        // just hit BACK, for example), there's nothing to do.
-        if (requestCode == REQUEST_CODE_VIEW_GROUP_OWN) {
-            if (data == null) {
-                return;
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_CREATE_GROUP) {
+                Fragment f = getFragmentByTag(TAB3);
+                if (f != null && f.getClass().equals(FragmentContactList.class)) {
+                    ((FragmentContactList)f).onRefresh();
+                }
             }
-        } else if (resultCode != RESULT_OK) {
-            LogUtil.d("onActivityResult: bail due to resultCode=" + resultCode);
-            return;
         }
-        /*
-        String contactId = data.getStringExtra(ChattingFragment.RECIPIENTS);
-        String contactUser = data.getStringExtra(ChattingFragment.CONTACT_USER);
-        if(contactId != null && contactId.length() > 0) {
-            Intent intent = new Intent(this ,  ChattingActivity.class);
-            intent.putExtra(ChattingFragment.RECIPIENTS, contactId);
-            intent.putExtra(ChattingFragment.CONTACT_USER, contactUser);
-            startActivity(intent);
-            finish();
-        }*/
     }
 
 

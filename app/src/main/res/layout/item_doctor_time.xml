@@ -13,6 +13,12 @@
     android:gravity="center">
 
     <TextView
+        android:id="@+id/tv0"
+        style="@style/view_table_row" />
+
+    <View style="@style/v_line"/>
+
+    <TextView
         android:id="@+id/tv1"
         style="@style/view_table_row" />
 
@@ -34,11 +40,6 @@
         android:id="@+id/tv4"
         style="@style/view_table_row" />
 
-    <View style="@style/v_line"/>
-
-    <TextView
-        android:id="@+id/tv5"
-        style="@style/view_table_row" />
 </LinearLayout>
 
     <View

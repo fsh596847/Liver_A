@@ -7,10 +7,8 @@ import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 
@@ -29,7 +27,7 @@ public class BothSlideLayout extends LinearLayout {
     private int dragRightDistance = 0;
     private final double AUTO_OPEN_SPEED_LIMIT = 1000.0;
     private int draggedX;
-    private boolean isManual;
+    private boolean canSlide;
     private OnSlideListener onSlideListener;
 
     public BothSlideLayout(Context context) {
@@ -131,7 +129,7 @@ public class BothSlideLayout extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(viewDragHelper.shouldInterceptTouchEvent(ev)) {
+        if(canSlide && viewDragHelper.shouldInterceptTouchEvent(ev)) {
             return true;
         }
         return super.onInterceptTouchEvent(ev);
@@ -139,9 +137,7 @@ public class BothSlideLayout extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isManual) {
-            viewDragHelper.processTouchEvent(event);
-        }
+        viewDragHelper.processTouchEvent(event);
         return true;
     }
 
@@ -154,9 +150,7 @@ public class BothSlideLayout extends LinearLayout {
     }
 
     public void slideOpenLeftView() {
-        isManual = true;
-        //Log.d("slideOpenLeftView: ", " " + dragRightDistance + ", " + dragLeftDistance);
-        //viewDragHelper.smoothSlideViewTo(contentView, dragRightDistance, 0);
+        canSlide = true;
         if (actionLeftView.getVisibility() == View.GONE) {
             actionLeftView.setVisibility(View.VISIBLE);
         }
@@ -164,21 +158,9 @@ public class BothSlideLayout extends LinearLayout {
         ViewCompat.postInvalidateOnAnimation(BothSlideLayout.this);
     }
 
-    public void slideCloseLeftView() {
-        //Log.d("slideCloseLeftView: ", " " + dragRightDistance + ", " + dragLeftDistance);
-        //viewDragHelper.smoothSlideViewTo(contentView, 0, 0);
-        if (actionLeftView.getVisibility() == View.VISIBLE) {
-            actionLeftView.setVisibility(View.GONE);
-        }
-        invalidate();
-        ViewCompat.postInvalidateOnAnimation(BothSlideLayout.this);
-    }
-
 
     public void slideOpenRightView() {
-        isManual = true;
-        //Log.d("slideOpenRightView: ", " " + dragRightDistance + ", " + dragLeftDistance);
-        //viewDragHelper.smoothSlideViewTo(contentView, dragLeftDistance, 0);
+        canSlide = true;
         if (actionRightView.getVisibility() == View.GONE) {
             actionRightView.setVisibility(View.VISIBLE);
         }
@@ -186,35 +168,8 @@ public class BothSlideLayout extends LinearLayout {
         ViewCompat.postInvalidateOnAnimation(BothSlideLayout.this);
     }
 
-    public void switchRightView() {
-        //isManual = false;
-        Log.d("switchRightView: ", " " + dragRightDistance + ", " + dragLeftDistance);
-        if (actionLeftView.getVisibility() == View.VISIBLE) {
-            actionLeftView.setVisibility(View.GONE);
-            viewDragHelper.smoothSlideViewTo(contentView, -dragLeftDistance, 0);
-            isManual = false;
-        } else if (actionRightView.getVisibility() == View.GONE) {
-            actionRightView.setVisibility(View.GONE);
-            viewDragHelper.smoothSlideViewTo(contentView, dragLeftDistance, 0);
-            isManual = true;
-        }
-        invalidate();
-        ViewCompat.postInvalidateOnAnimation(BothSlideLayout.this);
-    }
-
-    public void slideCloseRightView() {
-        //Log.d("slideCloseRightView: ", " " + dragRightDistance + ", " + dragLeftDistance);
-        //viewDragHelper.smoothSlideViewTo(contentView, 0, 0);
-        if (actionRightView.getVisibility() == View.VISIBLE) {
-            actionRightView.setVisibility(View.GONE);
-        }
-        invalidate();
-        ViewCompat.postInvalidateOnAnimation(BothSlideLayout.this);
-    }
-
-
     public void closeSlide() {
-        isManual = false;
+        canSlide = false;
         if (actionRightView.getVisibility() == View.VISIBLE) {
             actionRightView.setVisibility(View.GONE);
         }
@@ -223,6 +178,10 @@ public class BothSlideLayout extends LinearLayout {
         }
         invalidate();
         ViewCompat.postInvalidateOnAnimation(BothSlideLayout.this);
+    }
+
+    public void setCanSlide(boolean canSlide) {
+        this.canSlide = canSlide;
     }
 
     public void setOnSlideListener(OnSlideListener onSlideListener) {

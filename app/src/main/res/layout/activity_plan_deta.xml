@@ -20,19 +20,20 @@
             android:textSize="18sp"/>
 
         <LinearLayout
+            android:id="@+id/ll_menu_option"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:orientation="horizontal"
             android:paddingRight="15dp">
 
-            <ImageButton
-                android:id="@+id/img_complete"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@null"
+            <TextView
+                android:id="@+id/tv_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:src="@drawable/right"/>
+                android:gravity="center_vertical"
+                android:text="@string/adjust"/>
             <ImageButton
                 android:id="@+id/img_more"
                 android:layout_width="32dp"

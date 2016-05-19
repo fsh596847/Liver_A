@@ -7,7 +7,7 @@
     <string name="main_tab_topic">话题</string>
     <string name="main_tab_me">我的</string>
 
-
+    <string name="contact">联系人</string>
     <string name="patient">患者</string>
     <string name="group">群</string>
     <string name="doctor">医生</string>
@@ -21,6 +21,8 @@
     <string name="state">状态</string>
     <string name="message">信息</string>
     <string name="topic">话题</string>
+    <string name="article">文章</string>
+    <string name="attention">关注</string>
     <string name="diagnose_plan">随诊计划</string>
     <string name="loading">加载中…</string>
     <string name="loading_no_more">""</string>
@@ -41,6 +43,7 @@
     <string name="patient_leave_hospital">出院患者</string>
     <string name="clinic_patient">门诊患者</string>
     <string name="input_keywords_tips">请输入关键词</string>
+    <string name="_imports">导入</string>
     <string name="statistic">统计</string>
     <string name="disease_archive">疾病档案</string>
     <string name="look_more_archive">查看更多档案</string>
@@ -53,18 +56,30 @@
     <string name="archive">档案</string>
     <string name="public_topic">发布</string>
     <string name="title">标题</string>
+    <string name="not_process">未处理</string>
+    <string name="all">全部</string>
+    <string name="doctor_brief_info">%1$2s%2$2s\n\n&lt;B&gt;职称:&lt;/B&gt;\n\n%3$2s\n\n&lt;B&gt;执业经历:&lt;/B&gt;\n\n%4$2s\n\n&lt;B&gt;擅长：&lt;/B&gt;\n\n%5$2s\n\n</string>
+    <string-array name="notice_msg_oper">
+        <item name="agree">同意</item>
+        <item name="refuse">拒绝</item>
+        <item name="cancel">取消</item>
+    </string-array>
     <!-- 我的 -->
     <string name="login">登录</string>
     <string name="register">注册</string>
     <string name="register_or_login">注册/登录</string>
     <string name="my">我的</string>
+    <string name="personal_info">个人信息</string>
     <string name="my_patient">我的患者</string>
     <string name="my_inquiry">我的问诊</string>k
     <string name="announcement">发布公告</string>
     <string name="knowledge_repo">知识库</string>
     <string name="published_article">发表的文章</string>
     <string name="favorite_article">收藏的文章</string>
-    <string name="visit_plan">随访方案</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="visit_scheme">随访方案</string>
+    <string name="visit_plan">随访计划</string>
+    <string name="create_new_plan">新建随访方案</string>
     <string name="recommend_friend">推荐给好友</string>
     <string name="account_security">账户安全</string>
     <string name="message_notification">消息提醒</string>
@@ -76,6 +91,11 @@
     <string name="contact_service">联系客服</string>
     <string name="message_no_disturb">消息免打扰</string>
     <string name="clear_history_message">清空历史消息</string>
+    <string name="setting">设置</string>
+    <string name="subscribe">订阅</string>
+    <string name="unsubscribe">取消订阅</string>
+    <string name="pub_announce">发布公告</string>
+    <string name="service_mobile">0351-7022306</string>
     <string name="plan_name_date">%1$s | %2$s</string>
     <!-- 登录注册 -->
     <string name="username">用户名</string>
@@ -91,6 +111,7 @@
     <string name="quick_register">快速注册</string>
     <string name="forget_password">忘记密码?</string>
     <string name="change_password">修改密码</string>
+    <string name="change_phone_num">更换手机号</string>
     <string name="verifycode_already_send">已发送验证码到手机：</string>
     <string name="check_code">验证码</string>
     <string name="input_verification_code_tips">输入验证码</string>
@@ -100,12 +121,20 @@
     <string name="id_number">身份证号(可选)</string>
     <string name="sure">确定</string>
     <string name="cancel">取消</string>
+    <string name="operation">操作</string>
+    <string name="commit">提交</string>
+    <string name="get_message_vcode">获取短信验证码</string>
+    <string name="pls_input_old_password">请输入旧密码</string>
+    <string name="pls_input_new_password">请输入新密码</string>
+    <string name="pls_input_new_password_again">请再次输入新密码</string>
     <!-- 设置-->
+    <string name="suggest_tips">感谢您提出的宝贵意见，您的支持是我们最大的动力</string>
+    <string name="change_mobile_tips">更换手机后，下次登录可使用新手机号登录\n当前手机号：%1$s</string>
     <string name="version">版本</string>
     <string name="copyright_zh">版权所有</string>
     <string name="copyright_en">copyright</string>
     <string name="sans_serif" translatable="false">sans-serif</string>
-
+    <string name="menu_item_chat_online">在线聊天</string>
     <string name="new_conversation">新建会话</string>
     <string name="send_group_msg">群发消息</string>
     <string name="add_contact">添加联系人</string>
@@ -121,18 +150,25 @@
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
     <string name="create_group">创建群</string>
-    <string name="group_name">群组名称</string>
-    <string name="group_classify">群组分类</string>
+    <string name="group_name">群名称</string>
+    <string name="group_classify">群分组</string>
     <string name="join_group_verify">入群验证</string>
-    <string name="allow_anybody">允许任何人</string>
-    <string name="need_identify">需身份验证</string>
+    <string name="id_verify">身份验证</string>
+    <string name="allow_anybody_join">允许任何人加入该群</string>
+    <string-array name="group_identify">
+        <item name="allow_anybody">允许任何人加入该群</item>
+        <item name="need_identify">需要验证才能加入该群</item>
+        <item name="icancel">取消</item>
+    </string-array>
     <string name="group_announce">群组公告</string>
+    <string name="group_brief">群介绍</string>
     <string name="search_group">找群组</string>
     <string name="search_group_hint">请输入群组ID\群名称</string>
     <string name="group_master">群主</string>
     <string name="group_member">群成员</string>
     <string name="group_divide">群分组</string>
     <string name="apply_for_join">申请加入</string>
+    <string name="edit_group">修改群</string>
     <string name="manage_group">管理群组</string>
     <string name="save_change">保存修改</string>
     <string name="group_card">群名片</string>
@@ -158,6 +194,9 @@
     <string name="state_progressing">进行中</string>
     <string name="state_all">全部</string>
 
+    <string name="edu_exp">教育经历</string>
+    <string name="career_exp">执业经历</string>
+    <string name="favorite">擅长</string>
     <string name="please_select">请选择</string>
     <string name="select_patient">选择患者</string>
     <string name="start_date">开始日期</string>
@@ -165,6 +204,7 @@
     <string name="other_diagnose">其他诊断</string>
     <string name="treat_method">治疗方式</string>
     <string name="doctor_advice">出院医嘱</string>
+    <string name="visit_patient">随访患者</string>
     <string name="review">门诊复查</string>
     <string name="check">检查</string>
     <string name="checkout">检验</string>
@@ -174,7 +214,13 @@
     <string name="plan_record">随访记录</string>
     <string name="diag_record">随诊记录</string>
     <string name="new_plan">新建方案</string>
-    <string-array name="plan_scheme_operation">
+    <string name="select_plan">选择方案</string>
+    <string name="view_plan">查看方案</string>
+    <string name="remind_event">提醒事件</string>
+    <string name="pre_month">上一月</string>
+    <string name="next_month">下一月</string>
+    <string name="visit_remind">随访提醒</string>
+    <string-array name="plan_ing_status_menu">
         <item name="stop_current_plan">终止当前计划</item>
         <item name="add_follow_record">增加随访记录</item>
         <item name="look_follow_record">查看随访记录</item>
@@ -182,6 +228,24 @@
         <item name="cancel">取消</item>
     </string-array>
 
+    <string-array name="add_picture_way">
+        <item>拍照</item>
+        <item>从相册中选取</item>
+        <item name="cancel">取消</item>
+    </string-array>
+
+    <string-array name="plan_init_status_menu">
+        <item name="save1">保存为草稿</item>
+        <item name="save2">存为我的方案</item>
+        <item name="cancel">取消</item>
+    </string-array>
+    <string-array name="plan_uncreated_status_menu">
+        <item name="save1">保存</item>
+        <item name="del">删除</item>
+        <item name="save">保存为我的方案</item>
+        <item name="cancel">取消</item>
+    </string-array>
+    <string name="adjust">调整</string>
     <string name="close_this">关闭该项</string>
     <string name="slide_to_delete_item">滑动可删除单项</string>
     <string name="new_project">新建项目</string>
@@ -192,7 +256,10 @@
     <string name="btn_give_up_change">放弃修改</string>
     <string name="btn_continue_edit">继续编辑</string>
     <string name="are_sure_to_give_up_change">是否放弃对该项目的修改?</string>
-
+    <string name="plan_scheme_name">方案名称</string>
+    <string name="dis_diag">疾病诊断</string>
+    <string name="treatment">治疗方案</string>
+    <string name="plan_status">%1$s | 已发送(%2$d)</string>
     <string name="default_scheme">默认方案</string>
     <string name="custome_scheme">自定义方案</string>
     <string name="repeat_exec">重复执行</string>

@@ -27,7 +27,7 @@ public class PlanListAdapter extends BaseRecyViewAdapter {
         int viewType = viewHolder.getItemViewType();
         if (viewType == VIEW_TYPE_ITEM) {
             if (VisitPlanViewHolder.class.equals(viewHolder.getClass())) {
-                PlanList.DataEntity obj = (PlanList.DataEntity) this.getItem(pos);
+                PlanList.PlanBaseEntity obj = (PlanList.PlanBaseEntity) this.getItem(pos);
                 VisitPlanViewHolder holder = (VisitPlanViewHolder) viewHolder;
                 holder.setViewData(obj);
             }

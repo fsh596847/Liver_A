@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:calendar="http://schemas.android.com/apk/res-auto"
+    xmlns:support="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"/>
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:text="@string/visit_remind"
+                android:textSize="18sp"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_pre_month"
+            android:layout_weight="1"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="@string/pre_month"/>
+
+        <TextView
+            android:id="@+id/tv_month"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/app_theme_primary_textcolor"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView android:id="@+id/tv_next_month"
+            android:layout_weight="1"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="@string/next_month"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

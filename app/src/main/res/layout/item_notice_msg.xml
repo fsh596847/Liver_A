@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/img_tip"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/aii"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text=""
+                android:textSize="13sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_oper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/appThemePrimary0"
+            android:textSize="14sp"
+            android:text="@string/operation"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/oval_border"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text=""
+            android:textSize="12sp"
+            android:textColor="@color/app_theme_secondary_textcolor"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+    <View style="@style/h_line"/>
+</LinearLayout>

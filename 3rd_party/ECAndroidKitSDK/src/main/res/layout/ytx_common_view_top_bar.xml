@@ -19,7 +19,7 @@ be found in the AUTHORS file in the root of the source tree.
         android:layout_height="@dimen/topbar_content_height"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:background="@drawable/actionbar_background" >
+        android:background="#1B85C0" >
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -73,7 +73,8 @@ be found in the AUTHORS file in the root of the source tree.
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:textSize="@dimen/size_big"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:textColor="@android:color/white"/>
 
             <TextView
                 android:id="@+id/btn_middle_sub"
@@ -86,7 +87,7 @@ be found in the AUTHORS file in the root of the source tree.
                 android:gravity="center_vertical"
                 android:padding="0.0dip"
                 android:singleLine="true"
-                android:textColor="#ff848484"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/size_small"
                 android:visibility="gone" />
         </LinearLayout>

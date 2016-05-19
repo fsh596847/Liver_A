@@ -52,9 +52,9 @@ public class FragmentMedicUseList extends BaseRecyViewFragment {
 
     @Override
     protected void setAdapter() {
-        adapter = new SimpleTextListAdapter();
-        adapter.setItemOptionClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new SimpleTextListAdapter();
+        mAdapter.setItemOptionClickListener(this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class FragmentMedicUseList extends BaseRecyViewFragment {
     public void onItemClick(int position, View view) {
         Activity aty = getActivity();
         if (aty != null) {
-            String item = (String) adapter.getItem(position);
+            String item = (String) mAdapter.getItem(position);
             Intent intent = new Intent();
             intent.putExtra("data", item);
             aty.setResult(Activity.RESULT_OK, intent);

@@ -5,9 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.GroupList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
 import com.android.doctor.ui.viewholder.GroupViewHolder;
-import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -32,9 +32,9 @@ public class GroupListAdapter extends BaseRecyViewAdapter {
         int viewType = viewHolder.getItemViewType();
         if (viewType == VIEW_TYPE_ITEM) {
             if (GroupViewHolder.class.equals(viewHolder.getClass())) {
-                ECContacts obj = (ECContacts) this.getItem(pos);
+                GroupList.GroupsEntity obj = (GroupList.GroupsEntity) this.getItem(pos);
                 GroupViewHolder holder = (GroupViewHolder) viewHolder;
-                holder.fillUI(obj);
+                holder.setViewData(obj);
             }
         }
     }

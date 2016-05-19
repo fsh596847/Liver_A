@@ -72,7 +72,7 @@ public class PatientList {
         private String _id;
         private int duid;
         private String dname;
-        private int puid;
+        private String puid;
         private String name;
         private String province;
         private String city;
@@ -121,7 +121,7 @@ public class PatientList {
             this.dname = dname;
         }
 
-        public void setPuid(int puid) {
+        public void setPuid(String puid) {
             this.puid = puid;
         }
 
@@ -237,11 +237,11 @@ public class PatientList {
             return duid;
         }
 
-        public Object getDname() {
+        public String getDname() {
             return dname;
         }
 
-        public int getPuid() {
+        public String getPuid() {
             return puid;
         }
 
@@ -455,7 +455,7 @@ public class PatientList {
             dest.writeString(this._id);
             dest.writeInt(this.duid);
             dest.writeString(this.dname);
-            dest.writeInt(this.puid);
+            dest.writeString(this.puid);
             dest.writeString(this.name);
             dest.writeString(this.province);
             dest.writeString(this.city);
@@ -491,7 +491,7 @@ public class PatientList {
             this._id = in.readString();
             this.duid = in.readInt();
             this.dname = in.readString();
-            this.puid = in.readInt();
+            this.puid = in.readString();
             this.name = in.readString();
             this.province = in.readString();
             this.city = in.readString();

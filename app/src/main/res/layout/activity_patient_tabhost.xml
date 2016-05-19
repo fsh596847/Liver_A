@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    android:orientation="vertical"
+    android:background="@color/white">
+        
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:text="@string/invite_patient"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_add_manual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="15dp"
+            android:textColor="@android:color/white"
+            android:text="@string/manual_invite"
+            android:textSize="16sp"/>
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <include layout="@layout/layout_search_box"/>
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/cancel"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/tab_rdbtn_border_line">
+
+        <RadioGroup
+            android:id="@+id/rdg_btn"
+            android:layout_width="240dp"
+            android:layout_height="@dimen/segment_tab_height"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:divider="@color/white"
+            android:showDividers="middle">
+
+            <RadioButton
+                android:id="@+id/rdbtn_leave_patient"
+                style="@style/tab_rdbtn_bg_style"
+                android:background="@drawable/tab_left_rdbtn_selector"
+                android:text="@string/patient_leave_hospital"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/rdbtn_clinic"
+                style="@style/tab_rdbtn_bg_style"
+                android:text="@string/clinic_patient"
+                android:background="@drawable/tab_right_rdbtn_selector" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <android.support.v4.app.FragmentTabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.0"
+            android:orientation="horizontal"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </android.support.v4.app.FragmentTabHost>
+</LinearLayout>

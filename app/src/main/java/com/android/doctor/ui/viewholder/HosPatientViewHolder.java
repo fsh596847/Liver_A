@@ -45,6 +45,7 @@ public class HosPatientViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void setViewData(HosPaitentList.HosPatientEntity e) {
         if (e != null) {
+            mImgAvatar.setImageResource(e.getSex() == 0 ? R.drawable.patient_photo_f : R.drawable.patient_photo_m);
             mTvName.setText(e.getName());
             mTvDiagType.setText(e.getKw());
             mTvSeeDoctor.setText("就诊：" + e.getVisitdate());

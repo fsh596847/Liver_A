@@ -109,12 +109,23 @@ public class HosPaitentList {
         private CisuuidEntity cisuuid;
         private long createtime;
         private String source;
+        private int sync;
         private List<String> kw1;
         private List<String> kw2;
+
+        public int getSync() {
+            return sync;
+        }
+
+        public void setSync(int sync) {
+            this.sync = sync;
+        }
+
         /**
          * duid : 122
          * level : 0
          */
+
 
         private List<DoctorsEntity> doctors;
 

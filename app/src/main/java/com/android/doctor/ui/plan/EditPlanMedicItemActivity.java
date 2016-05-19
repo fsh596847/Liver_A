@@ -7,7 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.doctor.R;
-import com.android.doctor.helper.DialogHelper;
+import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.MedicInfo;
 import com.android.doctor.model.PlanDeta;
@@ -46,7 +46,7 @@ public class EditPlanMedicItemActivity extends BaseActivity{
     @InjectView(R.id.edt_content)
     protected EditText mTvNotice;
 
-    private PlanDeta.DataEntity.ItemsEntity mItemEntity;
+    private PlanDeta.PlanDetaEntity.ItemsEntity mItemEntity;
     private int mReqCode;
     private int index;
 
@@ -63,7 +63,7 @@ public class EditPlanMedicItemActivity extends BaseActivity{
         index = intent.getIntExtra("index", -1);
         if (mItemEntity == null) {
             setActionBar(R.string.new_project);
-            mItemEntity = new PlanDeta.DataEntity.ItemsEntity();
+            mItemEntity = new PlanDeta.PlanDetaEntity.ItemsEntity();
         } else {
             setActionBar(mItemEntity.getName());
         }
@@ -102,7 +102,7 @@ public class EditPlanMedicItemActivity extends BaseActivity{
         String yf = mTvUsage.getText().toString();
         String yl = mTvUseLevel.getText().toString();
         if (TextUtils.isEmpty(title)) {
-            UIHelper.showToast(this, "请填写标题");
+            UIHelper.showToast("请填写标题");
             return false;
         }
         mItemEntity.setName(title);
@@ -169,7 +169,7 @@ public class EditPlanMedicItemActivity extends BaseActivity{
     @OnClick(R.id.tv_duration_time)
     protected void onDurationTypeClick() {
         final List<String> list = Arrays.asList(getResources().getStringArray(R.array.duration_time));
-        DialogHelper.showBottomListDialog(this, list,
+        DialogUtils.showBottomListDialog(this, list,
                 new OnItemClickListener() {
                     @Override
                     public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
@@ -186,7 +186,7 @@ public class EditPlanMedicItemActivity extends BaseActivity{
     @OnClick(R.id.tv_dtime_unit)
     protected void showUnitListView() {
         final List<String> list = Arrays.asList(getResources().getStringArray(R.array.unit_date_exclude_week));
-        DialogHelper.showBottomListDialog(this, list,
+        DialogUtils.showBottomListDialog(this, list,
                 new OnItemClickListener() {
                     @Override
                     public void onItemClick(DialogPlus dialog, Object item, View view, int position) {

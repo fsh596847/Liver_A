@@ -53,7 +53,7 @@ public class ContactList {
 
     public static class ContactEntity {
         private String _id;
-        private int uid;
+        private String uid;
         private int utype;
         private String linktype;
         private String linkuuid;
@@ -106,11 +106,11 @@ public class ContactList {
             this._id = _id;
         }
 
-        public int getUid() {
+        public String getUid() {
             return uid;
         }
 
-        public void setUid(int uid) {
+        public void setUid(String uid) {
             this.uid = uid;
         }
 
@@ -210,7 +210,7 @@ public class ContactList {
             this.email = email;
         }
 
-        public Object getDesc() {
+        public String getDesc() {
             return desc;
         }
 
@@ -288,14 +288,23 @@ public class ContactList {
         }
 
         public static class PlatformEntity {
-            private int duid;
+            private String duid;
+            private String puid;
 
-            public int getDuid() {
+            public String getDuid() {
                 return duid;
             }
 
-            public void setDuid(int duid) {
+            public void setDuid(String duid) {
                 this.duid = duid;
+            }
+
+            public String getPuid() {
+                return puid;
+            }
+
+            public void setPuid(String puid) {
+                this.puid = puid;
             }
         }
 

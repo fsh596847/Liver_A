@@ -40,6 +40,7 @@ public class ECDeviceKit {
 		if (sInstance == null) {
 			synchronized (ECDeviceKit.class) {
 				sInstance = new ECDeviceKit();
+
 			}
 		}
 
@@ -96,6 +97,10 @@ public class ECDeviceKit {
 
 	public String getUserId() {
 		return userId;
+	}
+
+	public static void setUserId(String userId) {
+		ECDeviceKit.userId = userId;
 	}
 
 	public static void login(ECAuthParameters initParams, OnConnectSDKListener l) {

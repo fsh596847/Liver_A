@@ -64,5 +64,8 @@
         calendar:monthViewBackground = "@android:color/white"
         calendar:weekViewBackground="@android:color/white" />
 
-    <include layout="@layout/fragment_recycler_view"/>
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

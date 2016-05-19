@@ -2,6 +2,7 @@ package com.android.doctor.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.Stack;
 
@@ -30,6 +31,7 @@ public class AppManager {
      * 添加Activity到堆栈
      */
     public void addActivity(Activity activity) {
+        Log.d(AppConfig.TAG, "AppManager-> addActivity " + activity.getLocalClassName());
         if (activityStack == null) {
             activityStack = new Stack<Activity>();
         }
@@ -48,7 +50,7 @@ public class AppManager {
      * 结束当前Activity（堆栈中最后一个压入的）
      */
     public void finishActivity() {
-        Activity activity = activityStack.lastElement();
+        Activity activity = activityStack.pop();
         finishActivity(activity);
     }
 
@@ -56,9 +58,12 @@ public class AppManager {
      * 结束指定的Activity
      */
     public void finishActivity(Activity activity) {
-        if (activity != null && !activity.isFinishing()) {
-            activityStack.remove(activity);
-            activity.finish();
+        activityStack.remove(activity);
+        if (activity != null) {
+            if (!activity.isFinishing()) {
+                activity.finish();
+                Log.d(AppConfig.TAG, "AppManager-> finish " + activity.getLocalClassName());
+            }
             activity = null;
         }
     }
@@ -81,12 +86,6 @@ public class AppManager {
     public void finishAllActivity() {
         for (int i = 0, size = activityStack.size(); i < size; i++) {
             if (null != activityStack.get(i)) {
-              //finishActivity方法中的activity.isFinishing()方法会导致某些activity无法销毁
-              //貌似跳转的时候最后一个activity 是finishing状态，所以没有执行
-              //内部实现不是很清楚，但是实测结果如此，使用下面代码则没有问题
-              // find by TopJohn
-              //finishActivity(activityStack.get(i));
-
               activityStack.get(i).finish();
               //break;
             }

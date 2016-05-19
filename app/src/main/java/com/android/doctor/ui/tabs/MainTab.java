@@ -2,10 +2,9 @@ package com.android.doctor.ui.tabs;
 
 import com.android.doctor.R;
 import com.android.doctor.ui.chat.FragmentMainMsg;
-import com.android.doctor.ui.fragment.FragmentHome;
-import com.android.doctor.ui.chat.FragmentMainMsg1;
-import com.android.doctor.ui.fragment.FragmentMyInfo;
-import com.android.doctor.ui.topic.FragmentTopic;
+import com.android.doctor.ui.app.FragmentHome;
+import com.android.doctor.ui.mine.FragmentMyInfo;
+import com.android.doctor.ui.topic.FragmentMainTopic;
 import com.android.doctor.ui.plan.FragmentVisitPlan;
 
 public enum MainTab {
@@ -20,7 +19,7 @@ public enum MainTab {
 			FragmentVisitPlan.class),
 
 	TOPIC(3, R.string.main_tab_topic, R.drawable.ic_tab_icon_3,
-			FragmentTopic.class),
+			FragmentMainTopic.class),
 
 	ME(4, R.string.main_tab_me, R.drawable.ic_tab_icon_4,
 			FragmentMyInfo.class);

@@ -55,7 +55,7 @@ public class PlanRecordInfoActivity extends BaseActivity {
 
     @Override
     protected void setContentLayout() {
-        setContentView(R.layout.activity_diagnose_record);
+        setContentView(R.layout.activity_diag_record);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class PlanRecordInfoActivity extends BaseActivity {
         dismissProcessDialog();
         if (resp != null) {
             String text = resp.getError_msg();
-            UIHelper.showToast(this, text);
+            UIHelper.showToast(text);
             if (resp.getError_code() == 0) {
                 setResult(RESULT_OK);
                 onBackPressed();

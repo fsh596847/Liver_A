@@ -27,7 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/select_patient"
-            android:textSize="16sp" />
+            android:textSize="14sp"
+            android:textColor="@color/app_theme_primary_textcolor"/>
 
         <TextView
             android:id="@+id/tv_patient"
@@ -35,7 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:drawableRight="@drawable/arrow_right"
-            android:textSize="16sp" />
+            android:textSize="14sp"
+            android:textColor="@color/app_theme_primary_textcolor" />
     </RelativeLayout>
 
     <View style="@style/h_line"/>
@@ -65,20 +67,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/start_date"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/text1"
-                android:textSize="16sp" />
+                android:layout_alignParentRight="true"
+                android:drawableRight="@drawable/arrow_right"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
         </RelativeLayout>
 
         <View
             style="@style/h_line" />
 
         <RelativeLayout
+            android:id="@+id/rl_main_diag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -94,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/main_diagnose"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
 
             <EditText
                 android:id="@+id/edt_main_diagnose"
@@ -102,16 +109,18 @@
                 android:layout_height="wrap_content"
                 android:minWidth="100dp"
                 android:layout_alignParentRight="true"
+                android:drawableRight="@drawable/arrow_right"
                 android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
         </RelativeLayout>
 
         <View
             style="@style/h_line" />
 
         <RelativeLayout
+            android:id="@+id/rl_other_diag"
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,7 +136,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/other_diagnose"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
 
             <EditText
                 android:id="@+id/edt_other_diagnose"
@@ -135,9 +145,10 @@
                 android:layout_height="wrap_content"
                 android:minWidth="100dp"
                 android:layout_alignParentRight="true"
+                android:drawableRight="@drawable/arrow_right"
                 android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="@android:color/black"/>
         </RelativeLayout>
 
@@ -145,6 +156,7 @@
             style="@style/h_line" />
 
         <RelativeLayout
+            android:id="@+id/rl_treatment"
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,11 +167,12 @@
             android:paddingTop="16dp" >
 
             <TextView
-                android:id="@id/text"
+                android:id="@+id/tv_treatment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/treat_method"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor" />
 
             <EditText
                 android:id="@+id/edt_treatment"
@@ -169,8 +182,9 @@
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:textSize="14sp"
+                android:drawableRight="@drawable/arrow_right"
+                android:textColor="@color/app_theme_primary_textcolor"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -178,10 +192,10 @@
     <View style="@style/h_line"/>
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_create"
+        android:id="@+id/btn_select"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
-        android:text="@string/new_plan"
+        android:text="@string/select_plan"
         android:textSize="14sp"
         android:textColor="@color/white"
         android:background="@drawable/btn_selector"

@@ -36,7 +36,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_state"
+            android:id="@+id/tv_import_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -47,7 +47,7 @@
             android:textColor="@color/appThemePrimary"/>
 
         <View style="@style/v_line"
-            android:layout_toLeftOf="@id/tv_state"
+            android:layout_toLeftOf="@id/tv_import_state"
             android:layout_margin="10dp"/>
 
     </RelativeLayout>

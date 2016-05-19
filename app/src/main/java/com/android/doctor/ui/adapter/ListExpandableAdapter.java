@@ -21,14 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.doctor.R;
+import com.android.doctor.helper.DateUtils;
+import com.android.doctor.model.LaborArchList;
 
 public class ListExpandableAdapter extends BaseExpandableListAdapter {
     private LayoutInflater mInflater;
     private Context context;
-
-    int[] group_state_array = new int[] { R.drawable.arrow_down, R.drawable.arrow_up };
-    private List<String> mGroupList;
-    private List<List<String>> mChildList;
+    private int[] group_state_array = new int[] { R.drawable.arrow_down, R.drawable.arrow_up };
+    private List<LaborArchList.LaborArchEntity> mData;
 
     public ListExpandableAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -37,36 +37,38 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return mGroupList == null ? 0 : mGroupList.size();
+        return mData == null ? 0 : mData.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        if (mChildList == null) {
+        if (mData == null) {
             return 0;
         }
-        if (groupPosition >= mChildList.size() || mChildList.get(groupPosition) == null) {
+        if (groupPosition >= mData.size() || mData.get(groupPosition) == null) {
             return 0;
         }
-
-        return mChildList.get(groupPosition).size();
+        LaborArchList.LaborArchEntity.DetailEntity deta = mData.get(groupPosition).getDetail();
+        if (deta == null) return 0;
+        return deta.getLis() == null ? 0 : deta.getLis().size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return mGroupList == null ? null : mGroupList.get(groupPosition);
+        return mData == null ? null : mData.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        if (mChildList == null) {
+        if (mData == null) {
             return null;
         }
-        if (groupPosition >= mChildList.size() || mChildList.get(groupPosition) == null) {
+        if (groupPosition >= mData.size() || mData.get(groupPosition) == null) {
             return null;
         }
-
-        return mChildList.get(groupPosition).get(childPosition);
+        LaborArchList.LaborArchEntity.DetailEntity deta = mData.get(groupPosition).getDetail();
+        if (deta == null || deta.getLis() == null) return null;
+        return deta.getLis().get(childPosition);
     }
 
     @Override
@@ -84,25 +86,13 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    public List<String> getGroup() {
-        return mGroupList;
+
+    public List<LaborArchList.LaborArchEntity> getmData() {
+        return mData;
     }
 
-    public void setGroup(List<String> group) {
-        this.mGroupList = group;
-    }
-
-    public List<List<String>> getChild() {
-        return mChildList;
-    }
-
-    public void setChild(List<List<String>> child) {
-        this.mChildList = child;
-    }
-
-    public void setData(List<String> group, List<List<String>> child) {
-        this.mGroupList = group;
-        this.mChildList = child;
+    public void setmData(List<LaborArchList.LaborArchEntity> mData) {
+        this.mData = mData;
         notifyDataSetChanged();
     }
 
@@ -114,13 +104,14 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
         // 为视图对象指定布局
         convertView = LinearLayout.inflate(context, R.layout.item_list_group, null);
         //RelativeLayout myLayout = (RelativeLayout) convertView.findViewById(R.id.rl_group);
-        // 用来显示一级标签上的标题信息
         TextView group_title = (TextView) convertView.findViewById(R.id.tv_group_name);
-        // 用来显示一级标签上的大体描述的信息
+        TextView group_desc = (TextView) convertView.findViewById(R.id.tv_group_desc);
         TextView group_state = (TextView) convertView.findViewById(R.id.tv_icon);
-        // 设置标题上的文本信息
-        //group_title.setText(mGroupList.get(groupPosition));
-        // 设置整体描述上的文本信息
+
+        LaborArchList.LaborArchEntity laborArch = mData.get(groupPosition);
+        group_title.setText(laborArch.getContent());
+        String desc = laborArch.getTitle() + "  " + laborArch.getHosname() + "  " + DateUtils.getDateString_(laborArch.getCreatedatetime());
+        group_desc.setText(desc);
 
         if (!isExpanded) {
             group_state.setBackgroundResource(group_state_array[0]);
@@ -142,22 +133,30 @@ public class ListExpandableAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             mViewChild = new ViewChild();
             convertView = mInflater.inflate(R.layout.item_list_child_item, null);
-            mViewChild.tv1 = (TextView)convertView.findViewById(R.id.tv_name);
-            mViewChild.tv2 = (TextView)convertView.findViewById(R.id.text);
+            mViewChild.tv1 = (TextView)convertView.findViewById(R.id.tv1);
+            mViewChild.tv2 = (TextView)convertView.findViewById(R.id.tv2);
+            mViewChild.tv3 = (TextView)convertView.findViewById(R.id.tv3);
             convertView.setTag(mViewChild);
         } else {
             mViewChild = (ViewChild) convertView.getTag();
         }
-
+        LaborArchList.LaborArchEntity.DetailEntity.LisEntity lis = (LaborArchList.LaborArchEntity.DetailEntity.LisEntity) getChild(groupPosition, childPosition);
+        if (lis != null) {
+            String tx1 = lis.getEng() +"(" + lis.getName() + ")";
+            mViewChild.tv1.setText(tx1);
+            String tx2 = lis.getValue() + "   " + lis.getUnit();
+            mViewChild.tv2.setText(tx2);
+            mViewChild.tv3.setText(lis.getRange());
+        }
         return convertView;
     }
 
     ViewChild mViewChild;
 
     static class ViewChild {
-        TextView tv0;
         TextView tv1;
         TextView tv2;
+        TextView tv3;
     }
 
     @Override

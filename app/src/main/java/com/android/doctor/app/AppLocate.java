@@ -7,7 +7,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.android.doctor.helper.PreferenceHelper;
+import com.android.doctor.helper.PreferenceUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,11 +74,11 @@ public class AppLocate implements AMapLocationListener {
                 amapLocation.getStreetNum();//街道门牌号信息
                 String city_code = amapLocation.getCityCode();//城市编码
                 amapLocation.getAdCode();//地区编码
-                PreferenceHelper.write(mContext, "location", "latitude", lat);
-                PreferenceHelper.write(mContext, "location", "longitude", longitude);
-                PreferenceHelper.write(mContext, "location", "city", city);
-                PreferenceHelper.write(mContext, "location", "city_code", city_code);
-                PreferenceHelper.write(mContext, "location", "district", district);
+                PreferenceUtils.write(mContext, "location", "latitude", lat);
+                PreferenceUtils.write(mContext, "location", "longitude", longitude);
+                PreferenceUtils.write(mContext, "location", "city", city);
+                PreferenceUtils.write(mContext, "location", "city_code", city_code);
+                PreferenceUtils.write(mContext, "location", "district", district);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError", "location Error, ErrCode:"
@@ -87,7 +87,7 @@ public class AppLocate implements AMapLocationListener {
             }
         }
         errCode = amapLocation.getErrorCode();
-        PreferenceHelper.write(mContext, "location", "err_code", errCode);
+        PreferenceUtils.write(mContext, "location", "err_code", errCode);
     }
 
     public void stopLocation() {

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.android.doctor.R;
-import com.android.doctor.model.PlanList;
 import com.android.doctor.model.PlanRecordList;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.rest.ApiService;
@@ -50,9 +49,9 @@ public class FragmentPlanRecordList extends BaseRecyViewFragment {
 
     @Override
     protected void setAdapter() {
-        adapter = new TimeLineAdapter();
-        adapter.setItemOptionClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new TimeLineAdapter();
+        mAdapter.setItemOptionClickListener(this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override

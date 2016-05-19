@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+<RelativeLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:background="@android:color/white">
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/img"
         android:layout_width="66dp"
         android:layout_height="66dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_picture_occupy"
         android:visibility="gone"/>
 
     <LinearLayout
@@ -25,8 +33,9 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="复古风"
+            android:text=""
             android:textSize="13sp"
+            android:ellipsize="end"
             android:textColor="@color/app_theme_primary_textcolor"/>
 
         <TextView
@@ -36,7 +45,7 @@
             android:layout_marginTop="5dp"
             android:singleLine="true"
             android:ellipsize="end"
-            android:text="复古风"
+            android:text=""
             android:textSize="12sp"
             android:textColor="@color/app_theme_secondary_textcolor"/>
 
@@ -51,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="用户"
+                android:text=""
                 android:textSize="12sp"
                 android:textColor="@color/app_theme_secondary_textcolor"/>
 
@@ -64,7 +73,7 @@
                 android:background="@drawable/edt_corner_border"
                 android:paddingRight="15dp"
                 android:paddingLeft="15dp"
-                android:text="3"
+                android:text=""
                 android:textSize="12sp"
                 android:textColor="@color/appThemePrimary"/>
 
@@ -74,11 +83,15 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/tv_comment_num"
                 android:layout_centerVertical="true"
-                android:text="04-05"
+                android:text=""
                 android:textSize="12sp"
                 android:textColor="@color/appThemePrimary"
                 android:layout_marginRight="8dp"/>
         </RelativeLayout>
 
     </LinearLayout>
+
 </RelativeLayout>
+
+ <View style="@style/h_line"/>
+</LinearLayout>

@@ -27,24 +27,28 @@
             android:paddingRight="15dp">
 
             <ImageButton
-                android:id="@+id/img_pub"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@null"
-                android:padding="10dp"
-                android:src="@drawable/ic_btn_edit_white"/>
-
-            <ImageButton
                 android:id="@+id/img_menu"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@null"
-                android:layout_marginLeft="8dp"
                 android:padding="10dp"
                 android:src="@drawable/ic_list"/>
+
+            <ImageButton
+                android:id="@+id/img_pub"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="8dp"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/ic_btn_edit_white"/>
+
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
-    <include layout="@layout/fragment_recycler_view"/>
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/view_padding"
+        android:background="@color/line_color"
+        android:textColor="@color/app_theme_primary_textcolor"/>
+
+    <View style="@style/h_line" />
+
+    <LinearLayout
+        android:id="@+id/ll_remind_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_theme_secondary_textcolor"
+            style="@style/view_padding"/>
+
+    </LinearLayout>
+</LinearLayout>

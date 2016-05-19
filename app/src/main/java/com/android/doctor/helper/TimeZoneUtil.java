@@ -3,11 +3,7 @@ package com.android.doctor.helper;
 import java.util.Date;
 import java.util.TimeZone;
 
-/**
- * @author HuangWenwei
- * 
- * @date 2014年10月9日
- */
+
 public class TimeZoneUtil {
 
 	/**

@@ -56,13 +56,14 @@ public class FileTxRow extends BaseChattingRow {
 		FileRowViewHolder holder = (FileRowViewHolder) baseHolder;
 		if(detail != null) {
 			ECMessage message = detail;
-			String userData = message.getUserData();
+			//String userData = message.getUserData();
 			ECFileMessageBody fileBody = (ECFileMessageBody) message.getBody();
+			String userData = fileBody.getFileName();
 			if(TextUtils.isEmpty(userData)) {
 				holder.contentTv.setText(fileBody.getFileName());
 			} else {
-				String fileName = userData.substring(userData.indexOf("fileName=") + "fileName=".length(), userData.length());
-				holder.contentTv.setText(fileName);
+				//String fileName = userData.substring(userData.indexOf("fileName=") + "fileName=".length(), userData.length());
+				holder.contentTv.setText(userData);
 			}
 			OnClickListener onClickListener = ((ECChattingActivity) context).getChattingAdapter().getOnClickListener();
 			ViewHolderTag holderTag = ViewHolderTag.createTag(detail, ViewHolderTag.TagType.TAG_VIEW_FILE, position);

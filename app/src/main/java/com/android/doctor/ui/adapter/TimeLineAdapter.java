@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.HealthRecordList;
 import com.android.doctor.model.PlanRecordList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
 import com.android.doctor.ui.viewholder.TimeLineViewHolder;
@@ -14,7 +15,7 @@ import com.android.doctor.ui.viewholder.TimeLineViewHolder;
 /**
  *
  */
-public class TimeLineAdapter extends BaseRecyViewAdapter<TimeLineViewHolder> {
+public class TimeLineAdapter extends BaseRecyViewAdapter {
     public final static int NORMAL = 0;
     public final static int HEADER = 1;
     public final static int FOOTER = 2;
@@ -29,6 +30,7 @@ public class TimeLineAdapter extends BaseRecyViewAdapter<TimeLineViewHolder> {
     }
 
     public TimeLineAdapter() {
+        setFooterVisible(false);
     }
 
     @Override
@@ -63,9 +65,14 @@ public class TimeLineAdapter extends BaseRecyViewAdapter<TimeLineViewHolder> {
         if (holder != null && TimeLineViewHolder.class.equals(holder.getClass())) {
             TimeLineViewHolder vh = (TimeLineViewHolder) holder;
             Object obj = getItem(position);
-            if (obj != null && obj.getClass().equals(PlanRecordList.RecordEntity.class)) {
-                PlanRecordList.RecordEntity re = (PlanRecordList.RecordEntity) obj;
-                vh.setData(re);
+            if (obj != null) {
+                if (obj.getClass().equals(PlanRecordList.RecordEntity.class)) {
+                    PlanRecordList.RecordEntity re = (PlanRecordList.RecordEntity) obj;
+                    vh.setData(re);
+                } else if (obj.getClass().equals(HealthRecordList.HealthrecordEntity.class)) {
+                    HealthRecordList.HealthrecordEntity he = (HealthRecordList.HealthrecordEntity) obj;
+                    vh.setData(he);
+                }
             }
         }
     }

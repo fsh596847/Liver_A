@@ -46,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/group_master"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_group_master"
@@ -56,7 +57,8 @@
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
         </RelativeLayout>
 
         <View style="@style/h_line" />
@@ -75,7 +77,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/group_member"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_group_member"
@@ -85,7 +89,9 @@
                 android:drawableRight="@drawable/arrow_right"
                 android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp" />
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
         </RelativeLayout>
 
         <View style="@style/h_line" />
@@ -101,13 +107,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/join_group_verify"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_join_condition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"
                 android:layout_alignParentRight="true"/>
 
         </RelativeLayout>
@@ -136,7 +145,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/group_divide"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_group_divide"
@@ -146,7 +156,8 @@
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
         </RelativeLayout>
 
         <View style="@style/h_line" />
@@ -166,7 +177,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/group_announce"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_group_announce"
@@ -174,7 +186,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:background="@null"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
         </LinearLayout>
         <View style="@style/h_line" />
     </LinearLayout>
@@ -201,7 +214,7 @@
         android:paddingRight="16dp"
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_my_group_card"
@@ -215,7 +228,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/my_group_card"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
                 android:id="@+id/tv_my_group_card"
@@ -223,6 +238,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:drawableRight="@drawable/arrow_right"/>
 
         </RelativeLayout>
@@ -240,7 +256,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/receive_qroup_msg"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <ToggleButton
                 android:id="@+id/tbtn_receive_msg"
@@ -258,9 +275,10 @@
 
         </RelativeLayout>
 
+    </LinearLayout>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_manage_group"
+            android:id="@+id/btn_group"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
@@ -268,9 +286,6 @@
             android:layout_height="36dp"
             android:text="@string/manage_group"
             android:background="@drawable/btn_selector"/>
-
-    </LinearLayout>
-
     </LinearLayout>
 
     </com.android.doctor.ui.widget.CustomerScrollView>

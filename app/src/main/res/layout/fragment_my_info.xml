@@ -28,7 +28,7 @@
             android:paddingRight="15dp">
 
             <ImageButton
-                android:id="@+id/img_pub"
+                android:id="@+id/img_setting"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@null"
@@ -71,7 +71,7 @@
             android:padding="10dp"
             android:textColor="@color/white"
             android:textSize="16dp"
-            android:text="@string/login"/>
+            android:text=""/>
     </LinearLayout>
 
     <View style="@style/h_line" />
@@ -90,6 +90,7 @@
                 android:visibility="gone" />
 
             <RelativeLayout
+                android:id="@+id/rl_pub_ann"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -103,7 +104,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:text="@string/announcement"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/app_theme_primary_textcolor"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -116,6 +118,7 @@
                 style="@style/h_line" />
 
             <RelativeLayout
+                android:id="@+id/rl_my_diag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -130,7 +133,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:text="@string/my_inquiry"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/app_theme_primary_textcolor" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -143,6 +147,7 @@
                 style="@style/h_line" />
 
             <RelativeLayout
+                android:id="@+id/rl_tplan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -157,7 +162,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:text="@string/visit_plan"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/app_theme_primary_textcolor"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -178,6 +184,7 @@
             android:paddingLeft="16dp">
 
             <RelativeLayout
+                android:id="@+id/rl_know_lib"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -191,7 +198,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:text="@string/knowledge_repo"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/app_theme_primary_textcolor" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -204,6 +212,7 @@
                 style="@style/h_line" />
 
             <RelativeLayout
+                android:id="@+id/rl_collect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -218,7 +227,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:text="@string/favorite_article"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/app_theme_primary_textcolor" />
 
                 <TextView
                     android:layout_width="wrap_content"

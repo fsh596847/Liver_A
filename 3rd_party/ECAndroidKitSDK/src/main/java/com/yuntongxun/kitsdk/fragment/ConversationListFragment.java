@@ -38,7 +38,6 @@ import com.yuntongxun.kitsdk.adapter.ConversationAdapter;
 import com.yuntongxun.kitsdk.core.ECCustomProviderEnum;
 import com.yuntongxun.kitsdk.core.ECKitConstant;
 import com.yuntongxun.kitsdk.core.ECKitCustomProviderManager;
-import com.yuntongxun.kitsdk.custom.CustomConversationAdapter;
 import com.yuntongxun.kitsdk.custom.provider.conversation.ECCustomConversationListActionProvider;
 import com.yuntongxun.kitsdk.custom.provider.conversation.ECCustomConversationListUIProvider;
 import com.yuntongxun.kitsdk.db.GroupNoticeSqlManager;
@@ -57,15 +56,13 @@ public class ConversationListFragment extends BaseFragment implements
 		OnListAdapterCallBackListener {
 
 	private static final String TAG = "ConversationListFragment";
-	public static final String ARG_TYPE = "ARG_TYPE";
 
 	/** 会话消息列表ListView */
 	private ListView mListView;
 	private NetWarnBannerView mBannerView;
-	private CustomConversationAdapter mAdapter;
+	private ConversationAdapter mAdapter;
 	private OnUpdateMsgUnreadCountsListener mAttachListener;
 	private ECProgressDialog mPostingdialog;
-	private int type = 0;
 
 	final private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 
@@ -236,10 +233,6 @@ public class ConversationListFragment extends BaseFragment implements
      *
      */
 	private void initView() {
-		Bundle b = getArguments();
-		if (b != null) {
-			type = b.getInt(ARG_TYPE);
-		}
 		if (mListView != null) {
 			mListView.setAdapter(null);
 
@@ -258,10 +251,11 @@ public class ConversationListFragment extends BaseFragment implements
 		mListView.setOnItemClickListener(mItemClickListener);
 		mBannerView = new NetWarnBannerView(getActivity());
 		mListView.addHeaderView(mBannerView);
-		mAdapter = new CustomConversationAdapter(getActivity(), type);
+		mAdapter = new ConversationAdapter(getActivity(), this);
 		mListView.setAdapter(mAdapter);
 
 		registerForContextMenu(mListView);
+
 	}
 
 	public void updateConnectState() {
@@ -376,12 +370,4 @@ public class ConversationListFragment extends BaseFragment implements
 		// }
 	}
 
-
-	public static ConversationListFragment newInstance(int arg) {
-		Bundle args = new Bundle();
-		args.putInt(ARG_TYPE, arg);
-		ConversationListFragment fragment = new ConversationListFragment();
-		fragment.setArguments(args);
-		return fragment;
-	}
 }

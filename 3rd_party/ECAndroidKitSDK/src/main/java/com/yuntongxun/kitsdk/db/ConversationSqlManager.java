@@ -54,22 +54,6 @@ public class ConversationSqlManager extends AbstractSQLManager {
 
     }
 
-    public static Cursor getConversationCursorByType(int type) {
-        try {
-            //String sql = "select unreadCount, im_thread.type, sendStatus, dateTime, sessionId, text, username from im_thread,contacts where im_thread.type = '" + contact_id + "'order by dateTime desc";
-            String sql = "SELECT unreadCount, im_thread.type, sendStatus, dateTime, sessionId, text, username ,name ,im_thread.contactid ,isnotice\n" +
-                    "      FROM im_thread \n" +
-                    "      LEFT JOIN contacts ON im_thread.sessionId = contacts.contact_id \n" +
-                    "      LEFT JOIN groups2 ON im_thread.sessionId = groups2.groupid order by dateTime desc;";
-            return getInstance().sqliteDB().rawQuery(sql, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-
-
 
     /**
      * 通过会话ID查找消息数据库主键
@@ -116,7 +100,6 @@ public class ConversationSqlManager extends AbstractSQLManager {
                     + DatabaseHelper.TABLES_NAME_IM_SESSION
                     + "error , that Argument ECMessage:" + msg);
         }
-
         long row = -1;
         ContentValues values = new ContentValues();
         try {

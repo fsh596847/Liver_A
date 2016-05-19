@@ -30,11 +30,11 @@ public class VisitPlanViewHolder extends RecyclerView.ViewHolder implements View
     public void initView(View view) {
         mTvTitle = (TextView) view.findViewById(R.id.tv_title);
         mTvNameDate = (TextView) view.findViewById(R.id.tv_name_date);
-        mTvState = (TextView) view.findViewById(R.id.tv_state);
+        mTvState = (TextView) view.findViewById(R.id.tv_import_state);
         view.setOnClickListener(this);
     }
 
-    public void setViewData(PlanList.DataEntity obj) {
+    public void setViewData(PlanList.PlanBaseEntity obj) {
         if (obj == null) return;
         mTvTitle.setText(obj.getPlanname());
         String text = obj.getPname() + " | " + DateUtils.getDateString(obj.getCreateTime());

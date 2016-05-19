@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Yong on 2016-02-25.
  */
 public class RestClient {
-    private static final String API_BASE_URL = "http://101.201.151.203:18080/";
+    public static final String API_BASE_URL = "http://101.201.151.203:18080/";
     private ApiService apiService;
 
     public static <S> S createService(Class<S> serviceClass) {

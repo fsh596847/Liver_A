@@ -82,23 +82,16 @@
                     android:background="@android:color/white">
 
                     <TextView
-                        android:id="@+id/tv_department"
-                        style="@style/popup_option_item"
-                        android:text="@string/department" />
-
-                    <View style="@style/v_line"/>
-
-                    <TextView
-                        android:id="@+id/tv_job_title"
+                        android:id="@+id/tv_zc"
                         style="@style/popup_option_item"
                         android:text="@string/job_title" />
 
                     <View style="@style/v_line"/>
 
                     <TextView
-                        android:id="@+id/tv_good_at"
+                        android:id="@+id/tv_ks"
                         style="@style/popup_option_item"
-                        android:text="@string/be_good_at" />
+                        android:text="@string/department" />
 
                 </LinearLayout>
 
@@ -124,8 +117,8 @@
                         android:id="@+id/fl_popup_menu"
                         android:visibility="gone"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="200dp">
+                        android:layout_height="260dp"
+                        android:paddingBottom="10dp">
 
                     </FrameLayout>
                 </FrameLayout>

@@ -1,28 +1,33 @@
 package com.android.doctor.ui.chat;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TabHost;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.app.AppConfig;
+import com.android.doctor.helper.AppAsyncTask;
 import com.android.doctor.helper.MenuHelper;
 import com.android.doctor.helper.UIHelper;
-import com.android.doctor.model.MedicClassify;
 import com.android.doctor.ui.base.BaseFragment;
-import com.android.doctor.ui.plan.FragmentMedicInfoList;
-import com.android.doctor.ui.tabs.MsgTab;
 import com.android.doctor.ui.widget.PageEnableViewPager;
-import com.yuntongxun.kitsdk.fragment.ConversationListFragment;
+import com.yuntongxun.kitsdk.custom.ConversationDataPool;
+import com.yuntongxun.kitsdk.custom.CustomeConversationListFragment;
+import com.yuntongxun.kitsdk.db.IMessageSqlManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,13 +39,26 @@ import butterknife.OnClick;
  * Created by Yong on 2016-02-14.
  */
 public class FragmentMainMsg extends BaseFragment {
+    public static final String TAG = FragmentMainMsg.class.getSimpleName();
 
     private static final String tabs[] = {"患者", "群", "医生", "通知"};
+    private static final TextView tabsView[] = new TextView[tabs.length];
+
     private FragmentTabHost tabHost;
     @InjectView(R.id.viewPager)
     protected PageEnableViewPager mViewPager;
     @InjectView(R.id.tabLayout)
     protected TabLayout mTabLayout;
+
+    private ChatFragmentPagerAdapter mFragmentAdapter;
+
+    private BroadcastReceiver mDoLoad = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            OnUpdateMsgUnreadCounts();
+        }
+    };
+
 
     @Override
     protected int getLayoutId() {
@@ -52,36 +70,81 @@ public class FragmentMainMsg extends BaseFragment {
         initTabs();
     }
 
-
-    private void initTabs() {
-        for (int i = 0; i < tabs.length; ++i) {
-            mTabLayout.addTab(mTabLayout.newTab().setText(tabs[i]));
-        }
-        ChatFragmentPagerAdapter adapter = new ChatFragmentPagerAdapter(getChildFragmentManager(), getActivity());
-        adapter.setmData(Arrays.asList(tabs));
-        mViewPager.setAdapter(adapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            ConversationDataPool.getInstance().notifyChange();
+        }
+    };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        IMessageSqlManager.registerMsgObserver(ConversationDataPool.getInstance());
+        AppAsyncTask.execute(runnable);
+        //
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            IMessageSqlManager.unregisterMsgObserver(ConversationDataPool.getInstance());
+        } catch (Exception e) {
+            Log.e(AppConfig.TAG, "Exception" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void initTabs() {
+        mFragmentAdapter = new ChatFragmentPagerAdapter(getChildFragmentManager(), getActivity());
+        mFragmentAdapter.setmData(Arrays.asList(tabs));
+        mViewPager.setAdapter(mFragmentAdapter);
+        mViewPager.setOffscreenPageLimit(tabs.length);
+        mViewPager.setCurrentItem(0);
+        mTabLayout.setupWithViewPager(mViewPager);
+        //mTabLayout.removeAllTabs();
+        for (int i = 0; i < tabs.length; ++i) {
+            TabLayout.Tab tab = mTabLayout.getTabAt(i);
+            View indicator = LayoutInflater.from(getActivity()).inflate(R.layout.chat_tab_item, null);
+            TextView title = (TextView) indicator.findViewById(R.id.tab_title);
+            title.setText(tabs[i]);
+            if (i == 0) {
+                indicator.setSelected(true);
+            }
+
+            tab.setCustomView(indicator);
+        }
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        OnUpdateMsgUnreadCounts();
+    }
 
     @OnClick(R.id.imgbtn_selec_contact)
     protected void onSelectContact() {
-        UIHelper.showtAty(getActivity(), ContactActivity.class);
+        ContactActivity.startAty(getActivity(), ContactActivity.REQUEST_CODE_FOR_NEW_CONVERSATION);
     }
 
     @OnClick(R.id.imgbtn_popmenu)
     protected void onPopMenu(View view) {
-        MenuHelper.displayPopupMenu(getActivity(), R.menu.msg_menu, view,
+        MenuHelper.showPopupMenu(getActivity(), R.menu.msg_menu, view,
                 new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_new_conversation:
-                        UIHelper.showtAty(getActivity(), ContactActivity.class);
+                        ContactActivity.startAty(getActivity(), ContactActivity.REQUEST_CODE_FOR_NEW_CONVERSATION);
                         break;
                     case R.id.action_send_group_msg:
-                        UIHelper.showtAty(getActivity(), ICreatedGroupActivity.class);
+                        UIHelper.showtAty(getActivity(), MineGroupActivity.class);
                         break;
                     case R.id.action_add_contact:
                         UIHelper.showtAty(getActivity(), AddContactActivity.class);
@@ -90,6 +153,37 @@ public class FragmentMainMsg extends BaseFragment {
                 return false;
             }
         });
+    }
+
+
+    public void OnUpdateMsgUnreadCounts() {
+        if (mFragmentAdapter == null) return;
+        for (int i = 0; i < mFragmentAdapter.getCount(); ++i) {
+            int cnt = ConversationDataPool.getConversationUnreadCount(i);
+            updateUnreadCountTips(i, cnt);
+        }
+    }
+
+    private void updateUnreadCountTips(int tabIndex, final int unread) {
+        if (0 <= tabIndex && tabIndex < tabs.length) {
+            TabLayout.Tab tab = mTabLayout.getTabAt(tabIndex);
+            if (tab != null) {
+                View view = tab.getCustomView();
+                if (view != null) {
+                    RelativeLayout rl = (RelativeLayout) view.findViewById(R.id.rl_root);
+                    final TextView tv = (TextView) rl.findViewById(R.id.tv_unread_msg_number);
+                    tv.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv.setText(String.valueOf(unread));
+                            tv.setVisibility(unread == 0 ? View.GONE : View.VISIBLE);
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "tabview is null");
+                }
+            }
+        }
     }
 
     class ChatFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -104,8 +198,7 @@ public class FragmentMainMsg extends BaseFragment {
         @Override
         public Fragment getItem(int position) {
             if (mData == null) return null;
-            String e = mData.get(position);
-            return ConversationListFragment.newInstance(position);
+            return CustomeConversationListFragment.newInstance(position);
         }
 
         @Override

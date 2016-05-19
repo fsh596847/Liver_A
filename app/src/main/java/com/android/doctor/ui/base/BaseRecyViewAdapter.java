@@ -222,12 +222,22 @@ public abstract class BaseRecyViewAdapter<T> extends RecyclerView.Adapter<ViewHo
 	}
 	
 	public T getItem(int pos) {
-		if (data.size() > pos && 0 <= pos) {
+		if (data == null) return null;
+		if (0 <= pos  && pos < data.size()) {
 			return data.get(pos);
 		}
 		return null;
 	}
-	
+
+	public T getLastItem() {
+		if (data == null) return null;
+		int pos = data.size() - 1;
+		if (0 <= pos  && pos < data.size()) {
+			return data.get(pos);
+		}
+		return null;
+	}
+
 	public void removeItem(int pos) {
 		data.remove(pos);
 		notifyItemRemoved(pos);

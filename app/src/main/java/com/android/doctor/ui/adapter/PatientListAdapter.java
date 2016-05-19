@@ -11,6 +11,7 @@ import com.android.doctor.model.PatientList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
 import com.android.doctor.ui.viewholder.DocPatientViewHolder;
 import com.android.doctor.ui.viewholder.HosPatientViewHolder;
+import com.android.doctor.ui.viewholder.PatientViewHolder;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -40,6 +41,10 @@ public class PatientListAdapter extends BaseRecyViewAdapter {
                 HosPaitentList.HosPatientEntity obj = (HosPaitentList.HosPatientEntity) this.getItem(pos);
                 HosPatientViewHolder holder = (HosPatientViewHolder) viewHolder;
                 holder.setViewData(obj);
+            } else if (PatientViewHolder.class.equals(viewHolder.getClass())) {
+                HosPaitentList.HosPatientEntity obj = (HosPaitentList.HosPatientEntity) this.getItem(pos);
+                PatientViewHolder holder = (PatientViewHolder) viewHolder;
+                holder.setViewData(obj);
             }
         }
     }
@@ -54,6 +59,10 @@ public class PatientListAdapter extends BaseRecyViewAdapter {
             return viewHolder;
         } else if (layout == R.layout.item_patient_invite) {
             HosPatientViewHolder viewHolder = new HosPatientViewHolder(view);
+            viewHolder.setItemClickListener(itemOptionClickListener);
+            return viewHolder;
+        } else if (layout == R.layout.item_diag_record) {
+            PatientViewHolder viewHolder = new PatientViewHolder(view);
             viewHolder.setItemClickListener(itemOptionClickListener);
             return viewHolder;
         }

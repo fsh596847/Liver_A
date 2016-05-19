@@ -74,7 +74,7 @@ public class User implements Serializable{
 	public static class UserEntity implements Serializable{
 		private String _id;
 		private int no_staff;
-		private int duid;
+		private String duid;
 		private String username;
 		private String mobilephone;
 		private String nickname;
@@ -83,7 +83,7 @@ public class User implements Serializable{
 		private String duuid;
 		private String deptid;
 		private String deptname;
-		private int hosid;
+		private String hosid;
 		private String hosname;
 		/**
 		 * title : 医师
@@ -191,11 +191,11 @@ public class User implements Serializable{
 			this.no_staff = no_staff;
 		}
 
-		public int getDuid() {
+		public String getDuid() {
 			return duid;
 		}
 
-		public void setDuid(int duid) {
+		public void setDuid(String duid) {
 			this.duid = duid;
 		}
 
@@ -263,11 +263,11 @@ public class User implements Serializable{
 			this.deptname = deptname;
 		}
 
-		public int getHosid() {
+		public String getHosid() {
 			return hosid;
 		}
 
-		public void setHosid(int hosid) {
+		public void setHosid(String hosid) {
 			this.hosid = hosid;
 		}
 

@@ -25,7 +25,7 @@ public abstract class BaseFragment extends Fragment
     public static final int PAGE_STATE_REFRESH = 1;
     public static final int PAGE_STATE_LOADMORE = 2;
     public static final long MIN_CLICK_DELAY_TIME = 1000;
-    public int mState = PAGE_STATE_NONE;
+    protected int mState = PAGE_STATE_NONE;
     protected LayoutInflater mInflater;
     protected SwipeRefreshLayout swipeLayout;
     protected EmptyLayout emptyLayout;
@@ -80,10 +80,6 @@ public abstract class BaseFragment extends Fragment
         return 0;
     }
 
-    public boolean onBackPressed() {
-        return false;
-    }
-
 
     protected void setRefreshState(final boolean bRefresh) {
         if (swipeLayout != null) {
@@ -133,9 +129,9 @@ public abstract class BaseFragment extends Fragment
 	}
 	
 	
-	protected void setEmptyLayout(int stat, int type, String msg) {
+	protected void setMaskLayout(int visibility, int type, String msg) {
     	if (emptyLayout != null) {
-            emptyLayout.setVisibility(stat);
+            emptyLayout.setVisibility(visibility);
             emptyLayout.setErrorType(type);
             emptyLayout.setErrorMessage(msg);
     	}

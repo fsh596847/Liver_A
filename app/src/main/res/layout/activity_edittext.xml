@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appThemePrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+
+            <ImageButton
+                android:id="@+id/img_complete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:scaleType="centerInside"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_btn_nike_white"
+                android:background="@null"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/edttext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:minHeight="200dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="top"
+        android:text=""
+        android:layout_marginTop="8dp"
+        android:padding="8dp"                   
+        android:focusableInTouchMode="true"
+        android:textSize="14sp"
+        android:textColor="@color/app_theme_primary_textcolor"
+        android:textCursorDrawable="@null"/>
+
+    <TextView
+        android:id="@+id/tips"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="@string/suggest_tips"
+        android:textSize="12sp"
+        android:textColor="@color/app_theme_primary_textcolor"/>
+</LinearLayout>

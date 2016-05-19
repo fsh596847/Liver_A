@@ -46,13 +46,11 @@ public class ConversationAdapter extends CCPListAdapter <ECConversation> {
 
     private OnListAdapterCallBackListener mCallBackListener;
     int padding;
-    int type;
-
-    public ConversationAdapter(Context ctx , OnListAdapterCallBackListener listener, int type) {
+    
+    public ConversationAdapter(Context ctx , OnListAdapterCallBackListener listener) {
         super(ctx, new ECConversation());
         mCallBackListener = listener;
         padding = ctx.getResources().getDimensionPixelSize(R.dimen.OneDPPadding);
-        this.type = type;
     }
 
 
@@ -67,6 +65,8 @@ public class ConversationAdapter extends CCPListAdapter <ECConversation> {
         }
 
         if(conversation.getUsername() != null && conversation.getUsername().endsWith("@priategroup.com")) {
+        	
+            
             conversation.setUsername(conversation.getSessionId());//??
         } else if(conversation.getUsername() != null && conversation.getUsername().toUpperCase().startsWith("G")){
         	if(GroupSqlManager.getECGroup(conversation.getUsername())!=null){
@@ -207,7 +207,7 @@ public class ConversationAdapter extends CCPListAdapter <ECConversation> {
         if(mCallBackListener != null) {
             mCallBackListener.OnListAdapterCallBack();
         }
-        Cursor cursor = ConversationSqlManager.getConversationCursorByType(type);
+        Cursor cursor = ConversationSqlManager.getConversationCursor();
         setCursor(cursor);
         super.notifyDataSetChanged();
     }

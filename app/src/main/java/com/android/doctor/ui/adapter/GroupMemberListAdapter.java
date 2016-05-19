@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.interf.OnListItemSlideListener;
+import com.android.doctor.model.GroupMemberList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
 import com.android.doctor.ui.chat.GroupMemberActivity;
 import com.android.doctor.ui.viewholder.GroupMemberViewHolder;
-import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
 
 import java.util.Enumeration;
 import java.util.List;
@@ -46,16 +46,16 @@ public class GroupMemberListAdapter extends BaseRecyViewAdapter {
         int viewType = viewHolder.getItemViewType();
         if (viewType == VIEW_TYPE_ITEM) {
             if (GroupMemberViewHolder.class.equals(viewHolder.getClass())) {
-                ECContacts obj = (ECContacts) this.getItem(pos);
+                GroupMemberList.GroupMemberEntity obj = (GroupMemberList.GroupMemberEntity) this.getItem(pos);
                 GroupMemberViewHolder holder = (GroupMemberViewHolder) viewHolder;
-                holder.fillUI(obj);
+                holder.setViewData(obj);
             }
         }
     }
 
     @Override
     protected RecyclerView.ViewHolder getViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = inflater.inflate(R.layout.group_member_item, viewGroup, false);
+        View view = inflater.inflate(R.layout.item_group_member, viewGroup, false);
         GroupMemberViewHolder viewHolder = new GroupMemberViewHolder(view, aty);
         resp.addElement(viewHolder);
         viewHolder.setItemClickListener(itemOptionClickListener);

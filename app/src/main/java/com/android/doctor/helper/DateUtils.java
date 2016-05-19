@@ -43,6 +43,11 @@ public class DateUtils {
 		}
 	}
 
+    public static String formatDateString(String time, String formatStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat(formatStr);
+        return sdf.format(time);
+    }
+
     public static String getDateString(Date date) {
         return dateFormater.get().format(date);
     }

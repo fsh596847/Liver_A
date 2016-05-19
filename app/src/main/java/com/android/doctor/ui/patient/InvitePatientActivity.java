@@ -3,14 +3,11 @@ package com.android.doctor.ui.patient;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
-import com.android.doctor.helper.JsonUtil;
 import com.android.doctor.helper.UIHelper;
-import com.android.doctor.model.AdjustPlanParam;
 import com.android.doctor.model.DSendInviteParam;
 import com.android.doctor.model.HosPaitentList;
 import com.android.doctor.model.PlanDeta;
@@ -19,7 +16,6 @@ import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
-import com.google.gson.Gson;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -91,11 +87,11 @@ public class InvitePatientActivity extends BaseActivity {
             return;
         }
         DSendInviteParam param = new DSendInviteParam();
-        User u = AppContext.context().getUser();
-        if (u == null || u.getUser() == null) {
+        User.UserEntity ue = AppContext.context().getUser();
+        if (ue == null ) {
             return;
         }
-        User.UserEntity ue = u.getUser();
+
         param.setDname(ue.getUsername());
         param.setDuid("" + ue.getDuid());
         param.setHosid("" + ue.getHosid());
@@ -131,7 +127,6 @@ public class InvitePatientActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<RespEntity> call, Throwable t) {
-                Log.d("PlanSchemeActivity.", t.toString());
             }
         });
     }
@@ -140,7 +135,7 @@ public class InvitePatientActivity extends BaseActivity {
         dismissProcessDialog();
         if (resp != null) {
             String text = resp.getError_msg();
-            UIHelper.showToast(this, text);
+            UIHelper.showToast(text);
             if (resp.getError_code() == 0) {
                 onBackPressed();
             }

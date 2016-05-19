@@ -7,9 +7,6 @@
 
     <include layout="@layout/toolbar"/>
 
-    <View style="@style/h_line"
-        android:layout_marginTop="35dp"/>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +16,8 @@
         android:paddingRight="16dp"
         android:gravity="center_vertical"
         android:focusableInTouchMode="true"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="24dp"
@@ -40,14 +38,14 @@
             android:imeOptions="actionSearch"/>
     </LinearLayout>
 
-    <View style="@style/h_line" />
+    <View style="@style/h_line"
+        android:layout_marginTop="30dp"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:layout_marginTop="20dp">
+        android:background="@android:color/white">
 
         <RelativeLayout
             android:id="@+id/rl_add_doctor"

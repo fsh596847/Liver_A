@@ -31,23 +31,28 @@
                 android:id="@+id/tv_visit_plan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_btn_link_white"
-                android:padding="10dp"/>
+                android:src="@drawable/ic_icon_followup"
+                android:padding="10dp"
+                android:visibility="invisible"/>
 
             <ImageView
                 android:id="@+id/tv_dis_archive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_btn_link_white"
-                android:padding="10dp"/>
+                android:src="@drawable/ic_icon_archive"
+                android:padding="10dp"
+                android:visibility="invisible"/>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
+    <FrameLayout
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="vertical"
@@ -65,7 +70,7 @@
                     android:id="@+id/img_patient"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/ic_patient_photo"/>
+                    android:src="@drawable/patient_photo_m"/>
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -105,43 +110,58 @@
                     android:text="非联系人"
                     android:textColor="@color/appThemePrimary"/>
             </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/disease_archive"
-                android:textColor="@color/app_theme_primary_textcolor"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
-
+            <View style="@style/h_line"/>
             <LinearLayout
                 android:id="@+id/ll_dis_arc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@android:color/white"/>
+                android:visibility="gone"
+                android:background="@android:color/white">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/visit_plan"
-                android:textColor="@color/app_theme_primary_textcolor"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disease_archive"
+                    android:textColor="@color/app_theme_primary_textcolor"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_plan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@android:color/white"/>
+                android:visibility="gone"
+                android:background="@android:color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/visit_plan"
+                    android:textColor="@color/app_theme_primary_textcolor"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                </LinearLayout>
         </LinearLayout>
 
     </ScrollView>
+
+    <com.android.doctor.ui.widget.EmptyLayout
+        android:id="@+id/empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="visible"/>
+
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -151,5 +171,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
-        android:src="@drawable/chat_msg"/>
+        android:src="@drawable/chat_msg"
+        android:visibility="invisible"/>
+
 </RelativeLayout>

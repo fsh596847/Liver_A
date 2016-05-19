@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.android.doctor.ui.widget.StickyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@color/appThemePrimary"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="10dp">
+
+            <com.android.doctor.ui.widget.CircleImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                app:border_color="@color/white"
+                app:border_width="2dip"
+                android:src="@drawable/ic_doctor_photo" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:text=""/>
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/rdg_btn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:tag="sticky"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:divider="@color/white">
+
+            <RadioButton
+                android:id="@+id/rdbtn_1"
+                style="@style/tab_rdbtn_style"
+                android:background="@null"
+                android:text="发布话题"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/rdbtn_2"
+                style="@style/tab_rdbtn_style"
+                android:text="参与话题"
+                android:background="@null" />
+
+            <RadioButton
+                android:id="@+id/rdbtn_3"
+                style="@style/tab_rdbtn_style"
+                android:text="收藏文章"
+                android:background="@null" />
+        </RadioGroup>
+
+        <View style="@style/h_line" />
+
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"/>
+    </LinearLayout>
+
+    </com.android.doctor.ui.widget.StickyScrollView>
+</FrameLayout>

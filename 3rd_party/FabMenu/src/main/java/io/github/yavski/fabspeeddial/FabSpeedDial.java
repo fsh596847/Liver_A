@@ -345,6 +345,10 @@ public class FabSpeedDial extends LinearLayout implements View.OnClickListener {
         });
     }
 
+    public void setMenuId(int menuId) {
+        this.menuId = menuId;
+    }
+
     @Override
     public void onClick(View v) {
         fab.setSelected(false);
@@ -379,7 +383,7 @@ public class FabSpeedDial extends LinearLayout implements View.OnClickListener {
         fabMenuItemMap.put(miniFab, menuItem);
         //cardViewMenuItemMap.put(cardView, menuItem);
 
-        miniFab.setBackgroundTintList(fabBackgroundTint);
+        //miniFab.setBackgroundTintList(fabBackgroundTint);
         miniFab.setImageDrawable(menuItem.getIcon());
         miniFab.setOnClickListener(this);
         //cardView.setOnClickListener(this);
@@ -389,6 +393,7 @@ public class FabSpeedDial extends LinearLayout implements View.OnClickListener {
 
         final CharSequence title = menuItem.getTitle();
         if (!TextUtils.isEmpty(title) && miniFabTitlesEnabled) {
+            miniFab.setBackgroundColor(miniFabTitleBackgroundTint.getDefaultColor());
             //cardView.setCardBackgroundColor(miniFabTitleBackgroundTint.getDefaultColor());
             titleView.setText(title);
             titleView.setTypeface(null, Typeface.BOLD);

@@ -11,8 +11,7 @@
         android:id="@+id/avatar_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_patient_photo"/>
+        android:layout_centerVertical="true" />
 
 
     <LinearLayout
@@ -22,15 +21,14 @@
         android:layout_toRightOf="@id/avatar_view"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:paddingRight="15dp"
+        android:paddingRight="80dp"
         android:layout_marginLeft="10dp">
 
             <TextView
                 android:id="@+id/tv_username"
-                android:text="name"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_male"
                 android:textColor="@color/app_theme_primary_textcolor"
                 android:gravity="center_vertical"/>
 
@@ -42,12 +40,12 @@
                 android:ellipsize="end"
                 android:textSize="12sp"
                 android:textColor="@color/app_theme_secondary_textcolor"
-                android:text="其它"/>
+                android:text=""/>
 
      </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -60,15 +58,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tv_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:drawablePadding="5dp"
-            android:layout_marginTop="5dp"
-            android:drawableLeft="@drawable/ic_icon_followup"
-            android:drawableRight="@drawable/ic_icon_archive"/>
-
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_icon_followup"/>
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_icon_archive"/>
     </LinearLayout>
 
     <View style="@style/h_line"

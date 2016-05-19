@@ -58,10 +58,22 @@
 
     <style name="h_line">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">1dip</item>
+        <item name="android:layout_height">0.5dip</item>
         <item name="android:background">@color/divider_color</item>
     </style>
 
+    <style name="search_box_style">
+        <item name="android:layout_width">280dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/search_box_background</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
     <!-- 纵向线条 -->
     <style name="v_line">
         <item name="android:layout_width">1dip</item>
@@ -79,14 +91,12 @@
 
     <!-- 视图内边距 -->
     <style name="view_table_row">
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
+        <item name="android:gravity">center</item>
         <item name="android:layout_width">66dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/app_theme_secondary_textcolor</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/app_theme_primary_textcolor</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <!-- Popup window动画-->
@@ -140,7 +150,8 @@
     </style>
 
     <style name="TreeNodeStyleCustom">
-        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
 </resources>

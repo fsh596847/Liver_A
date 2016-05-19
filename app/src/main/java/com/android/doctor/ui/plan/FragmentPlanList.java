@@ -4,21 +4,17 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.android.doctor.R;
-import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.PlanList;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.PlanListAdapter;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
-import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Yong on 2016/3/8.
@@ -30,8 +26,9 @@ public class FragmentPlanList extends BaseRecyViewFragment {
     public static final int TYPE_STATE_ING = 3;
     public static final int TYPE_STATE_FINISHED = 4;
     public static final String EXTRA_PARAM = "type_state";
-    private int mType = 1;
+    private int mType = TYPE_STATE_PERSONAL;
     private String puid ;
+
     public static FragmentPlanList newInstance(String id) {
         FragmentPlanList f = new FragmentPlanList();
         Bundle b = new Bundle();
@@ -57,9 +54,9 @@ public class FragmentPlanList extends BaseRecyViewFragment {
 
     @Override
     protected void setAdapter() {
-        adapter = new PlanListAdapter();
-        adapter.setItemOptionClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new PlanListAdapter();
+        mAdapter.setItemOptionClickListener(this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -68,42 +65,34 @@ public class FragmentPlanList extends BaseRecyViewFragment {
     }
 
     protected void onLoad(int pageNum, int limit) {
-        onLoad();
+        onLoadPatientPlans();
     }
 
-    private void onLoad() {
+    private void onLoadPatientPlans() {
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity<PlanList>> call = service.getDoctorPatientRecord("" + puid);
-        call.enqueue(new Callback<RespEntity<PlanList>>() {
+        call.enqueue(new RespHandler<PlanList>() {
             @Override
-            public void onResponse(Call<RespEntity<PlanList>> call, Response<RespEntity<PlanList>> response) {
-                RespEntity<PlanList> data = response.body();
-                if (response.isSuccessful()) {
-                    if (data == null) {
-                        onSuccess(new ArrayList());
-                        return;
-                    } else if (data.getResponse_params() != null) {
-                        onSuccess(data.getResponse_params().getData());
-                    }
-                } else {
-                    String errMsg = "";
-                    if (data != null) {
-                        errMsg = data.getError_msg();
-                    }
-                    onFail(errMsg);
+            public void onSucceed(RespEntity<PlanList> resp) {
+                if (resp == null || resp.getResponse_params() == null) {
+                    onSuccess(new ArrayList());
+                    return;
+                } else  {
+                    onSuccess(resp.getResponse_params().getData());
                 }
             }
 
             @Override
-            public void onFailure(Call<RespEntity<PlanList>> call, Throwable t) {
-                onFail("加载失败");
+            public void onFailed(RespEntity<PlanList> resp) {
+                onFail(resp.getError_msg());
             }
         });
     }
 
     @Override
     public void onItemClick(int position, View view) {
-        PlanSchemeActivity.startAty(getActivity(), (PlanList.DataEntity) adapter.getItem(position));
+        PlanList.PlanBaseEntity pb = (PlanList.PlanBaseEntity) mAdapter.getItem(position);
+        PlanDetaActivity.startAty(getActivity(), "" + pb.getPid(),pb.getStatus(),pb );
     }
 
 }

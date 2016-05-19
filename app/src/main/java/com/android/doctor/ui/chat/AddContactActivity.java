@@ -37,7 +37,7 @@ public class AddContactActivity extends BaseActivity {
     private void onCheckNull() {
         String gname = mEdtContactName.getText().toString();
         if (TextUtil.isEmpty(gname)) {
-            UIHelper.showToast(this, "组名不能为空");
+            UIHelper.showToast("组名不能为空");
             return;
         }
     }
@@ -45,13 +45,13 @@ public class AddContactActivity extends BaseActivity {
     /**添加患者*/
     @OnClick(R.id.rl_add_patient)
     protected void onAddPatient() {
-        UIHelper.showtAty(this, FindPatientActivity.class);
+        UIHelper.showtAty(this, PatientListActivity.class);
     }
 
     /**添加医生*/
     @OnClick(R.id.rl_add_doctor)
     protected void onAddDoctor() {
-        UIHelper.showtAty(this, FindDoctorActivity.class);
+        UIHelper.showtAty(this, DoctorListActivity.class);
     }
 
     @OnEditorAction(R.id.edt_search_box)

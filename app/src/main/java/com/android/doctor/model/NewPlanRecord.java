@@ -109,7 +109,7 @@ public class NewPlanRecord implements Parcelable {
         this.setPuid(other.getPuid());
     }
 
-    public void setNewPlanRecord(PlanList.DataEntity other) {
+    public void setNewPlanRecord(PlanList.PlanBaseEntity other) {
         this.setPid(other.getPid());
         this.setPlanname(other.getPlanname());
         this.setPname(other.getPname());

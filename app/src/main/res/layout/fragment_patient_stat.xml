@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="@string/acd_state"
+        android:textColor="@color/app_theme_primary_textcolor"
         android:paddingLeft="16dp"
         android:gravity="center_vertical"/>
 
@@ -24,13 +25,15 @@
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart_pie_state"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="200dp"
+            android:background="@android:color/white"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="@string/acd_disease"
+        android:textColor="@color/app_theme_primary_textcolor"
         android:paddingLeft="16dp"
         android:gravity="center_vertical"/>
 
@@ -50,6 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="@string/acd_region"
+        android:textColor="@color/app_theme_primary_textcolor"
         android:paddingLeft="16dp"
         android:gravity="center_vertical"/>
 

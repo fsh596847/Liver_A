@@ -32,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/save"
+                android:textSize="16sp"
                 android:padding="10dp"/>
 
         </LinearLayout>
@@ -67,7 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/group_name"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
             <EditText
                 android:id="@+id/edt_group_name"
@@ -77,8 +79,62 @@
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="@android:color/black"/>
+        </RelativeLayout>
+
+        <View style="@style/h_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:paddingRight="16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/id_verify"
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
+
+            <TextView
+                android:id="@+id/tv_identify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text=""
+                android:textColor="@color/app_theme_primary_textcolor"
+                android:drawableRight="@drawable/arrow_right"
+                android:gravity="center_vertical"
+                android:textSize="14sp"/>
+
+            <RadioGroup
+                android:id="@+id/rg_join_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:visibility="gone">
+
+                <RadioButton
+                    android:id="@+id/rbtn_allow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text=""
+                    android:buttonTint="@color/black"/>
+
+                <RadioButton
+                    android:id="@+id/rbtn_identify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/black"
+                    android:text=""/>
+            </RadioGroup>
+
+
         </RelativeLayout>
 
         <View style="@style/h_line" />
@@ -96,61 +152,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:text="@string/group_classify"
-                android:textSize="16sp" />
+                android:textSize="14sp"
+                android:textColor="@color/app_theme_primary_textcolor"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/edt_group_classify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
                 android:layout_alignParentRight="true"
-                android:background="@null"
                 android:singleLine="true"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:textSize="14sp"
+                android:text="@string/please_select"
+                android:textColor="@color/app_theme_primary_textcolor"
+                android:drawableRight="@drawable/arrow_right"
+                android:gravity="center_vertical" />
         </RelativeLayout>
 
         <View style="@style/h_line" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:clickable="true"
-            android:paddingRight="16dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/join_group_verify"
-                android:textSize="16sp" />
-
-            <RadioGroup
-                android:id="@+id/rg_join_condition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentRight="true">
-
-                <RadioButton
-                    android:id="@+id/rbtn_allow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/allow_anybody"
-                    android:buttonTint="@color/divider_color"/>
-
-                <RadioButton
-                    android:id="@+id/rbtn_identify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/divider_color"
-                    android:text="@string/need_identify"/>
-            </RadioGroup>
-
-
-        </RelativeLayout>
-
     </LinearLayout>
 
     <View style="@style/h_line" />
@@ -160,7 +178,9 @@
         android:layout_height="48dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:text="@string/group_announce"/>
+        android:text="@string/group_brief"
+        android:textSize="14sp"
+        android:textColor="@color/app_theme_primary_textcolor"/>
 
     <View style="@style/h_line" />
     <EditText
@@ -170,8 +190,20 @@
         android:padding="15dp"
         android:minLines="3"
         android:background="@android:color/white"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="@android:color/black"/>
     <View style="@style/h_line" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_group"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:text="@string/str_group_dissolution"
+        android:background="@drawable/btn_selector"
+        android:visibility="gone"/>
 
 </LinearLayout>

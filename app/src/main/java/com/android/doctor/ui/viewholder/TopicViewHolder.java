@@ -6,7 +6,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.helper.DateUtils;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.TopicList;
+import com.yuntongxun.kitsdk.utils.DateUtil;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -35,14 +41,26 @@ public class TopicViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     public void initView(View view) {
         mImg = (ImageView) view.findViewById(R.id.img);
-        name_tv = (TextView) view.findViewById(R.id.name_tv);
+        name_tv = (TextView) view.findViewById(R.id.tv_title);
         content = (TextView) view.findViewById(R.id.tv_content);
         name_user = (TextView) view.findViewById(R.id.tv_user);
         comment_num = (TextView) view.findViewById(R.id.tv_comment_num);
         date_tv = (TextView) view.findViewById(R.id.tv_date);
     }
 
-    public void setData(Object o) {
+    public void setData(TopicList.TopicEntity topic) {
+        if (topic == null) return;
+        name_tv.setText(topic.getTitle());
+        content.setText(topic.getContent());
+        name_user.setText(topic.getCreatenickname());
+        comment_num.setText(String.valueOf(topic.getReplies()));
+        String lastRep = topic.getLastreplytime();
+        Date date = DateUtils.toDate(lastRep);
+        date_tv.setText(String.format("%tm", date) + "-" + String.format("%td", date));
+        List<TopicList.TopicEntity.AttachmentsEntity> atts = topic.getAttachments();
+        if (atts != null && !atts.isEmpty()) {
+            mImg.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setItemClickListener(OnListItemClickListener itemClickListener) {

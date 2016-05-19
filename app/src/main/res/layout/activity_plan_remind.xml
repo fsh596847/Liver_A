@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/view_padding"
+        android:text="建议 / 计划"
+        android:textSize="12sp"
+        android:background="@android:color/white"
+        android:paddingTop="20dp"/>
+
+    <View style="@style/h_line" />
+
+    <!-- 基本信息-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/include_plan_base"
+            layout="@layout/item_plan_base"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/arrow_right"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <View style="@style/h_line" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/view_padding"
+            android:text="事件"
+            android:textSize="12sp"/>
+
+        <View style="@style/h_line" />
+
+        <TextView
+            android:id="@+id/tv_remind_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/view_padding"
+            android:text=""
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_remind_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/view_padding"
+            android:text=""
+            android:textSize="12sp"/>
+    </LinearLayout>
+</LinearLayout>

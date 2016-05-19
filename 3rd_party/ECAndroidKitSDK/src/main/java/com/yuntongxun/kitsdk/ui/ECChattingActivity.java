@@ -111,6 +111,7 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
     private static final float TONE_RELATIVE_VOLUME = 100.0F;
     /**待发送的语音文件最短时长*/
     private static final int MIX_TIME = 1000;
+    public static final String ARG_USER_DATA = "ARG_USER_DATA";
     /**聊天界面消息适配器*/
     private ChattingListAdapter mChattingAdapter;
     private long mPageCount;
@@ -167,7 +168,7 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
 
         Intent intent = getIntent();
         if (intent != null) {
-             mUserData = intent.getStringExtra("userdata");
+             mUserData = intent.getStringExtra(ARG_USER_DATA);
         }
 
         // 初始化界面资源
@@ -288,8 +289,9 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
 
                 hideSoftKeyboard();
 
-                
-                mChattingFooter.hideBottomPanel();
+                if (mChattingFooter != null) {
+                    mChattingFooter.hideBottomPanel();
+                }
                 return false;
             }
         });
@@ -394,14 +396,16 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
         if(mUsername == null) {
           mUsername = mRecipients;
         }
-        getTopBarView().setTopBarToStatus(1, R.drawable.ytx_topbar_back_bt, isPeerChat() ? R.drawable.actionbar_facefriend_icon : R.drawable.actionbar_particular_icon, mUsername, this);
+
+        getTopBarView().setTopBarToStatus(1, R.drawable.ytx_topbar_back_bt, isPeerChat() ? R.drawable.actionbar_facefriend_icon : 0, mUsername, this);
         mThread = ConversationSqlManager.querySessionIdForBySessionId(mRecipients);
         mPageCount =  IMessageSqlManager.qureyIMCountForSession(mThread);
         //setting single chat or group chat
+
         if(isPeerChat()){
-        	getTopBarView().getRightButton().setImageResource(R.drawable.title_bar_group_details_01);
+        	getTopBarView().getRightButton().setImageResource(R.drawable.actionbar_facefriend_icon);
         }else{
-        	getTopBarView().getRightButton().setImageResource(R.drawable.title_bar_detail);
+        	//getTopBarView().getRightButton().setImageResource(R.drawable.actionbar_particular_icon);
         }
         
     }
@@ -703,7 +707,8 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
         // 设置附件长度
         msgBody.setLength(length);
         // 扩展附件名称、对方可以用此名称界面显示
-        msg.setUserData("fileName=" + msgBody.getFileName());
+        //msg.setUserData("fileName=" + msgBody.getFileName());
+        msg.setUserData(mUserData);
         msg.setBody(msgBody);
         try {
             // 调用发送API
@@ -741,7 +746,7 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
             // 设置附件本地路径
             msgBody.setLocalUrl(fileUrl);
             msg.setBody(msgBody);
-
+            msg.setUserData(mUserData);
             try {
                 long rowId = IMChattingHelper.sendImageMessage(imgInfo ,msg);
                 // 通知列表刷新

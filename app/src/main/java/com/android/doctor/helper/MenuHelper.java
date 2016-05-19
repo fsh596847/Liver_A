@@ -12,9 +12,9 @@ import java.lang.reflect.Field;
  * Created by Yong on 2016/3/25.
  */
 public class MenuHelper {
-    public static void displayPopupMenu(Context context, int layout,
-                                        View view,
-                                        PopupMenu.OnMenuItemClickListener listener) {
+    public static void showPopupMenu(Context context, int layout,
+                                     View view,
+                                     PopupMenu.OnMenuItemClickListener listener) {
         if (layout == 0) {
             return;
         }
@@ -25,6 +25,22 @@ public class MenuHelper {
         inflater.inflate(layout, menu);
         Object menuHelper;
 
+        try {
+            Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+            fMenuHelper.setAccessible(true);
+            menuHelper = fMenuHelper.get(popup);
+            Class[] argTypes = new Class[] { boolean.class };
+            menuHelper.getClass().getDeclaredMethod("setForceShowIcon", argTypes).invoke(menuHelper, true);
+        } catch (Exception e) {
+            popup.show();
+            return;
+        }
+        popup.setOnMenuItemClickListener(listener);
+        popup.show();
+    }
+
+    public static void showPopupMenu(PopupMenu popup, PopupMenu.OnMenuItemClickListener listener) {
+        Object menuHelper;
         try {
             Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
             fMenuHelper.setAccessible(true);

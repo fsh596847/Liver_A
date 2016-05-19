@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.model.DoctorList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
 import com.android.doctor.ui.viewholder.DoctorViewHolder;
 
@@ -26,9 +27,9 @@ public class DoctorListAdapter extends BaseRecyViewAdapter {
         int viewType = viewHolder.getItemViewType();
         if (viewType == VIEW_TYPE_ITEM) {
             if (DoctorViewHolder.class.equals(viewHolder.getClass())) {
-                Object obj = (Object) this.getItem(pos);
+                DoctorList.DoctorEntity obj = (DoctorList.DoctorEntity) this.getItem(pos);
                 DoctorViewHolder holder = (DoctorViewHolder) viewHolder;
-                holder.fillUI(obj);
+                holder.setViewData(obj);
             }
         }
     }

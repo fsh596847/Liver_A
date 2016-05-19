@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="随访计划2016-03-06"
+            android:text=""
             android:textColor="@color/app_theme_primary_textcolor"/>
 
         <LinearLayout
@@ -32,7 +32,7 @@
                 android:id="@+id/tv_patient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="患者"
+                android:text=""
                 android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="医生"
+                android:text=""
                 android:textColor="@color/app_theme_primary_textcolor"/>
         </LinearLayout>
 
@@ -54,14 +54,14 @@
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2016/03/31"
+                android:text=""
                 android:textColor="@color/app_theme_primary_textcolor"/>
 
             <TextView
-                android:id="@+id/tv_state"
+                android:id="@+id/tv_import_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="执行中 | 已发送(2)"
+                android:text=""
                 android:layout_alignParentRight="true"
                 android:textColor="@color/app_theme_primary_textcolor"/>
         </RelativeLayout>

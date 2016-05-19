@@ -28,6 +28,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.yuntongxun.eckitsdk.R;
 import com.yuntongxun.ecsdk.ECMessage;
+import com.yuntongxun.ecsdk.im.ECFileMessageBody;
 import com.yuntongxun.kitsdk.db.ImgInfoSqlManager;
 import com.yuntongxun.kitsdk.ui.ECChattingActivity;
 import com.yuntongxun.kitsdk.ui.chatting.holder.BaseHolder;
@@ -70,6 +71,8 @@ public class ImageRxRow extends BaseChattingRow {
 
 		final ImageRowViewHolder holder = (ImageRowViewHolder) baseHolder;
 		String userData = detail.getUserData();
+		//ECFileMessageBody body = (ECFileMessageBody) detail.getBody();
+		//String userData = body.getFileName();
 		ViewHolderTag holderTag = ViewHolderTag.createTag(detail, ViewHolderTag.TagType.TAG_VIEW_PICTURE ,position);
 		View.OnClickListener onClickListener = ((ECChattingActivity) context).getChattingAdapter().getOnClickListener();
 		holder.chattingContentIv.setTag(holderTag);

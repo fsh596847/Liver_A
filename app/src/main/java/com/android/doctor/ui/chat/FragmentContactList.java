@@ -1,36 +1,37 @@
 package com.android.doctor.ui.chat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.app.AppManager;
+import com.android.doctor.helper.ChatUtils;
+import com.android.doctor.model.Constants;
+import com.android.doctor.model.ContactGroupList;
 import com.android.doctor.model.ContactList;
-import com.android.doctor.model.MsgUserData;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.ContactListAdapter;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
-import com.google.gson.Gson;
-import com.yuntongxun.kitsdk.core.ECKitConstant;
-import com.yuntongxun.kitsdk.ui.ECChattingActivity;
-import com.yuntongxun.kitsdk.ui.group.model.ECContacts;
+import com.android.doctor.ui.patient.PatientProfileActivity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.InjectView;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
+ * 联系人列表，包括群组
  * Created by Yong on 2016/3/8.
  */
 public class FragmentContactList extends BaseRecyViewFragment {
@@ -40,6 +41,13 @@ public class FragmentContactList extends BaseRecyViewFragment {
     public static final String EXTRA_TYPE = "type";
     private int mType;
     private Map<String, String> queryMap = new HashMap<>();
+    private ContactActivity mActivity;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mActivity = (ContactActivity) getActivity();
+    }
 
     @Override
     protected int getLayoutId() {
@@ -48,9 +56,9 @@ public class FragmentContactList extends BaseRecyViewFragment {
 
     @Override
     protected void setAdapter() {
-        adapter = new ContactListAdapter();
-        adapter.setItemOptionClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new ContactListAdapter(mType);
+        mAdapter.setItemOptionClickListener(this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -68,48 +76,61 @@ public class FragmentContactList extends BaseRecyViewFragment {
     }
 
     protected void onLoad(int pageNum, int limit) {
-        User u = AppContext.context().getUser();
-        if (u == null || u.getUser() == null) {
+        User.UserEntity u = AppContext.context().getUser();
+        if (u == null) {
             return;
         }
-
-        queryMap.put("page_size", "9999");
-        queryMap.put("uid", "" + u.getUser().getDuid());
-        queryMap.put("utype","" + mType);
-        queryMap.put("linktype", mType == 0 ? "医生" : "患者");
-
-        onLoadRequest();
+        String duid = u.getDuid();
+        if (mType == Constants.CONTACT_TYPE_DOCTOR || mType == Constants.CONTACT_TYPE_PATIENT) {
+            onLoadCommonContact(duid);
+        } else {
+            onLoadGroupContact(duid);
+        }
     }
 
-    private void onLoadRequest() {
+    private void onLoadCommonContact(String duid) {
+        queryMap.put("page_size", "9999");
+        queryMap.put("uid", "" + duid);
+        queryMap.put("utype","0");
+        queryMap.put("linktype", mType == Constants.CONTACT_TYPE_DOCTOR ? "医生" : "患者");
+
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity<ContactList>> call = service.getMyContactList(queryMap);
-        call.enqueue(new Callback<RespEntity<ContactList>>() {
+        call.enqueue(new RespHandler<ContactList>() {
             @Override
-            public void onResponse(Call<RespEntity<ContactList>> call, Response<RespEntity<ContactList>> response) {
-                RespEntity<ContactList> data = response.body();
-                if (response.isSuccessful()) {
-                    if (data == null) {
-                        onSuccess(new ArrayList());
-                        return;
-                    } else if (data.getResponse_params() != null) {
-                        onSuccess(data.getResponse_params().getData());
-                    }
-                } else {
-                    String errMsg = "";
-                    if (data != null) {
-                        errMsg = data.getError_msg();
-                    }
-                    onFail(errMsg);
+            public void onSucceed(RespEntity<ContactList> resp) {
+                if (resp != null && resp.getResponse_params() != null) {
+                    onSuccess(resp == null ? null : resp.getResponse_params().getData());
                 }
             }
 
             @Override
-            public void onFailure(Call<RespEntity<ContactList>> call, Throwable t) {
-                onFail("加载失败");
+            public void onFailed(RespEntity<ContactList> resp) {
+                onFail(resp.getError_msg());
             }
         });
     }
+
+
+    private void onLoadGroupContact(String duid) {
+
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<ContactGroupList>> call = service.getMyContactGroupList(duid);
+        call.enqueue(new RespHandler<ContactGroupList>() {
+            @Override
+            public void onSucceed(RespEntity<ContactGroupList> resp) {
+                if (resp != null && resp.getResponse_params() != null) {
+                    onSuccess(resp == null ? null : resp.getResponse_params().getGroups());
+                }
+            }
+
+            @Override
+            public void onFailed(RespEntity<ContactGroupList> resp) {
+                onFail(resp.getError_msg());
+            }
+        });
+    }
+
 
     public void onSearch(String keywords) {
         queryMap.put("keywords", keywords);
@@ -121,31 +142,45 @@ public class FragmentContactList extends BaseRecyViewFragment {
         onRefresh();
     }
 
+    private void forNewConversation(Object object) {
+        if (object.getClass().equals(ContactList.ContactEntity.class)) {
+            ContactList.ContactEntity contactEntity = (ContactList.ContactEntity) object;
+            if (mType == Constants.CONTACT_TYPE_DOCTOR) {//医生详情
+                DoctorProfileActivity.startAty(getActivity(), contactEntity.getPlatform().getDuid());
+            } else {   //患者详情
+                PatientProfileActivity.startAty(getActivity(), contactEntity.getPlatform().getPuid());
+            }
+        } else if (object.getClass().equals(ContactGroupList.GroupsEntity.class)) {
+            ContactGroupList.GroupsEntity groupsEntity = (ContactGroupList.GroupsEntity) object;
+            ChatUtils.chat2(getActivity(), groupsEntity.getGroupId(),groupsEntity.getGroupId(),
+                    groupsEntity.getName(),groupsEntity.getUuid(), String.valueOf(0));
+        }
+    }
+
+
     @Override
     public void onItemClick(int position, View view) {
-        ECContacts e = (ECContacts)adapter.getItem(position);
-        //ECDeviceKit.getIMKitManager().startConversationActivity("test");
-        //CCPAppManager.startChattingAction(getActivity(), "test");
-        Intent intent = new Intent(getActivity(), ECChattingActivity.class);
-        intent.putExtra(ECKitConstant.KIT_CONVERSATION_TARGET, e.getContactid());
-        intent.putExtra(ECChattingActivity.CONTACT_USER, e.getContactid());
-        MsgUserData data = new MsgUserData();
-        data.setType("" + 0);
-
-        MsgUserData.ToEntity to = new MsgUserData.ToEntity();
-        to.setId(e.getContactid());
-        to.setName(e.getContactid());
-        to.setType("" +mType);
-        to.setUuid("uuid");
-        MsgUserData.FromEntity from = new MsgUserData.FromEntity();
-        from.setId(e.getContactid());
-        from.setName(e.getContactid());
-        from.setType("" + 0);
-        from.setUuid("uuid");
-        data.setTo(to);
-        data.setFrom(from);
-        Gson g = new Gson();
-        intent.putExtra("userdata", g.toJson(data));
-        getActivity().startActivity(intent);
+        Object object = mAdapter.getItem(position);
+        if (object == null || mActivity == null) {
+            Log.d(TAG, "[FragmentContactList-> onItemClick], type, code " + mType + "" );
+            return;
+        }
+        int code = mActivity.getRCode();
+        Log.d(TAG, "[FragmentContactList-> onItemClick], type, code " + code + "" );
+        if (code == ContactActivity.REQUEST_CODE_FOR_NEW_CONVERSATION) {
+            forNewConversation(object);
+        } else if (code == ContactActivity.REQUEST_CODE_FOR_ADD_MEMBER) {
+            if (object.getClass().equals(ContactList.ContactEntity.class)) {
+                ContactList.ContactEntity contactEntity = (ContactList.ContactEntity) object;
+                ContactList.ContactEntity.PlatformEntity pe = contactEntity.getPlatform();
+                if (pe != null) {
+                    Intent in = new Intent();
+                    in.putExtra("uid", mType == Constants.CONTACT_TYPE_DOCTOR ? pe.getDuid() : pe.getPuid());
+                    in.putExtra("usertype", String.valueOf(mType == Constants.CONTACT_TYPE_DOCTOR ? 0 : 1));
+                    mActivity.setResult(Activity.RESULT_OK, in);
+                    AppManager.getAppManager().finishActivity(mActivity);
+                }
+            }
+        }
     }
 }
