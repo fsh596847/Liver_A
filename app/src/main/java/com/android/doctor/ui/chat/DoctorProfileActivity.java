@@ -31,7 +31,7 @@ import com.android.doctor.rest.ApiService;
 import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
-import com.android.doctor.ui.topic.DataCache;
+import com.android.doctor.app.DataCacheManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -184,31 +184,14 @@ public class DoctorProfileActivity extends BaseActivity {
      * 设置FAB Menu资源ID
      */
     private void setFabMenuItem() {
-        contactEntity = DataCache.getInstance().findContact(duid);
+        contactEntity = DataCacheManager.getInstance().findContact(AppConfig.APP_CONTACT_DOCTOR, duid);
         if (contactEntity != null) {
             isFriend = true;
             fab.setMenuId(R.menu.doctor_menu_contact);
         } else {
             Log.d(AppConfig.TAG, "[DoctorProfileActivity-> setFabMenuItem] contact is null " + duid);
         }
-        /*ContactsCache.getInstance().load(AppConfig.APP_CONTACT_PEER, new ContactsCache.OnLoadResultListener() {
-            @Override
-            public void onResult(List<ContactList.ContactEntity> eList) {
-                if (eList != null) {
-                    for (ContactList.ContactEntity e : eList) {
-                        if (duid.equals("" + e.getUid())) {
-                            fab.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    fab.setMenuId(R.menu.doctor_menu_contact);
-                                }
-                            });
-                            contactEntity = e;
-                        }
-                    }
-                }
-            }
-        });*/
+
     }
 
     /***
@@ -255,7 +238,7 @@ public class DoctorProfileActivity extends BaseActivity {
      */
     private void chat() {
         if (doctorEntity == null) return;
-        ChatUtils.chat2(this, doctorEntity.get_id(),
+        ChatUtils.chat2(this, doctorEntity.getUsername(),
                 doctorEntity.getDuid(),
                 doctorEntity.getUsername(),
                 doctorEntity.getDuuid(),

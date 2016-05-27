@@ -87,8 +87,9 @@ public abstract class CCPActivityBase {
         onInit();
 
         mAudioManager = AudioManagerTools.getInstance().getAudioManager();
-        mMusicMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
+        if (mAudioManager != null) {
+            mMusicMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        }
         int layoutId = getLayoutId();
         mLayoutInflater = LayoutInflater.from(mActionBarActivity);
         mBaseLayoutView = mLayoutInflater.inflate(R.layout.ytx_ccp_activity, null);

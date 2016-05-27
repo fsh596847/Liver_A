@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Process;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,12 +20,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ScrollView;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppConfig;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.helper.AppAsyncTask;
 import com.android.doctor.helper.DeviceHelper;
 import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.FileUtils;
@@ -42,6 +47,7 @@ import com.android.doctor.ui.base.BaseActivity;
 import com.android.doctor.ui.viewholder.TopicDetaHeaderViewHolder;
 import com.android.doctor.ui.viewholder.TopicReplyViewHolder;
 import com.android.doctor.ui.widget.EmptyLayout;
+import com.android.doctor.ui.widget.TIChattingFooter;
 import com.android.doctor.ui.widget.treeview.model.TreeNode;
 import com.android.doctor.ui.widget.treeview.view.AndroidTreeView;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -49,11 +55,11 @@ import com.orhanobut.dialogplus.OnItemClickListener;
 import com.yuntongxun.kitsdk.setting.ECPreferenceSettings;
 import com.yuntongxun.kitsdk.setting.ECPreferences;
 import com.yuntongxun.kitsdk.ui.ECImagePreviewActivity;
-import com.yuntongxun.kitsdk.ui.chatting.view.CCPChattingFooter2;
-import com.yuntongxun.kitsdk.ui.chatting.view.SmileyPanel;
+import com.yuntongxun.kitsdk.utils.EmoticonUtil;
 import com.yuntongxun.kitsdk.utils.FileAccessor;
 import com.yuntongxun.kitsdk.utils.LogUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -70,13 +76,17 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
 
     @InjectView(R.id.container)
     protected ViewGroup containerView;
+    //@InjectView(R.id.scrollview)
+    //protected ScrollView mScrollView;
+
     private AndroidTreeView tView;
     private String mTpId;
     private TreeNode root = TreeNode.root();
-    private CCPChattingFooter2 mChattingFooter;
-    private OnOnChattingPanelImpl mChattingPanelImpl = new OnOnChattingPanelImpl();
+
+
+    @InjectView(R.id.chat_footer)
+    protected TIChattingFooter mChatFooter;
     private OnInputFooterListener mChattingFooterImpl = new OnInputFooterListener();
-    private FrameLayout mChattingBottomPanel;
     private boolean isBaseViewLoad = false;
     private boolean isReplyViewLoad = false;
     private TopicList.TopicEntity mBaseTopic;
@@ -86,6 +96,9 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     protected GridView mChatFooterAttach;
     private CameraProxy cameraProxy;
     private ImageGridAdapter mAdapter;
+
+    private Handler mHandler;
+    private Looper mLooper;
 
     @Override
     protected void setContentLayout() {
@@ -103,12 +116,10 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         super.onResume();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mChattingFooter != null){
-            mChattingFooter.onDestory();
-            mChattingFooter = null;
+
+    private void doEmojiPanel() {
+        if(EmoticonUtil.getEmojiSize() == 0) {
+            EmoticonUtil.initEmoji();
         }
     }
 
@@ -122,12 +133,19 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     protected void initView() {
         super.initView();
         setActionBar(R.string.topic);
-        mChattingFooter = (CCPChattingFooter2) findViewById(R.id.nav_footer);
-        // 注册聊天面板状态回调通知、包含录音按钮按钮下放开等录音操作
-        mChattingFooter.setOnChattingFooterLinstener(mChattingFooterImpl);
-        // 注册聊天面板附加功能（图片、拍照、文件）被点击回调通知
-        mChattingFooter.setOnChattingPanelClickListener(mChattingPanelImpl);
-        mChattingFooter.addTextChangedListener(new TextWatcher() {
+        /*mScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideBottom();
+                return false;
+            }
+        });*/
+        initFooterView();
+    }
+
+    private void initFooterView() {
+        mChatFooter.setOnChattingFooterLinstener(mChattingFooterImpl);
+        mChatFooter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -137,16 +155,7 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
             @Override
             public void afterTextChanged(Editable s) {}
         });
-        mChattingFooter.findViewById(R.id.chatting_mode_btn).setVisibility(View.GONE);
-        mContentView = findViewById(R.id.ll_content);
-        mContentView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                hideBottom();
-                return false;
-            }
-        });
-        mChattingFooter.findViewById(com.yuntongxun.eckitsdk.R.id.chatting_attach_btn).setOnClickListener(mAttachClickListener);
+
         View view = LayoutInflater.from(this).inflate(R.layout.gridview_image, null);
         cameraProxy = new CameraProxy(this, this);
         mAdapter = new ImageGridAdapter(this);
@@ -165,41 +174,86 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
                 }
             }
         });
-        mChattingBottomPanel = (FrameLayout) mChattingFooter.findViewById(com.yuntongxun.eckitsdk.R.id.chatting_bottom_panel);
-        mChattingBottomPanel.addView(mChatFooterAttach, FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 
-        mChattingFooter.switchChattingPanel(SmileyPanel.APP_PANEL_NAME_DEFAULT);
-        mChattingFooter.initSmileyPanel();
-        mChattingFooter.setVisibility(View.GONE);
-        //initTreeView();
+        mChatFooter.setAttachPanel(mChatFooterAttach);
     }
 
     @Override
     protected void initData() {
         super.initData();
+        HandlerThread thread = new HandlerThread("REPLY_ACTIVITY",
+                Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+        mLooper = thread.getLooper();
+        mHandler = new Handler(mLooper);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                doEmojiPanel();
+                Log.d(AppConfig.TAG, "HandlerThread-> run");
+            }
+        });
         onLoadTopicInfo();
         onLoadTpcReplyList();
     }
 
     private void initTreeView() {
+       /* TreeNode baseNode= new TreeNode(mBaseTopic).setViewHolder(new TopicDetaHeaderViewHolder(this));
+        fillFolder(baseNode);
+        root.addChildren(baseNode);*/
+
         tView = new AndroidTreeView(this, root);
         tView.setDefaultAnimation(true);
-        //tView.setDefaultViewHolder(TopicReplyViewHolder.class);
+        tView.setDefaultViewHolder(TopicReplyViewHolder.class);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleDivided, true);
-        //tView.collapseAll();
+        //
         tView.setUse2dScroll(false);
-        containerView.addView(tView.getView());
-        tView.expandAll();
+
+        final View view = tView.getView(R.style.TreeNodeStyleDivided);
+        containerView.post(new Runnable() {
+            @Override
+            public void run() {
+                containerView.addView(view);
+                tView.expandAll();
+                setMaskLayout(View.GONE, EmptyLayout.HIDE_LAYOUT, "");
+            }
+        });
+
+        //root.getViewHolder().getNodeItemsView().invalidate();
+        //containerView.invalidate();
+        //tView.expandAll();
+        //tView.setUseAutoToggle(false);
+        //tView.collapseAll();
+        //tView.toggleNode(root);
+        //expandView(root);
     }
 
+    private void fillFolder(TreeNode folder) {
+        TreeNode currentNode = folder;
+        for (int i = 0; i < 10; i++) {
+            TreeNode baseNode= new TreeNode(mBaseTopic);
+            baseNode.setViewHolder(new TopicDetaHeaderViewHolder(this));
+            currentNode.addChild(baseNode);
+            currentNode = baseNode;
+        }
+    }
+
+    private void expandView(TreeNode node) {
+        List<TreeNode> childs = node.getChildren();
+        if (childs != null) {
+            for (TreeNode treeNode : childs) {
+                tView.expandNode(treeNode, true);
+                //expandView(treeNode);
+            }
+        }
+    }
 
     private void setTpcViewData(TopicList.TopicEntity tpc) {
         this.mBaseTopic = tpc;
         isBaseViewLoad = true;
         new TopicDetaHeaderViewHolder(this).initView(findViewById(R.id.include_tpheader),tpc);
-        //TreeNode tr = new TreeNode(tpc);
-        //tr.setViewHolder(new TopicDetaHeaderViewHolder(this));
-        //root.addChild(tr);
+        //baseNode= new TreeNode(tpc);
+        //baseNode.setViewHolder(new TopicDetaHeaderViewHolder(this));
         updateView();
     }
 
@@ -210,24 +264,26 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
             TopicReplyViewHolder viewHolder = new TopicReplyViewHolder(this);
             viewHolder.setItemClickListener(this);
             subNode.setViewHolder(viewHolder);
-            setSubReplyViewData(subNode, reply.getReplies());
             trNode.addChild(subNode);
+            setSubReplyViewData(subNode, reply.getReplies());
         }
     }
 
     private void setReplyViewData(List<TopicReplyList.TopicRepliesEntity> repList) {
 
         if (repList != null) {
+            List<TreeNode> nodes = new ArrayList<>();
             for (int i = 0; i < repList.size(); ++i) {
                 TopicReplyList.TopicRepliesEntity rep = repList.get(i);
                 //TopicReplyList.TopicRepliesEntity reply= new TopicReplyList.RepliesEntity(rep);
-                TreeNode tr = new TreeNode(rep);
+                TreeNode replyNode = new TreeNode(rep);
                 TopicReplyViewHolder viewHolder = new TopicReplyViewHolder(this);
                 viewHolder.setItemClickListener(this);
-                tr.setViewHolder(viewHolder);
-                root.addChild(tr);
-                setSubReplyViewData(tr, rep.getReplies());
+                replyNode.setViewHolder(viewHolder);
+                nodes.add(replyNode);
+                setSubReplyViewData(replyNode, rep.getReplies());
             }
+            root.addChildren(nodes);
         }
         mRepList = repList;
         isReplyViewLoad = true;
@@ -237,7 +293,6 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     private void updateView() {
         if (isBaseViewLoad && isReplyViewLoad) {
             initTreeView();
-            setMaskLayout(View.GONE, EmptyLayout.HIDE_LAYOUT, "");
         }
     }
 
@@ -264,9 +319,14 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         Call<RespEntity<TopicReplyList>> call = service.getTopicReplyList(mTpId);
         call.enqueue(new RespHandler<TopicReplyList>() {
             @Override
-            public void onSucceed(RespEntity<TopicReplyList> resp) {
+            public void onSucceed(final RespEntity<TopicReplyList> resp) {
                 if (resp.getResponse_params() != null) {
-                    setReplyViewData(resp.getResponse_params().getTopicreplies());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            setReplyViewData(resp.getResponse_params().getTopicreplies());
+                        }
+                    });
                 }
             }
 
@@ -280,8 +340,8 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            LogUtil.d(AppConfig.TAG, "keycode back , chatfooter mode: " +  mChattingFooter.getMode());
-            if(!mChattingFooter.isButtomPanelNotVisibility()) {
+            LogUtil.d(AppConfig.TAG, "keycode back , chatfooter mode: " +  mChatFooter.getMode());
+            if(!mChatFooter.isButtomPanelNotVisibility()) {
                 hideBottom();
                 return true;
             }
@@ -293,9 +353,9 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         // 隐藏键盘
         DeviceHelper.hideSoftKeyboard(getCurrentFocus());
 
-        if(mChattingFooter != null) {
+        if(mChatFooter != null) {
             // 隐藏更多的聊天功能面板
-            mChattingFooter.hideBottomPanel();
+            mChatFooter.hideBottomPanel();
         }
     }
 
@@ -421,10 +481,10 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     }
 
     private void switchFooterView() {
-        if (mChattingFooter.getVisibility() == View.GONE) {
-            mChattingFooter.setVisibility(View.VISIBLE);
+        if (mChatFooter.getVisibility() == View.GONE) {
+            mChatFooter.setVisibility(View.VISIBLE);
         } else {
-            mChattingFooter.setVisibility(View.GONE);
+            mChatFooter.setVisibility(View.GONE);
         }
     }
 
@@ -465,36 +525,45 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
 
     }
 
-    private class OnOnChattingPanelImpl implements CCPChattingFooter2.OnChattingPanelClickListener {
-
-        @Override
-        public void OnTakingPictureRequest() {
-            //handleTackPicture();
-            hideBottomPanel();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mChatFooter != null){
+            mChatFooter.onDestory();
+            mChatFooter = null;
+        }
+        if(mChattingFooterImpl != null) {
+            mChattingFooterImpl.release();
+            mChattingFooterImpl = null;
         }
 
-        @Override
-        public void OnSelectImageReuqest() {
-            //handleSelectImageIntent();
-            hideBottomPanel();
+        if(mLooper != null) {
+            mLooper.quit();
+            mLooper = null;
         }
 
-        @Override
-        public void OnSelectFileRequest() {
-            //startActivityForResult(new Intent(TopicDetaActivity.this, ECFileExplorerActivity.class), 0x2a);
-            hideBottomPanel();
+        if(mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
-
-        private void hideBottomPanel() {
-            mChattingFooter.hideBottomPanel();
-        }
-
     }
 
-    private class OnInputFooterListener extends OnEditTextFooterImpl {
+
+    private class OnInputFooterListener implements TIChattingFooter.OnChattingFooterLinstener {
+
+        @Override
+        public void OnInEditMode() {
+            //fragmentAskReplyList.scrollListViewToLast();
+        }
+
+        @Override
+        public void onPause() {}
+
+        @Override
+        public void release() {}
+
         @Override
         public void OnSendTextMessageRequest(CharSequence text) {
-            super.OnSendTextMessageRequest(text);
             if(text == null) {
                 return ;
             }
@@ -502,23 +571,4 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
             handleSendReply(text.toString());
         }
     }
-
-    final private View.OnClickListener mAttachClickListener
-            = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(mChattingFooter.isButtomPanelNotVisibility()) {
-                DeviceHelper.hideSoftKeyboard(v);
-                mChattingBottomPanel.setVisibility(View.VISIBLE);
-                //mAppPanel.refreshAppPanel();
-            } else {
-                //setMode(CHATTING_MODE_VOICE, 22, true);
-                if(mChatFooterAttach.getVisibility() == View.VISIBLE) {
-                    mChatFooterAttach.setVisibility(View.GONE);
-                } else {
-                    mChatFooterAttach.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-    };
 }

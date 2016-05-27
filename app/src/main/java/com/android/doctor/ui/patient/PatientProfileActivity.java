@@ -28,7 +28,7 @@ import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.TimeLineAdapter;
 import com.android.doctor.ui.base.BaseActivity;
-import com.android.doctor.ui.topic.DataCache;
+import com.android.doctor.app.DataCacheManager;
 import com.android.doctor.ui.widget.EmptyLayout;
 import com.android.doctor.ui.widget.TimeLineMarker;
 
@@ -252,26 +252,13 @@ public class PatientProfileActivity extends BaseActivity{
      * 检查是否已经是好友
      */
     private void checkIsFriend() {
-        contactEntity = DataCache.getInstance().findContact(puid);
+        contactEntity = DataCacheManager.getInstance().findContact(AppConfig.APP_CONTACT_PATIENT, puid);
         if (contactEntity != null) {
             isFriend = true;
             mTvIsContact.setText(R.string.contact);
         } else {
             Log.d(AppConfig.TAG, "[PatientProfileActivity-> checkIsFriend] contact is null " + puid);
         }
-        /*ContactsCache.getInstance().load(AppConfig.APP_CONTACT_PEER, new ContactsCache.OnLoadResultListener() {
-            @Override
-            public void onResult(List<ContactList.ContactEntity> eList) {
-                if (eList == null)  return;
-                for (ContactList.ContactEntity e : eList) {
-                    if (puid.equals("" + e.getUid())) {
-                        isFriend = true;
-                        contactEntity = e;
-                        break;
-                    }
-                }
-            }
-        });*/
     }
 
     public Map<String,String> getAddFriendParam() {

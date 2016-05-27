@@ -28,9 +28,11 @@ import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.helper.AnimUtils;
 import com.android.doctor.helper.DeviceHelper;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.interf.OnRefreshDataListener;
+import com.android.doctor.interf.OnScrollChangedListener;
 import com.android.doctor.model.Constants;
 import com.android.doctor.model.User;
 import com.android.doctor.ui.adapter.SlideDownMenuAdapter;
@@ -79,6 +81,8 @@ public class FragmentHome extends BaseFragment {
     protected LinearLayout mLlTabMenu;
     @InjectView(R.id.fl_popup_menu)
     protected FrameLayout mSlideMenuViews;
+    @InjectView(R.id.ll_search)
+    protected LinearLayout mSearchLinear;
     @InjectView(R.id.edt_search_box)
     protected EditText mEdtSearch;
     @InjectView(R.id.iv_clear)
@@ -125,13 +129,7 @@ public class FragmentHome extends BaseFragment {
         mPtrFrame.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                RecyclerView rcView = (RecyclerView) mFlMain.findViewById(R.id.recyc_view);
-                LinearLayoutManager lm = (LinearLayoutManager) rcView.getLayoutManager();
-                if (lm.findFirstVisibleItemPosition() <= 0 &&
-                        mSlideMenuViews.getVisibility() != View.VISIBLE ) {
-                    return true;
-                }
-                return false;
+                return isCanDoRefresh();
             }
 
             @Override
@@ -146,6 +144,15 @@ public class FragmentHome extends BaseFragment {
         });
     }
 
+    private boolean isCanDoRefresh() {
+        if (mFragmentPatient.isScrollTop()
+                && mSearchLinear.getVisibility() == View.VISIBLE
+                && mSlideMenuViews.getVisibility() != View.VISIBLE ) {
+            return true;
+        }
+        return false;
+    }
+
     private void initListView() {
         mFragmentPatient = FragmentPatientList.newInstance(Constants.PATIENT_TYPE_IS_DOCTOR, "");
         FragmentManager fm = getChildFragmentManager();
@@ -155,6 +162,16 @@ public class FragmentHome extends BaseFragment {
             @Override
             public void onRefreshComplete(String msg) {
                 mPtrFrame.refreshComplete();
+            }
+        });
+        mFragmentPatient.setScrollChangedListener(new OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(RecyclerView recyclerView) {
+                if (mFragmentPatient.isScrollTop() && mSlideMenuViews.getVisibility() != View.VISIBLE ) {
+                    showSearchView();
+                } else {
+                    hideSearchView();
+                }
             }
         });
     }
@@ -278,14 +295,14 @@ public class FragmentHome extends BaseFragment {
 
     @OnFocusChange(R.id.edt_search_box)
     protected void onEditTextFocusChange(View v, boolean hasFocus) {
-        setCancelViewBg(hasFocus);
+        setSearchCancel(hasFocus);
         closeMenu();
     }
 
     @OnClick(R.id.tv_cancel)
     protected void onClickCancelView(){
         boolean focused = mEdtSearch.isFocused();
-        setCancelViewBg(!focused);
+        setSearchCancel(!focused);
     }
 
     @OnEditorAction(R.id.edt_search_box)
@@ -302,7 +319,7 @@ public class FragmentHome extends BaseFragment {
         return false;
     }
 
-    private void setCancelViewBg(boolean focus) {
+    private void setSearchCancel(boolean focus) {
         if (focus) {
             mEdtSearch.requestFocus();
             DeviceHelper.showSoftKeyboard(mEdtSearch);
@@ -330,10 +347,11 @@ public class FragmentHome extends BaseFragment {
     }
 
     private void switchMenu(View target) {
+        closeMenu();
         for (int i = 0; i < mLlTabMenu.getChildCount(); i = i + 2) {
             if (target == mLlTabMenu.getChildAt(i)) {
                 if (mCurTabPosition == i) {
-                    closeMenu();
+                    //closeMenu();
                 } else {
                     if (mCurTabPosition == -1) {
                         mSlideMenuViews.setVisibility(View.VISIBLE);
@@ -348,6 +366,7 @@ public class FragmentHome extends BaseFragment {
                     ((TextView) mLlTabMenu.getChildAt(i))
                             .setTextColor(getResources()
                             .getColor(R.color.pop_tab_text_selected_color));
+                    hideSearchView();
                 }
             } else {
                 ((TextView) mLlTabMenu.getChildAt(i))
@@ -358,6 +377,19 @@ public class FragmentHome extends BaseFragment {
         }
     }
 
+    private void showSearchView() {
+        if (mSearchLinear.getVisibility() != View.VISIBLE) {
+            mSearchLinear.setVisibility(View.VISIBLE);
+            AnimUtils.expand(mSearchLinear);
+        }
+    }
+
+    private void hideSearchView() {
+        if (mSearchLinear.getVisibility() != View.GONE) {
+            mSearchLinear.setVisibility(View.GONE);
+            AnimUtils.collapse(mSearchLinear);
+        }
+    }
 
     public void closeMenu() {
         if (mCurTabPosition != -1) {

@@ -7,6 +7,8 @@
     <string name="main_tab_topic">话题</string>
     <string name="main_tab_me">我的</string>
 
+    <string name="send">发送</string>
+
     <string name="contact">联系人</string>
     <string name="patient">患者</string>
     <string name="group">群</string>
@@ -27,6 +29,7 @@
     <string name="loading">加载中…</string>
     <string name="loading_no_more">""</string>
     <string name="no_data">""</string>
+    <string name="error_view_no_data">""</string>
     <string name="error_view_loading">加载中…</string>
     <string name="address">地址: %1$s</string>
     <string name="card_num">身份证号: %1$s</string>
@@ -71,7 +74,9 @@
     <string name="my">我的</string>
     <string name="personal_info">个人信息</string>
     <string name="my_patient">我的患者</string>
-    <string name="my_inquiry">我的问诊</string>k
+    <string name="my_inquiry">我的问诊</string>
+    <string name="ask">问诊</string>
+    <string name="ask_deta">问诊详情</string>
     <string name="announcement">发布公告</string>
     <string name="knowledge_repo">知识库</string>
     <string name="published_article">发表的文章</string>
@@ -168,6 +173,7 @@
     <string name="group_member">群成员</string>
     <string name="group_divide">群分组</string>
     <string name="apply_for_join">申请加入</string>
+    <string name="exit_group">退出该群</string>
     <string name="edit_group">修改群</string>
     <string name="manage_group">管理群组</string>
     <string name="save_change">保存修改</string>
@@ -180,6 +186,7 @@
     <string name="note">备注</string>
     <string name="tips">提示</string>
     <string name="are_you_sure_to_delete_member">确定要删除该成员吗？</string>
+    <string name="are_you_sure_to_exit_group">确定要退出该群吗？</string>
     <string name="add_doctor_tip">添加医生(医院名单)</string>
     <string name="add_patient_tip">添加患者(我的患者)</string>
     <string name="input_contact_name_hint">请输入联系人姓名</string>

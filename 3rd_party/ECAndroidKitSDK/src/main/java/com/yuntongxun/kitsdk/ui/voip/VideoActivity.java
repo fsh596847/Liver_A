@@ -84,9 +84,11 @@ public class VideoActivity extends ECVoIPBaseActivity implements OnClickListener
         if(!TextUtil.isEmpty(mCallNumber)){
         	mPhone.setText(mCallNumber);
         }
-        
 
-        ECDevice.getECVoIPSetupManager().setVideoView(mVideoView, mLoaclVideoViewLate);
+        ECVoIPSetupManager voIPSetupManager = ECDevice.getECVoIPSetupManager();
+        if (voIPSetupManager != null) {
+            voIPSetupManager.setVideoView(mVideoView, mLoaclVideoViewLate);
+        }
         mCallId = VoIPCallHelper.makeCall(mCallType ,  mCallNumber);
     }
     

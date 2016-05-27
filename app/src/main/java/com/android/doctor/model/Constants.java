@@ -4,6 +4,9 @@ package com.android.doctor.model;
  * Created by Yong on 2016/5/6.
  */
 public class Constants {
+    public static final int USER_TYPE_DOCTOR = 0x00;
+    public static final int USER_TYPE_PATIENT = 0x01;
+
     public static final int PLAN_STATUS_INIT = 0x03;
     public static final int PLAN_STATUS_NOT_CREATE = 0x00;
     public static final int PLAN_STATUS_IN_EXEC = 0x01;
@@ -41,4 +44,14 @@ public class Constants {
 
     public static final int REQ_CODE_FOR_CREATE = 0x26;
     public static final int REQ_CODE_FOR_LOOKUP = 0x08;
+
+    public static final int NOTIFY_TYPE_CONTACT_ASSISTANT = 200;
+    public static final int NOTIFY_TYPE_PATIENT_ASK = 300;
+    public static final int NOTIFY_TYPE_ASK_MANAGE = 400;
+    public static final int NOTIFY_TYPE_GROUP_ASSISTANT = 500;
+    public static final int NOTIFY_TYPE_PATIENT_REPORT = 700;
+
+    public static final int EVENT_MSG_UPDATE_CONTACT_GROUP = 0x100;
+    public static final int EVENT_MSG_UPDATE_CONTACT_DOCTOR = 0x102;
+    public static final int EVENT_MSG_UPDATE_CONTACT_PATIENT = 0x103;
 }

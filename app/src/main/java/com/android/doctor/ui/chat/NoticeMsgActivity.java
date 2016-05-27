@@ -46,6 +46,7 @@ public class NoticeMsgActivity extends BaseActivity {
 		intent.putExtra(ARG_TYPE, type);
         intent.putExtra(ARG_SESSION_ID, sessionId);
 		aty.startActivity(intent);
+        Log.d(AppConfig.TAG, "[NoticeMsgActivity-> startAty] type: " + type + ", sessionId: " + sessionId);
 	}
 
 	@Override
@@ -110,30 +111,6 @@ public class NoticeMsgActivity extends BaseActivity {
                 mTabHost.getCurrentTabTag());
     }
 
-
-    public void onProcessMsg(Map<String, String> map) {
-
-        showProcessDialog();
-        ApiService service = RestClient.createService(ApiService.class);
-        Call<RespEntity> call = service.processMsg(map);
-        call.enqueue(new Callback<RespEntity>() {
-            @Override
-            public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
-                dismissProcessDialog();
-                RespEntity r = response.body();
-                if (r != null) {
-                    UIHelper.showToast(r.getError_msg());
-                    onFinished(r);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RespEntity> call, Throwable t) {
-                Log.d(AppConfig.TAG,"[NoticeMsgActivity-> onProcessMsg-> onFailure]" + t.toString());
-                dismissProcessDialog();
-            }
-        });
-    }
 
 
     private void onFinished(RespEntity r) {

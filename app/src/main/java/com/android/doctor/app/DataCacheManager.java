@@ -1,7 +1,5 @@
-package com.android.doctor.ui.topic;
+package com.android.doctor.app;
 
-import com.android.doctor.app.AppConfig;
-import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.AppAsyncTask;
 import com.android.doctor.model.ArticleList;
 import com.android.doctor.model.ContactGroupList;
@@ -24,15 +22,15 @@ import retrofit2.Call;
 /**
  * Created by Yong on 2016/4/29.
  */
-public class DataCache {
+public class DataCacheManager {
 
-    private static DataCache instance;
+    private static DataCacheManager instance;
 
-    private DataCache(){}
+    private DataCacheManager(){}
 
-    public static DataCache getInstance() {
+    public static DataCacheManager getInstance() {
         if (instance == null) {
-            instance = new DataCache();
+            instance = new DataCacheManager();
         }
 
         return instance;
@@ -77,7 +75,7 @@ public class DataCache {
         });
     }
 
-    public void onLoadContact(int mType) {
+    public void onLoadContact(final int mType) {
         User.UserEntity u = AppContext.context().getUser();
         if (u == null) {
             return;
@@ -94,7 +92,8 @@ public class DataCache {
             @Override
             public void onSucceed(RespEntity<ContactList> resp) {
                 if (resp != null && resp.getResponse_params() != null) {
-                    saveContacts(resp.getResponse_params().getData());
+                    saveContacts(resp.getResponse_params().getData(),
+                            mType == 0 ? AppConfig.APP_CONTACT_DOCTOR : AppConfig.APP_CONTACT_PATIENT);
                 }
             }
 
@@ -123,12 +122,12 @@ public class DataCache {
         });
     }
 
-    public void saveContacts(final List<ContactList.ContactEntity> list) {
+    public void saveContacts(final List<ContactList.ContactEntity> list, final String key) {
         if (list == null) return;
         AppAsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                AppContext.context().setProperty(AppConfig.APP_CONTACT_PEER, new Gson().toJson(list));
+                AppContext.context().setProperty(key, new Gson().toJson(list));
             }
         });
     }
@@ -143,14 +142,19 @@ public class DataCache {
         });
     }
 
-    public List<ContactList.ContactEntity> getContacts() {
+    public List<ContactList.ContactEntity> getContacts(String key) {
         Gson gson = new Gson();
-        return gson.fromJson(AppContext.context().getProperty(AppConfig.APP_CONTACT_PEER),
-                new TypeToken<List<ContactList.ContactEntity>>() {}.getType());
+        try {
+            return gson.fromJson(AppContext.context().getProperty(key),
+                    new TypeToken<List<ContactList.ContactEntity>>() {}.getType());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public  ContactList.ContactEntity findContact(String uid) {
-        List<ContactList.ContactEntity> list = getContacts();
+    public  ContactList.ContactEntity findContact(String key, String uid) {
+        List<ContactList.ContactEntity> list = getContacts(key);
         if (list != null) {
             for (ContactList.ContactEntity e : list) {
                 if (e != null) {
@@ -175,10 +179,15 @@ public class DataCache {
         return null;
     }
 
-    public  List<ContactGroupList.GroupsEntity> getGroups() {
+    public List<ContactGroupList.GroupsEntity> getGroups() {
         Gson gson = new Gson();
-        return gson.fromJson(AppContext.context().getProperty(AppConfig.APP_CONTACT_GROUP),
-                new TypeToken<List<ContactList.ContactEntity>>() {}.getType());
+        try {
+            return gson.fromJson(AppContext.context().getProperty(AppConfig.APP_CONTACT_GROUP),
+                    new TypeToken<List<ContactGroupList.GroupsEntity>>() {}.getType());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public interface OnLoadResultListener {
@@ -207,14 +216,24 @@ public class DataCache {
 
     public List<ArticleList.SuggestsEntity> getCollects() {
         Gson gson = new Gson();
-        return gson.fromJson(AppContext.context().getProperty(AppConfig.APP_MY_COLLECT_ARTICLE),
-                new TypeToken<List<ArticleList.SuggestsEntity>>() {}.getType());
+        try {
+            return gson.fromJson(AppContext.context().getProperty(AppConfig.APP_MY_COLLECT_ARTICLE),
+                    new TypeToken<List<ArticleList.SuggestsEntity>>() {}.getType());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<SuggClassList.SuggEntity> getSubjects() {
         Gson gson = new Gson();
-        return gson.fromJson(AppContext.context().getProperty(AppConfig.APP_MY_SUBSCRIBE_SUBJECT),
-                new TypeToken<List<SuggClassList.SuggEntity>>() {}.getType());
+        try {
+            return gson.fromJson(AppContext.context().getProperty(AppConfig.APP_MY_SUBSCRIBE_SUBJECT),
+                    new TypeToken<List<SuggClassList.SuggEntity>>() {}.getType());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public ArticleList.SuggestsEntity findArticlesByID(String code) {

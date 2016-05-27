@@ -2,6 +2,7 @@ package com.android.doctor.ui.chat;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,24 +11,34 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppConfig;
+import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.AppAsyncTask;
+import com.android.doctor.helper.DialogUtils;
+import com.android.doctor.helper.ECSDKCoreHelper;
 import com.android.doctor.helper.MenuHelper;
 import com.android.doctor.helper.UIHelper;
+import com.android.doctor.ui.app.MainActivity;
 import com.android.doctor.ui.base.BaseFragment;
 import com.android.doctor.ui.widget.PageEnableViewPager;
+import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.kitsdk.custom.ConversationDataPool;
 import com.yuntongxun.kitsdk.custom.CustomeConversationListFragment;
 import com.yuntongxun.kitsdk.db.IMessageSqlManager;
+import com.yuntongxun.kitsdk.utils.ECNotificationManager;
+import com.yuntongxun.kitsdk.view.ECAlertDialog;
+import com.yuntongxun.kitsdk.view.NetWarnBannerView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +60,10 @@ public class FragmentMainMsg extends BaseFragment {
     protected PageEnableViewPager mViewPager;
     @InjectView(R.id.tabLayout)
     protected TabLayout mTabLayout;
+    @InjectView(R.id.flayout)
+    protected FrameLayout mFlBarView;
 
+    private NetWarnBannerView mBannerView;
     private ChatFragmentPagerAdapter mFragmentAdapter;
 
     private BroadcastReceiver mDoLoad = new BroadcastReceiver() {
@@ -67,7 +81,66 @@ public class FragmentMainMsg extends BaseFragment {
 
     protected void initView(View view) {
         mViewPager.setPagingEnabled(false);
+        initNetWarnBanner();
         initTabs();
+    }
+
+    private void initNetWarnBanner() {
+        if (mBannerView != null) {
+            mFlBarView.removeView(mBannerView);
+        }
+        mBannerView = new NetWarnBannerView(getActivity());
+        mBannerView.setVisibility(View.GONE);
+        mFlBarView.addView(mBannerView);
+        mBannerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reTryConnect();
+            }
+        });
+    }
+
+    public void handlerKickOff(String kickoffText) {
+        if (getActivity().isFinishing()) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(kickoffText);
+        builder.setPositiveButton("重新登录", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ECNotificationManager.getInstance().forceCancelNotification();
+                AppContext.context().restartAPP();
+            }
+        });
+        builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AppContext.context().AppExit();
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+    }
+
+    private void reTryConnect() {
+        ECDevice.ECConnectState connectState = ECSDKCoreHelper.getConnectState();
+        if(connectState == null || connectState == ECDevice.ECConnectState.CONNECT_FAILED) {
+            ECSDKCoreHelper.getInstance().init(getActivity());
+        }
+    }
+
+    public void updateConnectState(ECDevice.ECConnectState connect) {
+        if (!isAdded()) {
+            return;
+        }
+        if (connect == ECDevice.ECConnectState.CONNECT_FAILED) {
+            mBannerView
+                    .setNetWarnText(getString(R.string.connect_server_error));
+            mBannerView.reconnect(false);
+        } else if (connect == ECDevice.ECConnectState.CONNECT_SUCCESS) {
+            mBannerView.hideWarnBannerView();
+        }
     }
 
     @Override
@@ -86,8 +159,10 @@ public class FragmentMainMsg extends BaseFragment {
     public void onResume() {
         super.onResume();
         IMessageSqlManager.registerMsgObserver(ConversationDataPool.getInstance());
-        AppAsyncTask.execute(runnable);
+        ConversationDataPool.getInstance().notifyChange();
+        //AppAsyncTask.execute(runnable);
         //
+        OnUpdateMsgUnreadCounts();
     }
 
     @Override

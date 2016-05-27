@@ -506,6 +506,37 @@ public class CCPChattingFooter2 extends LinearLayout {
             }
         }
 
+		@Override
+		public void OnSelectVoiceClick() {
+			if(mChattingPanelClickListener != null) {
+                mChattingPanelClickListener.OnSelectVoiceRequest();
+            }
+		}
+
+		@Override
+		public void OnSelectVideoClick() {
+			if(mChattingPanelClickListener != null) {
+                mChattingPanelClickListener.OnSelectVideoRequest();
+            }
+		}
+
+		@Override
+		public void OnSelectFireMsgClick() {
+
+			if(mChattingPanelClickListener != null) {
+                mChattingPanelClickListener.OnSelectFireMsg();
+            }
+		}
+
+		@Override
+		public void OnSelectFireLocationClick() {
+			// TODO Auto-generated method stub
+			if(mChattingPanelClickListener != null) {
+                mChattingPanelClickListener.OnSelectLocationRequest();
+            }
+			
+		}
+
     };
 
     final private EmojiGrid.OnEmojiItemClickListener mEmojiItemClickListener
@@ -1306,7 +1337,10 @@ public class CCPChattingFooter2 extends LinearLayout {
         void OnTakingPictureRequest();
         void OnSelectImageReuqest();
         void OnSelectFileRequest();
-
+        void OnSelectVoiceRequest();
+        void OnSelectVideoRequest();
+        void OnSelectFireMsg();
+        void OnSelectLocationRequest();
     }
 
 

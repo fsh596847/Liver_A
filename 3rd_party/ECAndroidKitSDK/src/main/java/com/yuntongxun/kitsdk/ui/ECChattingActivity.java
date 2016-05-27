@@ -45,6 +45,7 @@ import com.yuntongxun.ecsdk.ECDeskManager;
 import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.ecsdk.ECError;
 import com.yuntongxun.ecsdk.ECMessage;
+import com.yuntongxun.ecsdk.ECVoIPCallManager;
 import com.yuntongxun.ecsdk.SdkErrorCode;
 import com.yuntongxun.ecsdk.im.ECFileMessageBody;
 import com.yuntongxun.ecsdk.im.ECTextMessageBody;
@@ -52,10 +53,12 @@ import com.yuntongxun.ecsdk.im.ECVoiceMessageBody;
 import com.yuntongxun.ecsdk.platformtools.ECHandlerHelper;
 import com.yuntongxun.kitsdk.ECDeviceKit;
 import com.yuntongxun.kitsdk.adapter.ChattingListAdapter;
+import com.yuntongxun.kitsdk.core.CCPAppManager;
 import com.yuntongxun.kitsdk.core.ECAsyncTask;
 import com.yuntongxun.kitsdk.core.ECKitConstant;
 import com.yuntongxun.kitsdk.core.ECKitCustomProviderManager;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatActionProvider;
+import com.yuntongxun.kitsdk.db.ContactSqlManager;
 import com.yuntongxun.kitsdk.db.ConversationSqlManager;
 import com.yuntongxun.kitsdk.db.GroupSqlManager;
 import com.yuntongxun.kitsdk.db.IMessageSqlManager;
@@ -537,6 +540,10 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
         return mThread;
     }
 
+    public String getmRecipients() {
+        return mRecipients;
+    }
+
     private void doEmojiPanel() {
         if(EmoticonUtil.getEmojiSize() == 0) {
             EmoticonUtil.initEmoji();
@@ -973,6 +980,26 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
         startActivityForResult(i, REQUEST_CODE_LOAD_IMAGE);
     }
 
+    public void handleVideoCall() {
+        /*ECContacts contact = ContactSqlManager.getContact(mRecipients);
+
+        if (contact == null) {
+            return;
+        }*/
+        //CCPAppManager.callVideoAction(this, mUsername, mRecipients, false);
+
+    }
+
+    public void handleVoiceCall() {
+        /*ECContacts contact = ContactSqlManager.getContact(mRecipients);
+        if (contact == null) {
+            return;
+        }*/
+        //CCPAppManager.callVoIPAction(getActivity(), ECVoIPCallManager.CallType.VOICE,
+        //        contact.getNickname(), contact.getContactid(),false);
+
+    }
+
     /**
      * 消息重发
      * @param msg
@@ -1032,6 +1059,26 @@ public class ECChattingActivity extends ECSuperActivity implements View.OnClickL
             mChattingFooter.hideBottomPanel();
         }
 
+        @Override
+        public void OnSelectVoiceRequest() {
+
+        }
+
+        @Override
+        public void OnSelectVideoRequest() {
+            handleVideoCall();
+            hideBottomPanel();
+        }
+
+        @Override
+        public void OnSelectFireMsg() {
+
+        }
+
+        @Override
+        public void OnSelectLocationRequest() {
+
+        }
     }
 
     /**

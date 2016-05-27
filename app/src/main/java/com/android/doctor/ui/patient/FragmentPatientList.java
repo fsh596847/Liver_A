@@ -1,5 +1,6 @@
 package com.android.doctor.ui.patient;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -8,6 +9,7 @@ import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.interf.OnRefreshDataListener;
+import com.android.doctor.interf.OnScrollChangedListener;
 import com.android.doctor.model.Constants;
 import com.android.doctor.model.HosPaitentList;
 import com.android.doctor.model.PatientList;
@@ -35,6 +37,7 @@ import retrofit2.Response;
 public class FragmentPatientList extends BaseRecyViewFragment {
 
     private OnRefreshDataListener refreshDataListener;
+
     private int mType = 1;
     private Map<String, String> queryParam = new HashMap<>();
     private String pname;
@@ -83,6 +86,7 @@ public class FragmentPatientList extends BaseRecyViewFragment {
     public void setRefreshDataListener(OnRefreshDataListener refreshDataListener) {
         this.refreshDataListener = refreshDataListener;
     }
+
 
     @Override
     protected void initData() {
@@ -226,6 +230,12 @@ public class FragmentPatientList extends BaseRecyViewFragment {
     public void clearOption(String key) {
         queryParam.remove(key);
         onRefresh();
+    }
+
+    @Override
+    protected void onScrollChanged() {
+        super.onScrollChanged();
+        if (isScrollTop()) {}
     }
 
     @Override

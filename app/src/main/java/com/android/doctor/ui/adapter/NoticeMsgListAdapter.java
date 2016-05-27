@@ -4,14 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
-import com.android.doctor.model.HosPaitentList;
-import com.android.doctor.model.NoticeMsgList;
-import com.android.doctor.model.PatientList;
+import com.android.doctor.model.AskMangeMsgList;
+import com.android.doctor.model.ContactAssistantMsgList;
+import com.android.doctor.model.GroupNoticeMsgList;
+import com.android.doctor.model.PatientAskMsgList;
+import com.android.doctor.model.PatientReportMsgList;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
-import com.android.doctor.ui.viewholder.DocPatientViewHolder;
-import com.android.doctor.ui.viewholder.HosPatientViewHolder;
 import com.android.doctor.ui.viewholder.MsgViewHolder;
 
 /**
@@ -35,9 +34,24 @@ public class NoticeMsgListAdapter extends BaseRecyViewAdapter {
         int viewType = viewHolder.getItemViewType();
         if (viewType == VIEW_TYPE_ITEM) {
             if (MsgViewHolder.class.equals(viewHolder.getClass())) {
-                NoticeMsgList.MsgEntity obj = (NoticeMsgList.MsgEntity) this.getItem(pos);
                 MsgViewHolder holder = (MsgViewHolder) viewHolder;
-                holder.setViewData(obj);
+                Object obj = this.getItem(pos);
+                if(ContactAssistantMsgList.ContactAssistMsgEntity.class.equals(obj.getClass())) {
+                    ContactAssistantMsgList.ContactAssistMsgEntity e = (ContactAssistantMsgList.ContactAssistMsgEntity) obj;
+                    holder.setViewData(e);
+                } else if (PatientAskMsgList.PAskMsgEntity.class.equals(obj.getClass())) {
+                    PatientAskMsgList.PAskMsgEntity e = (PatientAskMsgList.PAskMsgEntity) obj;
+                    holder.setViewData(e);
+                } else if (AskMangeMsgList.AskManageMsgEntity.class.equals(obj.getClass())) {
+                    AskMangeMsgList.AskManageMsgEntity e = (AskMangeMsgList.AskManageMsgEntity) obj;
+                    holder.setViewData(e);
+                } else if (GroupNoticeMsgList.MsgEntity.class.equals(obj.getClass())) {
+                    GroupNoticeMsgList.MsgEntity e = (GroupNoticeMsgList.MsgEntity)obj;
+                    holder.setViewData(e);
+                } else if (PatientReportMsgList.ReportMsgEntity.class.equals(obj.getClass())) {
+                    PatientReportMsgList.ReportMsgEntity e = (PatientReportMsgList.ReportMsgEntity) obj;
+                    holder.setViewData(e);
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ package com.yuntongxun.kitsdk;
 
 import com.yuntongxun.ecsdk.ECDevice;
 
+import com.yuntongxun.ecsdk.ECError;
 import com.yuntongxun.ecsdk.ECInitParams;
 import com.yuntongxun.kitsdk.beans.ECAuthParameters;
 import com.yuntongxun.kitsdk.core.CCPAppManager;
@@ -137,7 +138,6 @@ public class ECDeviceKit {
 		mInitParams.setOnDeviceConnectListener(ECKitSDKCoreRouteManager
 				.getInstance());
 		
-		
         Intent intent = new Intent(getInstance().mContext, VoIPCallActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity( getInstance().mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mInitParams.setPendingIntent(pendingIntent);
@@ -146,10 +146,10 @@ public class ECDeviceKit {
 		ECDevice.login(mInitParams);
 	}
 
-	public static void logout(OnLogoutSDKListener l) {
+	public static void logout() {
 
 		ECKitSDKCoreRouteManager.logout();
-		release();
+		unInitial();
 	}
 
 	public static void unInitial() {
@@ -170,10 +170,8 @@ public class ECDeviceKit {
 	}
 
 	public static void initSql() {
-
 		ConversationSqlManager.getInstance();
 		GroupNoticeSqlManager.getInstance();
 		GroupSqlManager.getInstance();
 	}
-
 }

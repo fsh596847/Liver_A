@@ -99,7 +99,7 @@ public class DiseaArchActivity extends BaseActivity implements OnListItemClickLi
     @Override
     public void onItemClick(int position, View view) {
         HealthRecordList.HealthrecordEntity record = (HealthRecordList.HealthrecordEntity) adapter.getItem(position);
-        ArchDetaActivity.startAty(this, "" + record.getPid(), record.getPrid());
+        ArchDetaActivity.startAty(this, "" + record.getPid(), record.getRid());
     }
 
     @OnClick(R.id.tv_import)

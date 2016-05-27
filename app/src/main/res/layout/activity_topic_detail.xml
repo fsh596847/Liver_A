@@ -42,11 +42,12 @@
         android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/scrollview"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_content"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -57,13 +58,14 @@
                 layout="@layout/item_tpdeta_header"/>
 
             <RelativeLayout
+                android:layout_below="@id/include_tpheader"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="50dp"
                 android:id="@+id/container" />
 
-        </LinearLayout>
-    </ScrollView>
+        </RelativeLayout>
+   </ScrollView>
     <!--<ScrollView
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -100,10 +102,12 @@
             android:id="@+id/h_line"
             style="@style/h_line" />
 
-        <com.yuntongxun.kitsdk.ui.chatting.view.CCPChattingFooter2
-            android:id="@+id/nav_footer"
-            android:layout_width="fill_parent"
+        <com.android.doctor.ui.widget.TIChattingFooter
+            android:id="@+id/chat_footer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:focusableInTouchMode="true"
             android:layout_below="@id/h_line"/>
 
     </RelativeLayout>

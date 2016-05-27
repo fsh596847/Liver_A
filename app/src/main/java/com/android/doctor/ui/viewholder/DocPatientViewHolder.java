@@ -23,6 +23,8 @@ public class DocPatientViewHolder extends RecyclerView.ViewHolder implements Vie
     TextView mTvDiagnose;
     TextView mTvInfo;
     TextView mTvIcon;
+    ImageView mImgFollowup;
+    ImageView mImgArchive;
 
     private OnListItemClickListener itemClickListener;
 
@@ -38,6 +40,8 @@ public class DocPatientViewHolder extends RecyclerView.ViewHolder implements Vie
         mTvDiagnose = (TextView) view.findViewById(R.id.tv_diagnose);
         mTvInfo = (TextView) view.findViewById(R.id.tv_other);
         mTvIcon = (TextView) view.findViewById(R.id.tv_icon);
+        mImgFollowup = (ImageView) view.findViewById(R.id.img_followup);
+        mImgArchive = (ImageView) view.findViewById(R.id.img_archive);
     }
 
     public void setViewData(PatientList.DataEntity e) {
@@ -51,6 +55,12 @@ public class DocPatientViewHolder extends RecyclerView.ViewHolder implements Vie
                     desc = desc + " " + str;
                 }
                 mTvDiagnose.setText(desc);
+            }
+            if (mImgFollowup != null) {
+                mImgFollowup.setImageResource(e.getIsplan() == 0 ? R.drawable.ic_icon_followup : R.drawable.ic_icon_followup_sel);
+            }
+            if (mImgArchive!= null) {
+                mImgArchive.setImageResource(e.getIshasarchives() == 0 ? R.drawable.ic_icon_archive : R.drawable.ic_icon_archive_sel);
             }
         }
     }

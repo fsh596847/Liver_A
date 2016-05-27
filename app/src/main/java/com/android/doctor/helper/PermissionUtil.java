@@ -72,13 +72,13 @@ public class PermissionUtil {
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        AppContext.context().AppExit(ctx);
+                        AppContext.context().AppExit();
                     }})
                 .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ctx.startActivityForResult(new Intent(Settings.ACTION_APPLICATION_SETTINGS), 0);
-                        AppContext.context().AppExit(ctx);
+                        AppContext.context().AppExit();
                     }})
                 .show();
     }

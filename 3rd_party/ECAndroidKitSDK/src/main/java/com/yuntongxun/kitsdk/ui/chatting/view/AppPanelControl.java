@@ -28,8 +28,9 @@ public class AppPanelControl {
 	private Context mContext;
 
 	public int[] cap = new int[] { R.string.app_panel_pic,
-			R.string.app_panel_tackpic, R.string.app_panel_file,
-
+			R.string.app_panel_tackpic,//, R.string.app_panel_file,
+			//R.string.app_panel_p2pvoice,
+			//R.string.app_panel_p2pvideo
 	};
 
 	private ECCustomChatPlusExtendProvider obj;
@@ -98,7 +99,17 @@ public class AppPanelControl {
 					R.string.app_panel_file),
 					R.drawable.ytx_chattingfooter_file_selector);
 
-		}
+		} else if (resid == R.string.app_panel_p2pvoice) {
+            capability = new Capability(getContext().getString(
+                    R.string.app_panel_p2pvoice),
+                    R.drawable.ytx_chatting_voice_btn);
+
+        } else if (resid == R.string.app_panel_p2pvideo) {
+            capability = new Capability(getContext().getString(
+                    R.string.app_panel_p2pvideo),
+                    R.drawable.ytx_chatting_voice_btn);
+
+        }
 
 		capability.setId(resid);
 		return capability;

@@ -2,6 +2,7 @@ package com.android.doctor.ui.widget.treeview.view;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
@@ -231,12 +232,12 @@ public class AndroidTreeView {
         }
     }
 
-    private void expandNode(final TreeNode node, boolean includeSubnodes) {
+    public void expandNode(final TreeNode node, boolean includeSubnodes) {
         node.setExpanded(true);
         final TreeNode.BaseNodeViewHolder parentViewHolder = getViewHolderForNode(node);
         parentViewHolder.getNodeItemsView().removeAllViews();
 
-
+        Log.d("[AndroidTreeView-> ", "expandNode] " + node.getPath());
         parentViewHolder.toggle(true);
 
         for (final TreeNode n : node.getChildren()) {

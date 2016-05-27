@@ -29,7 +29,7 @@
                 android:layout_height="66dp"
                 app:border_color="@color/white"
                 app:border_width="2dip"
-                android:src="@drawable/ic_doctor_photo" />
+                android:src="@drawable/doctor_photo" />
 
             <TextView
                 android:id="@+id/tv_name"

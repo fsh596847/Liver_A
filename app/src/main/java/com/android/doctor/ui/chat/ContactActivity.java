@@ -20,9 +20,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.helper.AnimUtils;
 import com.android.doctor.helper.DeviceHelper;
 import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.UIHelper;
@@ -69,6 +71,8 @@ public class ContactActivity extends AppCompatActivity implements
     protected ImageView mIvClear;
     @InjectView(R.id.edt_search_box)
     protected EditText mEdtSearch;
+    @InjectView(R.id.rl_search_view)
+    protected RelativeLayout mRlSearchView;
 
     /**查看群组*/
     public static final int REQUEST_CODE_VIEW_GROUP_OWN = 0x2a;
@@ -220,6 +224,20 @@ public class ContactActivity extends AppCompatActivity implements
             return true;
         }
         return false;
+    }
+
+    public void showSearchView() {
+        if (mRlSearchView.getVisibility() != View.VISIBLE) {
+            mRlSearchView.setVisibility(View.VISIBLE);
+            //AnimUtils.expand(mRlSearchView);
+        }
+    }
+
+    public void hideSearchView() {
+        if (mRlSearchView.getVisibility() != View.GONE) {
+            mRlSearchView.setVisibility(View.GONE);
+            //AnimUtils.collapse(mRlSearchView);
+        }
     }
 
     private void switchMenu(int v) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,9 +16,11 @@ import com.google.gson.Gson;
 import com.yuntongxun.eckitsdk.R;
 import com.yuntongxun.ecsdk.ECMessage;
 import com.yuntongxun.kitsdk.adapter.CCPListAdapter;
+import com.yuntongxun.kitsdk.core.ECAsyncTask;
 import com.yuntongxun.kitsdk.db.GroupNoticeSqlManager;
 import com.yuntongxun.kitsdk.group.GroupNoticeHelper;
 import com.yuntongxun.kitsdk.ui.chatting.model.ECConversation;
+import com.yuntongxun.kitsdk.ui.chatting.model.ImgInfo;
 import com.yuntongxun.kitsdk.ui.chatting.view.CCPTextView;
 import com.yuntongxun.kitsdk.utils.DateUtil;
 import com.yuntongxun.kitsdk.utils.DemoUtils;
@@ -240,17 +243,34 @@ public class CustomConversationAdapter extends BaseAdapter {
 
 
     public synchronized void notifyChange() {
-        mConversations = ConversationDataPool.getInstance().getConversationByType(mConvType);
-        if (mCallBackListener != null) {
-            mCallBackListener.OnListAdapterCallBack();
-        }
-        super.notifyDataSetChanged();
-        /*((Activity) mContext).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                CustomConversationAdapter.super.notifyDataSetChanged();
-            }
-        });*/
+        Log.d("TAG", "[ConversationAdapter-> notifyChange] " + mConvType);
+        new LoadDataAsyncTask(mContext).execute(mConvType);
     }
 
+    public class LoadDataAsyncTask extends ECAsyncTask {
+
+        /**
+         * @param context
+         */
+        public LoadDataAsyncTask(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            return ConversationDataPool.getInstance().getConversationByType((Integer) params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            if(result instanceof List) {
+                mConversations = (List<ECConversation>) result;
+                if (mCallBackListener != null) {
+                    mCallBackListener.OnListAdapterCallBack();
+                }
+                notifyDataSetChanged();
+            }
+        }
+
+    }
 }

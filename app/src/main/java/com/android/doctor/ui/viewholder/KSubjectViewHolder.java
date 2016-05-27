@@ -8,10 +8,9 @@ import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
-import com.android.doctor.model.ArticleList;
 import com.android.doctor.model.Constants;
 import com.android.doctor.model.SuggClassList;
-import com.android.doctor.ui.topic.DataCache;
+import com.android.doctor.app.DataCacheManager;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -43,7 +42,7 @@ public class KSubjectViewHolder extends RecyclerView.ViewHolder implements View.
         if (o == null) return;
         textView.setText(o.getName());
         if (imgBtn != null) {
-            SuggClassList.SuggEntity sg = DataCache.getInstance().findSubjectByCode(o.getCode());
+            SuggClassList.SuggEntity sg = DataCacheManager.getInstance().findSubjectByCode(o.getCode());
             if (sg != null) {
                 imgBtn.setImageResource(R.drawable.ic_btn_nike_blue);
                 imgBtn.setTag(Constants.KBASE_SUBJECT_STATE_SUBSCRIBED);

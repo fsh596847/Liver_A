@@ -3,6 +3,7 @@ package com.android.doctor.ui.chat;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.AppCompatButton;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,8 +16,10 @@ import com.android.doctor.app.AppContext;
 import com.android.doctor.app.AppManager;
 import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.UIHelper;
+import com.android.doctor.model.Constants;
 import com.android.doctor.model.DiseaseClass;
 import com.android.doctor.model.GroupList;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
@@ -26,6 +29,8 @@ import com.android.doctor.ui.base.BaseActivity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.yuntongxun.kitsdk.utils.TextUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,7 +100,11 @@ public class EditGroupActivity extends BaseActivity {
             setActionBar(R.string.edit_group);
             mEdtGroupName.setText(mEntity.getName());
             List<String> arrs = Arrays.asList(getResources().getStringArray(R.array.group_identify));
-            int perIndex = Integer.parseInt(mEntity.getPermission());
+            int perIndex = 0;
+            String perm = mEntity.getPermission();
+            if (!TextUtils.isEmpty(perm)) {
+                perIndex = Integer.parseInt(perm);
+            }
             if (0 <= perIndex && perIndex < arrs.size()) {
                 mTvGroupVerify.setText(arrs.get(perIndex));
             }

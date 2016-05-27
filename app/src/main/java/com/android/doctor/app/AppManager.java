@@ -111,7 +111,7 @@ public class AppManager {
     /**
      * 退出应用程序
      */
-    public void AppExit(Context context) {
+    public void AppExit() {
         try {
             finishAllActivity();
             // 杀死该应用进程

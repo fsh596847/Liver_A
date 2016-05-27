@@ -5,8 +5,14 @@ import com.android.doctor.model.ArchStatList;
 import com.android.doctor.model.ArticleList;
 import com.android.doctor.model.AsMyPlParam;
 import com.android.doctor.model.AsPlDraftParam;
+import com.android.doctor.model.AskList;
+import com.android.doctor.model.AskMangeMsgList;
+import com.android.doctor.model.AskReplyList;
+import com.android.doctor.model.ContactAssistantMsgList;
 import com.android.doctor.model.HealthRecordList;
 import com.android.doctor.model.LaborArchList;
+import com.android.doctor.model.PatientAskMsgList;
+import com.android.doctor.model.PatientReportMsgList;
 import com.android.doctor.model.STopicEntity;
 import com.android.doctor.model.SuggClassList;
 import com.android.doctor.model.TPlanList;
@@ -30,7 +36,7 @@ import com.android.doctor.model.HosPaitentList;
 import com.android.doctor.model.MedicClassify;
 import com.android.doctor.model.MedicInfo;
 import com.android.doctor.model.NewPlanRecord;
-import com.android.doctor.model.NoticeMsgList;
+import com.android.doctor.model.GroupNoticeMsgList;
 import com.android.doctor.model.PatientBaseInfo;
 import com.android.doctor.model.PatientList;
 import com.android.doctor.model.PatientStats;
@@ -175,7 +181,19 @@ public interface ApiService {
     Call<RespEntity<DoctorKSLabelList>> getDoctorKsFilterList(@QueryMap Map<String, String> map);
 
     @GET("/api/v1/msg/mytypemsg.json")
-    Call<RespEntity<NoticeMsgList>> getNoticeMsgList(@QueryMap Map<String, String> map);
+    Call<RespEntity<GroupNoticeMsgList>> getGroupNoticeMsgList(@QueryMap Map<String, String> map);
+
+    @GET("/api/v1/msg/mytypemsg.json")
+    Call<RespEntity<ContactAssistantMsgList>> getContactNoticeMsgList(@QueryMap Map<String, String> map);
+
+    @GET("/api/v1/msg/mytypemsg.json")
+    Call<RespEntity<PatientAskMsgList>> getPAskNoticeMsgList(@QueryMap Map<String, String> map);
+
+    @GET("/api/v1/msg/mytypemsg.json")
+    Call<RespEntity<AskMangeMsgList>> getAskManageNoticeMsgList(@QueryMap Map<String, String> map);
+
+    @GET("/api/v1/msg/mytypemsg.json")
+    Call<RespEntity<PatientReportMsgList>> getPReportNoticeMsgList(@QueryMap Map<String, String> map);
 
     @GET("/api/v1/doctor/doctorregister.json")
     Call<RespEntity<DoctorTimeSheet>> getDoctorTimeSheet(@Query("duid") String duid);
@@ -209,6 +227,9 @@ public interface ApiService {
 
     @POST("/api/v1/ytx/im/deletegroup.json")
     Call<RespEntity> deleteGroup(@Body Map<String, String> params);
+
+    @POST("/api/v1/ytx/im/logoutgroup.json")
+    Call<RespEntity<Object>> exitGroup(@Body Map<String, String> params);
 
     @POST("/api/v1/ytx/im/modifygroup.json")
     Call<RespEntity> modifyGroup(@Body Map<String, String> params);
@@ -314,4 +335,13 @@ public interface ApiService {
 
     @GET("/api/v1/archives/getlist.json")
     Call<RespEntity<LaborArchList>> getLaborArchData(@QueryMap Map<String, String> map);
+
+    @GET("/api/v1/ask/getreplies.json")
+    Call<RespEntity<AskReplyList>> getAskReplyList(@Query("askid") String askId);
+
+    @GET("/api/v1/ask/aget.json")
+    Call<RespEntity<AskList>> getAskList(@QueryMap Map<String, String> map);
+
+    @POST("/api/v1/ask/reply.json")
+    Call<RespEntity> askReply(@Body Map<String, String> params);
 }

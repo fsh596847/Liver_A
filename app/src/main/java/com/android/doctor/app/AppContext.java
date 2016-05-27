@@ -6,11 +6,14 @@ package com.android.doctor.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
+import com.android.doctor.helper.ECSDKCoreHelper;
 import com.android.doctor.model.User;
+import com.android.doctor.ui.app.MainActivity;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
@@ -22,6 +25,8 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.umeng.socialize.PlatformConfig;
+import com.yuntongxun.ecsdk.ECDevice;
+import com.yuntongxun.kitsdk.ECDeviceKit;
 import com.yuntongxun.kitsdk.core.CCPAppManager;
 
 import java.io.File;
@@ -215,6 +220,8 @@ public class AppContext extends Application {
     public synchronized User.UserEntity getUser() {
         if (user != null) {
             return user.getUser();
+        } else {
+            Log.d(AppConfig.TAG, "[AppContext-> getUser] user is null");
         }
         return null;
     }
@@ -271,13 +278,22 @@ public class AppContext extends Application {
         isLogin  = false;
         clearUser();
 		clearAppCache();
+        ECSDKCoreHelper.logout(false);
 	}
 
-	public void AppExit(Context context) {
+    public void restartAPP() {
+        ECDeviceKit.logout();
+        Intent intent = new Intent(this, AppLauncher.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        AppManager.getAppManager().AppExit();
+    }
+
+	public void AppExit() {
 		try {
 			// 杀死该应用进程
 			//AppContext.context().getmAppLocate().stopLocate();
-			AppManager.getAppManager().AppExit(context);
+			AppManager.getAppManager().AppExit();
 
 		} catch (Exception e) {
 		}

@@ -17,7 +17,7 @@ import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
-import com.android.doctor.ui.topic.DataCache;
+import com.android.doctor.app.DataCacheManager;
 import com.android.doctor.ui.topic.FragmentSuggList;
 
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ public class SuggListActivity extends BaseActivity {
     }
 
     private void judgeIfSubscribe(String code) {
-        SuggClassList.SuggEntity sg = DataCache.getInstance().findSubjectByCode(code);
+        SuggClassList.SuggEntity sg = DataCacheManager.getInstance().findSubjectByCode(code);
         if (sg == null) {
             setToobarRightText(R.string.subscribe);
         } else {
@@ -122,7 +122,7 @@ public class SuggListActivity extends BaseActivity {
             public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
                 //UIHelper.showToast(status == 0 ? "收藏成功" : "取消收藏成功");
                 setToobarRightText(isSubs ? R.string.unsubscribe : R.string.subscribe);
-                DataCache.getInstance().onLoadCollectArticles();
+                DataCacheManager.getInstance().onLoadCollectArticles();
             }
 
             @Override
@@ -137,7 +137,7 @@ public class SuggListActivity extends BaseActivity {
         Map<String, Object> param = new HashMap<>();
 
         List<String> codeList = new ArrayList<>();
-        List<SuggClassList.SuggEntity> collects = DataCache.getInstance().getSubjects();
+        List<SuggClassList.SuggEntity> collects = DataCacheManager.getInstance().getSubjects();
         if (collects != null) {
             for (int i = 0; i < collects.size(); ++i) {
                 codeList.add(collects.get(i).getCode());

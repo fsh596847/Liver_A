@@ -19,21 +19,24 @@ public abstract class RespHandler<T> implements Callback<RespEntity<T>> {
             RespEntity<T> r = response.body();
             if (r == null) {
                 defFailedInfo();
+                Log.d(AppConfig.TAG, "[RespHandler-> onResponse ] response.body() is null" );
                 return;
             }
             if (r.getError_code() == 0) {
                 onSucceed(r);
             } else {
                 onFailed(r);
+                Log.d(AppConfig.TAG, "[RespHandler-> onResponse ] r.getError_code() " + r.getError_code());
             }
         } else {
             defFailedInfo();
+            Log.d(AppConfig.TAG, "[RespHandler-> onResponse ] response.code " + response.code());
         }
     }
 
     @Override
     public void onFailure(Call<RespEntity<T>> call, Throwable t) {
-        Log.d(AppConfig.TAG, "RespHandler-> onFailure " + t.toString());
+        Log.d(AppConfig.TAG, "[RespHandler-> onFailure ] " + t.toString());
         defFailedInfo();
     }
 

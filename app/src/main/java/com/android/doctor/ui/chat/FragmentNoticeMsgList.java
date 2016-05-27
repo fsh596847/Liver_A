@@ -8,18 +8,27 @@ import android.view.View;
 import com.android.doctor.R;
 import com.android.doctor.app.AppConfig;
 import com.android.doctor.helper.DialogUtils;
+import com.android.doctor.helper.UIHelper;
 import com.android.doctor.interf.OnRefreshDataListener;
+import com.android.doctor.model.AskMangeMsgList;
+import com.android.doctor.model.Constants;
+import com.android.doctor.model.ContactAssistantMsgList;
 import com.android.doctor.model.HosPaitentList;
-import com.android.doctor.model.NoticeMsgList;
+import com.android.doctor.model.GroupNoticeMsgList;
+import com.android.doctor.model.PatientAskMsgList;
 import com.android.doctor.model.PatientList;
+import com.android.doctor.model.PatientReportMsgList;
+import com.android.doctor.model.PlanList;
 import com.android.doctor.model.RespEntity;
-import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.NoticeMsgListAdapter;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
+import com.android.doctor.ui.mine.AskReplyListActivity;
+import com.android.doctor.ui.patient.PatientProfileActivity;
+import com.android.doctor.ui.plan.PlanDetaActivity;
 import com.android.doctor.ui.widget.LinearSpacingItemDecoration;
-import com.google.gson.Gson;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
@@ -30,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Yong on 2016/3/9.
@@ -44,7 +51,6 @@ public class FragmentNoticeMsgList extends BaseRecyViewFragment {
     private int mProStatus = 1;
     private int mMsgType;
     private String sessionId;
-    private Map<String, String> option = new HashMap<>();
 
     @Override
     protected int getLayoutId() {
@@ -67,7 +73,7 @@ public class FragmentNoticeMsgList extends BaseRecyViewFragment {
 
     @Override
     protected void setAdapter() {
-        mAdapter = new NoticeMsgListAdapter(R.layout.item_notice_msg);
+        mAdapter = new NoticeMsgListAdapter(mProStatus == 0 ? R.layout.item_notice_msg : R.layout.item_notice_msg_proc);
         mAdapter.setItemOptionClickListener(this);
         recyclerView.setAdapter(mAdapter);
     }
@@ -90,46 +96,147 @@ public class FragmentNoticeMsgList extends BaseRecyViewFragment {
 
     @Override
     protected void onLoad(int pageNum, int limit) {
-        option.put("msgtype", "" + mMsgType);
-        option.put("process_status", "" + mProStatus);
+        if (Constants.NOTIFY_TYPE_CONTACT_ASSISTANT == mMsgType) {
+            onLoadContactNoticeMsg();
+        } else if (Constants.NOTIFY_TYPE_PATIENT_ASK == mMsgType) {
+            onLoadPAskNoticeMsg();
+        } else if (Constants.NOTIFY_TYPE_ASK_MANAGE == mMsgType) {
+            onLoadAskManageNoticeMsg();
+        } else if (Constants.NOTIFY_TYPE_GROUP_ASSISTANT == mMsgType) {
+            onLoadGroupNoticeMsg();
+        } else if (Constants.NOTIFY_TYPE_PATIENT_REPORT == mMsgType) {
+            onLoadPReportNoticeMsg();
+        }
+    }
 
-        onLoadRequest(option);
+    public Map<String,String> getParam() {
+        Map<String, String> param = new HashMap<>();
+        param.put("msgtype", "" + mMsgType);
+        if (mProStatus != TYPE_MSG_ALL) {
+            param.put("process_status", "" + mProStatus);
+        }
+        return param;
     }
 
     /**
-     *
-     * @param option
+     * 200 联系人助手
      */
-    private void onLoadRequest(Map<String, String> option) {
+    private void onLoadContactNoticeMsg() {
         ApiService service = RestClient.createService(ApiService.class);
-        Call<RespEntity<NoticeMsgList>> call = service.getNoticeMsgList(option);
-        call.enqueue(new Callback<RespEntity<NoticeMsgList>>() {
+        Call<RespEntity<ContactAssistantMsgList>> call = service.getContactNoticeMsgList(getParam());
+        call.enqueue(new RespHandler<ContactAssistantMsgList>() {
             @Override
-            public void onResponse(Call<RespEntity<NoticeMsgList>> call, Response<RespEntity<NoticeMsgList>> response) {
-                RespEntity<NoticeMsgList> data = response.body();
-                if (response.isSuccessful()) {
-                    if (data == null) {
-                        onSuccess(new ArrayList());
-                        return;
-                    } else if (data.getResponse_params() != null) {
-                        onSuccess(data.getResponse_params().getData());
-                    }
+            public void onSucceed(RespEntity<ContactAssistantMsgList> resp) {
+                if (resp != null && resp.getResponse_params() != null) {
+                    onSuccess(resp.getResponse_params().getData());
                 } else {
-                    String errMsg = "";
-                    if (data != null) {
-                        errMsg = data.getError_msg();
-                    }
-                    onFail(errMsg);
+                    onSuccess(new ArrayList());
                 }
             }
 
             @Override
-            public void onFailure(Call<RespEntity<NoticeMsgList>> call, Throwable t) {
-                Log.d(TAG, t.toString());
-                onFail("加载失败");
+            public void onFailed(RespEntity<ContactAssistantMsgList> resp) {
+                onFail(resp.getError_msg());
             }
         });
     }
+
+    /**
+     * 300 患者咨询问诊
+     *
+     */
+    private void onLoadPAskNoticeMsg() {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<PatientAskMsgList>> call = service.getPAskNoticeMsgList(getParam());
+        call.enqueue(new RespHandler<PatientAskMsgList>() {
+            @Override
+            public void onSucceed(RespEntity<PatientAskMsgList> resp) {
+                if (resp != null && resp.getResponse_params() != null) {
+                    onSuccess(resp.getResponse_params().getData());
+                } else {
+                    onSuccess(new ArrayList());
+                }
+            }
+
+            @Override
+            public void onFailed(RespEntity<PatientAskMsgList> resp) {
+                onFail(resp.getError_msg());
+            }
+        });
+    }
+
+    /**
+     * 400 随诊管理
+     *
+     */
+    private void onLoadAskManageNoticeMsg() {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<AskMangeMsgList>> call = service.getAskManageNoticeMsgList(getParam());
+        call.enqueue(new RespHandler<AskMangeMsgList>() {
+            @Override
+            public void onSucceed(RespEntity<AskMangeMsgList> resp) {
+                if (resp != null && resp.getResponse_params() != null) {
+                    onSuccess(resp.getResponse_params().getData());
+                } else {
+                    onSuccess(new ArrayList());
+                }
+            }
+
+            @Override
+            public void onFailed(RespEntity<AskMangeMsgList> resp) {
+                onFail(resp.getError_msg());
+            }
+        });
+    }
+
+    /**
+     * 500 群助手
+     *
+     */
+    private void onLoadGroupNoticeMsg() {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<GroupNoticeMsgList>> call = service.getGroupNoticeMsgList(getParam());
+        call.enqueue(new RespHandler<GroupNoticeMsgList>() {
+            @Override
+            public void onSucceed(RespEntity<GroupNoticeMsgList> resp) {
+                if (resp != null && resp.getResponse_params() != null) {
+                    onSuccess(resp.getResponse_params().getData());
+                } else {
+                    onSuccess(new ArrayList());
+                }
+            }
+
+            @Override
+            public void onFailed(RespEntity<GroupNoticeMsgList> resp) {
+                onFail(resp.getError_msg());
+            }
+        });
+    }
+
+    /**
+     * 700 患者报道
+     *
+     */
+    private void onLoadPReportNoticeMsg() {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<PatientReportMsgList>> call = service.getPReportNoticeMsgList(getParam());
+        call.enqueue(new RespHandler<PatientReportMsgList>() {
+            @Override
+            public void onSucceed(RespEntity<PatientReportMsgList> resp) {
+                if (resp != null && resp.getResponse_params() != null) {
+                    onSuccess(resp.getResponse_params().getData());
+                } else {
+                    onSuccess(new ArrayList());
+                }
+            }
+
+            @Override
+            public void onFailed(RespEntity<PatientReportMsgList> resp) {
+                onFail(resp.getError_msg());
+            }
+        });
+    }
+
 
 
     @Override
@@ -169,52 +276,99 @@ public class FragmentNoticeMsgList extends BaseRecyViewFragment {
         }
     }
 
-    public void onSearch(String key, String keywords) {
-        option.put(key, keywords);
-        onRefresh();
-    }
-
-    public void onFilter(List<User.UserEntity.GroupsEntity.ChildgroupsEntity> groups) {
-        if (groups.isEmpty()) {
-            option.remove("groups");
-        } else {
-            option.put("groups", new Gson().toJson(groups));
-        }
-        onRefresh();
-    }
-
-    public void clearOption(String key) {
-        option.remove(key);
-        onRefresh();
-    }
-
 
 
     @Override
     public void onItemClick(int position, View view) {
-        final NoticeMsgList.MsgEntity msg = (NoticeMsgList.MsgEntity) mAdapter.getItem(position);
-        if (view.getId() == R.id.tv_oper) {
-            DialogUtils.showBottomListDialog(getActivity(),
-                    Arrays.asList(getResources().getStringArray(R.array.notice_msg_oper)),
-                    new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
-                            dialog.dismiss();
-                            switch (position) {
-                                case 0 ://同意
-                                    onProcessMsg(msg.getMsgid(), msg.getStatus(), String.valueOf(1), "");
-                                    break;
-                                case 1://拒绝
-                                    onProcessMsg(msg.getMsgid(), msg.getStatus(), String.valueOf(2), "");
-                                    break;
-                                case 2:
-                                    break;
-                                default:break;
-                            }
-                        }
-                    }, null);
+        int resId = view.getId();
+        Object obj = mAdapter.getItem(position);
+        if(ContactAssistantMsgList.ContactAssistMsgEntity.class.equals(obj.getClass())) {
+            ContactAssistantMsgList.ContactAssistMsgEntity e = (ContactAssistantMsgList.ContactAssistMsgEntity) obj;
+            if (resId == R.id.tv_oper) { //同意或拒绝
+                showMsgAction(e.getMsgid(),  e.getStatus());
+            } else {
+                if ("-1".equals(e.getStatus()) || "0".equals(e.getStatus())) { //设置已读
+                    onProcessMsg(e.getMsgid(), e.getStatus(), String.valueOf(5), "");
+                }
+            }
+        } else if (PatientAskMsgList.PAskMsgEntity.class.equals(obj.getClass())) {
+            PatientAskMsgList.PAskMsgEntity e = (PatientAskMsgList.PAskMsgEntity) obj;
+            if (resId == R.id.tv_oper) { //同意或拒绝
+                showMsgAction(e.getMsgid(),  e.getStatus());
+            } else {
+                if ("-1".equals(e.getStatus()) || "0".equals(e.getStatus())) { //设置已读
+                    onProcessMsg(e.getMsgid(), e.getStatus(), String.valueOf(5), "");
+                }
+                AskReplyListActivity.startAty(getActivity(), e.getMsgparam().getAskid());
+            }
+        } else if (AskMangeMsgList.AskManageMsgEntity.class.equals(obj.getClass())) {
+            AskMangeMsgList.AskManageMsgEntity e = (AskMangeMsgList.AskManageMsgEntity) obj;
+            if (resId == R.id.tv_oper) { //同意或拒绝
+                showMsgAction(e.getMsgid(),  e.getStatus());
+            } else {
+                if ("-1".equals(e.getStatus()) || "0".equals(e.getStatus())) { //设置已读
+                    onProcessMsg(e.getMsgid(), e.getStatus(), String.valueOf(5), "");
+                }
+                PlanList.PlanBaseEntity plan = e.getMsgparam();
+                PlanDetaActivity.startAty(getActivity(), "" + plan.getPid(), plan.getStatus(), plan);
+            }
+        } else if (GroupNoticeMsgList.MsgEntity.class.equals(obj.getClass())) {
+            GroupNoticeMsgList.MsgEntity e = (GroupNoticeMsgList.MsgEntity)obj;
+            if (resId == R.id.tv_oper) { //同意或拒绝
+                showMsgAction(e.getMsgid(),  e.getStatus());
+            } else {
+                if ("-1".equals(e.getStatus()) || "0".equals(e.getStatus())) { //设置已读
+                    onProcessMsg(e.getMsgid(), e.getStatus(), String.valueOf(5), "");
+                }
+                String uType = e.getFromutype();
+                if ("0".equals(uType)) {
+                    DoctorProfileActivity.startAty(getActivity(), e.getFrom());
+                } else if ("1".equals(uType)) {
+                    PatientProfileActivity.startAty(getActivity(), e.getFrom());
+                }
+            }
+        } else if (PatientReportMsgList.ReportMsgEntity.class.equals(obj.getClass())) {
+            PatientReportMsgList.ReportMsgEntity e = (PatientReportMsgList.ReportMsgEntity) obj;
+            if (resId == R.id.tv_oper) { //同意或拒绝
+                showMsgAction(e.getMsgid(),  e.getStatus());
+            } else {
+                if ("-1".equals(e.getStatus()) || "0".equals(e.getStatus())) { //设置已读
+                    onProcessMsg(e.getMsgid(), e.getStatus(), String.valueOf(5), "");
+                }
+                String uType = e.getFromutype();
+                if ("0".equals(uType)) {
+                    DoctorProfileActivity.startAty(getActivity(), e.getFrom());
+                } else if ("1".equals(uType)) {
+                    PatientProfileActivity.startAty(getActivity(), e.getFrom());
+                }
+            }
         }
+
     }
+
+
+    private void showMsgAction(final String msgid, final String status) {
+        DialogUtils.showBottomListDialog(getActivity(),
+                Arrays.asList(getResources().getStringArray(R.array.notice_msg_oper)),
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                        dialog.dismiss();
+                        switch (position) {
+                            case 0 ://同意
+                                onProcessMsg(msgid, status, String.valueOf(1), "");
+                                break;
+                            case 1://拒绝
+                                onProcessMsg(msgid, status, String.valueOf(2), "");
+                                break;
+                            case 2:
+                                break;
+                            default:break;
+                        }
+                    }
+                }, null);
+    }
+
 
     private void onProcessMsg(String msgId, String oldstats, String newstats, String msgextend) {
         Map<String, String> map = new HashMap<>();
@@ -222,8 +376,25 @@ public class FragmentNoticeMsgList extends BaseRecyViewFragment {
         map.put("oldstatus", oldstats);
         map.put("newstatus", newstats);
         map.put("msgextend", msgextend);
-        ((NoticeMsgActivity)getActivity()).onProcessMsg(map);
+        onProcessMsg(map);
         //ConversationSqlManager.setChattingSessionRead(Long.getLong(sessionId));
+    }
+
+    public void onProcessMsg(Map<String, String> map) {
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity> call = service.processMsg(map);
+        call.enqueue(new RespHandler() {
+            @Override
+            public void onSucceed(RespEntity resp) {
+                onRefresh();
+                UIHelper.showToast(resp.getError_msg());
+            }
+
+            @Override
+            public void onFailed(RespEntity resp) {
+                UIHelper.showToast(resp.getError_msg());
+            }
+        });
     }
 
 }

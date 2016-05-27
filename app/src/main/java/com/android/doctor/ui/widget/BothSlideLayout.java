@@ -137,7 +137,9 @@ public class BothSlideLayout extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        viewDragHelper.processTouchEvent(event);
+        if (canSlide) {
+            viewDragHelper.processTouchEvent(event);
+        }
         return true;
     }
 
@@ -150,7 +152,6 @@ public class BothSlideLayout extends LinearLayout {
     }
 
     public void slideOpenLeftView() {
-        canSlide = true;
         if (actionLeftView.getVisibility() == View.GONE) {
             actionLeftView.setVisibility(View.VISIBLE);
         }
@@ -160,7 +161,6 @@ public class BothSlideLayout extends LinearLayout {
 
 
     public void slideOpenRightView() {
-        canSlide = true;
         if (actionRightView.getVisibility() == View.GONE) {
             actionRightView.setVisibility(View.VISIBLE);
         }

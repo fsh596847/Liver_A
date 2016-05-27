@@ -1,5 +1,7 @@
 package com.yuntongxun.kitsdk.custom;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -8,9 +10,10 @@ import org.json.JSONObject;
 /**
  * Created by Yong on 2016/4/26.
  */
-public class MsgUserDataUtil {
+public class UserDataUtil {
 
     public static Object getUserData(String udata) {
+        if (TextUtils.isEmpty(udata)) return null;
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(udata);
@@ -48,8 +51,8 @@ public class MsgUserDataUtil {
     public static boolean isTypeFrom(CommonUserData cud, String tp) {
         CommonUserData.FromEntity fromEntity = cud.getFrom();
         if (fromEntity != null) {
-            String toTp = fromEntity.getType();
-            if (toTp != null && toTp.equals(tp)) {
+            String from = fromEntity.getType();
+            if (from != null && from.equals(tp)) {
                 return true;
             }
         }
@@ -57,17 +60,17 @@ public class MsgUserDataUtil {
     }
 
     public static boolean isPatient(CommonUserData uEntity) {
-        if (MsgUserDataUtil.isTypeFrom(uEntity, String.valueOf(1))
-                || MsgUserDataUtil.isTypeTo(uEntity, String.valueOf(1))) {
+        if ((isTypeFrom(uEntity, String.valueOf(1))
+                || isTypeTo(uEntity, String.valueOf(1))) && !isGroup(uEntity)) {
             return true;
         }
         return false;
     }
 
     public static boolean isDoctor(CommonUserData uEntity) {
-        if (!MsgUserDataUtil.isGroup(uEntity)
-                && MsgUserDataUtil.isTypeFrom(uEntity, String.valueOf(0))
-                && MsgUserDataUtil.isTypeTo(uEntity, String.valueOf(0))) {
+        if (!isGroup(uEntity)
+                && isTypeFrom(uEntity, String.valueOf(0))
+                && isTypeTo(uEntity, String.valueOf(0))) {
             return true;
         }
         return false;

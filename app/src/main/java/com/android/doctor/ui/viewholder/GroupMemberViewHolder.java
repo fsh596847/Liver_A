@@ -48,6 +48,8 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder
 
     private GestureDetector gestureDetector;
 
+    boolean bIsOwner;
+
     private OnListItemClickListener itemClickListener;
 
     public GroupMemberViewHolder(View view, GroupMemberActivity aty){
@@ -88,11 +90,13 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder
     public void setViewData(GroupMemberList.GroupMemberEntity mem) {
         name_tv.setText(mem.getDisplay());
         String ownerType = "0".equals(mem.getOwnertype()) ? "医生 " : "患者 ";
-        boolean isOwner = mem.isManager();
-        String tx = ownerType + (isOwner ? "管理员" : "");
+        bIsOwner = mem.isManager();
+        String tx = ownerType + (bIsOwner ? "管理员" : "");
         desc.setText(tx);
-        if (isOwner) {
+        if (bIsOwner) {
             slideLayout.setCanSlide(false);
+        } else {
+            slideLayout.setCanSlide(true);
         }
     }
 
@@ -115,7 +119,7 @@ public class GroupMemberViewHolder extends RecyclerView.ViewHolder
      **/
     @Override
     public void onItemSlide(int state) {
-
+        if (bIsOwner) return;
         if (state == 0) {
             slideLayout.closeSlide();
         } else if (state == 1) {

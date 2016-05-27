@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Yong on 2016/4/23.
  */
-public class NoticeMsgList {
+public class GroupNoticeMsgList {
 
     private int total;
     /**
@@ -217,6 +217,11 @@ public class NoticeMsgList {
 
         public static class MsgparamEntity {
             private String groupId;
+            private String groupname;
+            private String display;
+            private String owneruid;
+            private int ownertype;
+
 
             public String getGroupId() {
                 return groupId;
@@ -224,6 +229,38 @@ public class NoticeMsgList {
 
             public void setGroupId(String groupId) {
                 this.groupId = groupId;
+            }
+
+            public String getGroupname() {
+                return groupname;
+            }
+
+            public void setGroupname(String groupname) {
+                this.groupname = groupname;
+            }
+
+            public String getDisplay() {
+                return display;
+            }
+
+            public void setDisplay(String display) {
+                this.display = display;
+            }
+
+            public String getOwneruid() {
+                return owneruid;
+            }
+
+            public void setOwneruid(String owneruid) {
+                this.owneruid = owneruid;
+            }
+
+            public int getOwnertype() {
+                return ownertype;
+            }
+
+            public void setOwnertype(int ownertype) {
+                this.ownertype = ownertype;
             }
         }
     }

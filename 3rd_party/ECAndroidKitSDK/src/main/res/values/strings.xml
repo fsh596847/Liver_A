@@ -31,6 +31,7 @@
     <string name="app_panel_pic">图片</string>
     <string name="app_panel_tackpic">拍照</string>
     <string name="app_panel_file">文件</string>
+    <string name="app_panel_p2pvoice">语音</string>
     <string name="app_panel_p2pvideo">视频</string>
     <string name="app_panel_talkroom">对讲</string>
     <string name="app_panel_call">电话</string>

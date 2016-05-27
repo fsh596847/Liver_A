@@ -290,7 +290,7 @@ public class SmileyPanel extends ChatFooterPanel implements
 	
 	@Override
 	public void reset() {
-
+		swicthToPanel(APP_PANEL_NAME_DEFAULT);
 	}
 
 	@Override

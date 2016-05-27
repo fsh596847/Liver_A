@@ -62,8 +62,6 @@ public class ECNotificationManager {
         mContext = context;
     }
 
-   
-
 
     /**
      *

@@ -15,6 +15,7 @@ import com.android.doctor.helper.ChatUtils;
 import com.android.doctor.model.Constants;
 import com.android.doctor.model.ContactGroupList;
 import com.android.doctor.model.ContactList;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
@@ -23,6 +24,9 @@ import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.ContactListAdapter;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
 import com.android.doctor.ui.patient.PatientProfileActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +71,25 @@ public class FragmentContactList extends BaseRecyViewFragment {
         if (b != null) {
             mType = b.getInt(EXTRA_TYPE);
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(MessageEvent event){
+        if (event.message == Constants.EVENT_MSG_UPDATE_CONTACT_GROUP) {
+            onRefresh();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -131,6 +154,15 @@ public class FragmentContactList extends BaseRecyViewFragment {
         });
     }
 
+    @Override
+    protected void onScrollChanged() {
+        super.onScrollChanged();
+        if (isScrollTop()) {
+            mActivity.showSearchView();
+        } else {
+            mActivity.hideSearchView();
+        }
+    }
 
     public void onSearch(String keywords) {
         queryMap.put("keywords", keywords);

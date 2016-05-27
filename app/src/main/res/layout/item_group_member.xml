@@ -26,7 +26,7 @@
                 android:id="@+id/img_avatar"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/ic_doctor_photo" />
+                android:src="@drawable/doctor_photo" />
 
 
             <LinearLayout

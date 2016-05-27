@@ -29,6 +29,7 @@
                 android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="14sp"
                 android:textColor="@color/app_theme_primary_textcolor"
                 android:gravity="center_vertical"/>
 
@@ -36,7 +37,9 @@
                 android:id="@+id/tv_diagnose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ddfff"/>
+                android:text=""
+                android:textSize="12sp"
+                android:textColor="@color/app_theme_secondary_textcolor"/>
 
      </LinearLayout>
 

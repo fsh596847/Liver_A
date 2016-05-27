@@ -2,19 +2,18 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="64dp"
     android:background="@color/window_bg"
     android:focusable="false"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp"
     android:id="@+id/rl_group">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingRight="16dp"
         android:layout_centerVertical="true">
 
         <TextView
@@ -23,10 +22,12 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="@color/app_theme_primary_textcolor"/>
 
         <TextView
-            android:id="@+id/tv_desc"
+            android:id="@+id/tv_group_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -39,5 +40,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:layout_marginRight="16dp"
         android:layout_alignParentRight="true" />
+
+    <View
+        style="@style/h_line"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

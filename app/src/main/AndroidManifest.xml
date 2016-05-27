@@ -312,6 +312,12 @@
         <activity android:name=".ui.app.ChangePhoneNumActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".ui.mine.AskListActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.mine.AskReplyListActivity"
+            android:screenOrientation="portrait" />
+
         // 配置所需的activity
         <activity
             android:name="com.yuntongxun.kitsdk.ui.ECChattingActivity"

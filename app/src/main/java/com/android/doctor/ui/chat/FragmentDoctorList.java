@@ -104,7 +104,11 @@ public class FragmentDoctorList extends BaseRecyViewFragment {
 
     public void onFilter(Map<String, String> map ) {
         if (map == null) return;
-        queryMap.putAll(map);
+        if (map.isEmpty()) {
+            queryMap.clear();
+        } else {
+            queryMap.putAll(map);
+        }
         onRefresh();
     }
 

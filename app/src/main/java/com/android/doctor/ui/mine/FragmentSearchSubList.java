@@ -19,7 +19,7 @@ import com.android.doctor.ui.adapter.SeaKBaseListAdapter;
 import com.android.doctor.ui.adapter.sticky_adapter.StickyRecyclerHeadersAdapter;
 import com.android.doctor.ui.adapter.sticky_adapter.StickyRecyclerHeadersDecoration;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
-import com.android.doctor.ui.topic.DataCache;
+import com.android.doctor.app.DataCacheManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -207,7 +207,7 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
             @Override
             public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
                 //UIHelper.showToast(status == 0 ? "收藏成功" : "取消收藏成功");
-                DataCache.getInstance().onLoadCollectArticles();
+                DataCacheManager.getInstance().onLoadCollectArticles();
             }
 
             @Override
@@ -221,7 +221,7 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
 
         Map<String, Object> param = new HashMap<>();
         List<String> codeList = new ArrayList<>();
-        List<SuggClassList.SuggEntity> collects = DataCache.getInstance().getSubjects();
+        List<SuggClassList.SuggEntity> collects = DataCacheManager.getInstance().getSubjects();
         if (collects != null) {
             for (int i = 0; i < collects.size(); ++i) {
                 codeList.add(collects.get(i).getCode());

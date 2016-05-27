@@ -10,6 +10,7 @@ import android.util.Log;
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
 import com.android.doctor.model.User;
+import com.android.doctor.ui.app.MainActivity;
 import com.yuntongxun.ecsdk.ECChatManager;
 import com.yuntongxun.ecsdk.ECDeskManager;
 import com.yuntongxun.ecsdk.ECDevice;
@@ -17,10 +18,11 @@ import com.yuntongxun.ecsdk.ECError;
 import com.yuntongxun.ecsdk.ECGroupManager;
 import com.yuntongxun.ecsdk.ECInitParams;
 import com.yuntongxun.ecsdk.ECNotifyOptions;
+import com.yuntongxun.ecsdk.ECVoIPCallManager;
 import com.yuntongxun.ecsdk.SdkErrorCode;
+import com.yuntongxun.ecsdk.VideoRatio;
 import com.yuntongxun.kitsdk.ECDeviceKit;
-import com.yuntongxun.kitsdk.beans.ClientUser;
-import com.yuntongxun.kitsdk.core.CCPAppManager;
+import com.yuntongxun.kitsdk.listener.OnInitSDKListener;
 import com.yuntongxun.kitsdk.setting.ECPreferenceSettings;
 import com.yuntongxun.kitsdk.setting.ECPreferences;
 import com.yuntongxun.kitsdk.ui.chatting.model.IMChattingHelper;
@@ -32,16 +34,16 @@ import java.io.InvalidClassException;
 /**
  * Created by Jorstin on 2015/3/17.
  */
-public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDeviceConnectListener,ECDevice.OnLogoutListener {
+public class ECSDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDeviceConnectListener,ECDevice.OnLogoutListener, OnInitSDKListener {
 
-    public static final String TAG = "SDKCoreHelper";
+    public static final String TAG = "ECSDKCoreHelper";
     public static final String ACTION_LOGOUT = "com.yuntongxun.ECDemo_logout";
     public static final String ACTION_SDK_CONNECT = "com.yuntongxun.Intent_Action_SDK_CONNECT";
     public static final String ACTION_KICK_OFF = "com.yuntongxun.Intent_ACTION_KICK_OFF";
     private static final String AppKey = "8a48b5514fd49643014fed92fca838ea";
     private static final String AppToken = "f46afd5c1f092a218b8988217acb9677";
 
-    private static SDKCoreHelper sInstance;
+    private static ECSDKCoreHelper sInstance;
     private Context mContext;
     private ECDevice.ECConnectState mConnect = ECDevice.ECConnectState.CONNECT_FAILED;
     private ECInitParams mInitParams;
@@ -56,13 +58,13 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
     public static SoftUpdate mSoftUpdate;
 
     private Handler handler;
-    private SDKCoreHelper() {
+    private ECSDKCoreHelper() {
     	initNotifyOptions();
     }
 
-    public static SDKCoreHelper getInstance() {
+    public static ECSDKCoreHelper getInstance() {
         if (sInstance == null) {
-            sInstance = new SDKCoreHelper();
+            sInstance = new ECSDKCoreHelper();
         }
         return sInstance;
     }
@@ -75,29 +77,14 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
         return getInstance().mKickOff;
     }
 
-    public static void init(Context ctx) {
-        init(ctx, ECInitParams.LoginMode.AUTO);
-    }
-
-    public static void init(Context ctx , ECInitParams.LoginMode mode) {
+    public void init(Context ctx) {
         getInstance().mKickOff = false;
-        Log.d(TAG , "[init] start regist..");
-        ctx = AppContext.context();
-        ECDeviceKit.setmContext(ctx);
-        getInstance().mMode = mode;
         getInstance().mContext = ctx;
-        // 判断SDK是否已经初始化，没有初始化则先初始化SDK
-        if(!ECDevice.isInitialized()) {
-            getInstance().mConnect = ECDevice.ECConnectState.CONNECTING;
-            // ECSDK.setNotifyOptions(getInstance().mOptions);
-            ECDevice.initial(ctx, getInstance());
-
-            postConnectNotify();
-            return ;
+        if (!ECDeviceKit.isInitialized()) {
+            Log.d(TAG, "[ECSDKCoreHelper-> init] ECDeviceKit.isInitialized is false");
+            User.UserEntity.YtxsubaccountEntity account = AppContext.context().getUser().getYtxsubaccount();
+            ECDeviceKit.init(account.getVoipaccount(), ctx, this);
         }
-        Log.d(TAG, " SDK has inited , then regist..");
-        // 已经初始化成功，直接进行注册
-        getInstance().onInitialized();
     }
 
     public static void setSoftUpdate(String version , String desc , boolean mode) {
@@ -108,56 +95,45 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
         if(mOptions == null) {
             mOptions = new ECNotifyOptions();
         }
-        // 设置新消息是否提醒
-        mOptions.setNewMsgNotify(true);
-        // 设置状态栏通知图标
-        mOptions.setIcon(R.mipmap.ic_launcher);
-        // 设置是否启用勿扰模式（不会声音/震动提醒）
-        mOptions.setSilenceEnable(false);
-        // 设置勿扰模式时间段（开始小时/开始分钟-结束小时/结束分钟）
-        // 小时采用24小时制
-        // 如果设置勿扰模式不启用，则设置勿扰时间段无效
-        // 当前设置晚上11点到第二天早上8点之间不提醒
-        mOptions.setSilenceTime(23, 0, 8, 0);
-        // 设置是否震动提醒(如果处于免打扰模式则设置无效，没有震动)
+        mOptions.setNewMsgNotify(true);         //设置新消息是否提醒
+        mOptions.setIcon(R.mipmap.ic_launcher); // 设置状态栏通知图标
+        mOptions.setSilenceEnable(false);       // 设置是否启用勿扰模式（不会声音/震动提醒）
+        mOptions.setSilenceTime(23, 0, 8, 0);   /* 设置勿扰模式时间段（开始小时/开始分钟-结束小时/结束分钟）
+                                                    小时采用24小时制
+                                                    如果设置勿扰模式不启用，则设置勿扰时间段无效
+                                                    当前设置晚上11点到第二天早上8点之间不提醒
+                                                    设置是否震动提醒(如果处于免打扰模式则设置无效，没有震动)
+                                                 */
         mOptions.enableShake(true);
-        // 设置是否声音提醒(如果处于免打扰模式则设置无效，没有声音)
-        mOptions.enableSound(true);
+        mOptions.enableSound(true);             // 设置是否声音提醒(如果处于免打扰模式则设置无效，没有声音)
     }
 
     @Override
     public void onInitialized() {
-        Log.d(TAG, "ECSDK is ready");
-        
-        // 设置消息提醒
-        ECDevice.setNotifyOptions(mOptions);
+        Log.d(TAG, "[ECSDKCoreHelper-> onInitialized] ECSDK is ready");
 
-        // 设置SDK注册结果回调通知，当第一次初始化注册成功或者失败会通过该引用回调
-        // 通知应用SDK注册状态
-        // 当网络断开导致SDK断开连接或者重连成功也会通过该设置回调
+        ECDevice.setNotifyOptions(mOptions);    // 设置消息提醒
+                                                /* 设置SDK注册结果回调通知，当第一次初始化注册成功或者失败会通过该引用回调
+                                                   通知应用SDK注册状态
+                                                   当网络断开导致SDK断开连接或者重连成功也会通过该设置回调
+                                                */
         ECDevice.setOnChatReceiveListener(IMChattingHelper.getInstance());
         ECDevice.setOnDeviceConnectListener(this);
 
         User.UserEntity.YtxsubaccountEntity account = AppContext.context().getUser().getYtxsubaccount();
-        ECDeviceKit.setUserId(account.getVoipaccount());
+
         if (mInitParams == null){
             mInitParams = ECInitParams.createParams();
         }
         mInitParams.reset();
-        // 如：VoIP账号/手机号码/..
-
         mInitParams.setUserid(account.getVoipaccount());
-        // appkey
         mInitParams.setAppKey(AppKey);
-        // appToken
         mInitParams.setToken(AppToken);
 
         // ECInitParams.LoginMode.FORCE_LOGIN
         mInitParams.setMode(getInstance().mMode);
-
-        // 如果有密码（VoIP密码，对应的登陆验证模式是）
-        // ECInitParams.LoginAuthType.PASSWORD_AUTH
-        if(!TextUtils.isEmpty(account.getVoippwd())) {
+        if(!TextUtils.isEmpty(account.getVoippwd())) {  // 如果有密码（VoIP密码，对应的登陆验证模式是）
+                                                        // ECInitParams.LoginAuthType.PASSWORD_AUTH
             mInitParams.setPwd(account.getVoippwd());
         }
 
@@ -181,19 +157,16 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
     }
 
     @Override
-    public void onConnect() {
-        // Deprecated
-    }
+    public void onConnect() {}
 
     @Override
     public void onDisconnect(ECError error) {
-        // SDK与云通讯平台断开连接
-        // Deprecated
+        ToastUtil.showMessage(error.errorMsg);
     }
 
     @Override
     public void onConnectState(ECDevice.ECConnectState state, ECError error) {
-        Log.d(TAG, "state, error " + state + ", " + error.errorMsg);
+        Log.d(TAG, "[ECSDKCoreHelper-> onConnectState] state:  " + state + " " + error.errorMsg);
         if(state == ECDevice.ECConnectState.CONNECT_FAILED && error.errorCode == SdkErrorCode.SDK_KICKED_OFF) {
             try {
                 ECPreferences.savePreference(ECPreferenceSettings.SETTINGS_REGIST_AUTO, "", true);
@@ -207,8 +180,8 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
             Intent intent = new Intent(ACTION_KICK_OFF);
             intent.putExtra("kickoffText" , error.errorMsg);
             mContext.sendBroadcast(intent);
-            //LauncherActivity.mLauncherUI.handlerKickOff(error.errorMsg);
-            //ECNotificationManager.getInstance().showKickoffNotification(mContext ,error.errorMsg);
+            ((MainActivity)mContext).handlerKickOff(error.errorMsg);
+            INotificationManager.getInstance().showKickoffNotification(mContext ,error.errorMsg);
         }
         getInstance().mConnect = state;
         Intent intent = new Intent(ACTION_SDK_CONNECT);
@@ -248,29 +221,16 @@ public class SDKCoreHelper implements ECDevice.InitListener , ECDevice.OnECDevic
      * 状态通知
      */
     private static void postConnectNotify() {
-        if(getInstance().mContext instanceof LauncherActivity) {
-            //((LauncherActivity) getInstance().mContext).onNetWorkNotify(getConnectState());
+        if(getInstance().mContext instanceof MainActivity) {
+            ((MainActivity) getInstance().mContext).onNetWorkNotify(getConnectState());
         }
     }
 
     public static void logout(boolean isNotice) {
     	ECDevice.NotifyMode notifyMode = (isNotice) ? ECDevice.NotifyMode.IN_NOTIFY : ECDevice.NotifyMode.NOT_NOTIFY;
         ECDevice.logout(notifyMode, getInstance());
-
-        release();
-    }
-
-    public static void release() {
         getInstance().mKickOff = false;
-        /*IMChattingHelper.getInstance().destroy();
-        ContactSqlManager.reset();
-        ConversationSqlManager.reset();
-        GroupMemberSqlManager.reset();
-        GroupNoticeSqlManager.reset();
-        GroupSqlManager.reset();
-        IMessageSqlManager.reset();
-        ImgInfoSqlManager.reset();*/
-
+        ECDeviceKit.logout();
     }
 
     /**

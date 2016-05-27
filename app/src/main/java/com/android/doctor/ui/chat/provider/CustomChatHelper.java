@@ -1,21 +1,28 @@
 package com.android.doctor.ui.chat.provider;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.android.doctor.R;
+import com.android.doctor.app.AppConfig;
 import com.android.doctor.app.AppContext;
-import com.android.doctor.helper.ChatUtils;
+import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.User;
 import com.android.doctor.ui.chat.DoctorProfileActivity;
 import com.android.doctor.ui.chat.GroupProfileActivity;
-import com.android.doctor.ui.chat.NoticeMsgActivity;
 import com.android.doctor.ui.patient.PatientProfileActivity;
+import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.ecsdk.ECMessage;
+import com.yuntongxun.ecsdk.ECVoIPCallManager;
+import com.yuntongxun.kitsdk.ECDeviceKit;
+import com.yuntongxun.kitsdk.VoipKitManager;
 import com.yuntongxun.kitsdk.custom.CommonUserData;
-import com.yuntongxun.kitsdk.custom.MsgUserDataUtil;
-import com.yuntongxun.kitsdk.custom.NoticeUserData;
+import com.yuntongxun.kitsdk.custom.UserDataUtil;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatActionProvider;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatPlusExtendProvider;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatUIProvider;
+import com.yuntongxun.kitsdk.ui.ECChattingActivity;
+import com.yuntongxun.kitsdk.utils.ToastUtil;
 
 
 public class CustomChatHelper implements ECCustomChatUIProvider,
@@ -27,12 +34,8 @@ public class CustomChatHelper implements ECCustomChatUIProvider,
 	 */
 	@Override
 	public String[] getCustomPlusTitleArray(Context context) {
-		String[] arr = null;
-		/*if (DemoDataConstance.isShowCustom) {
-			arr = new String[] { "测试1", "测试2", "测试3" };
-			return arr;
-		}*/
-		return null;
+		String[] arr = new String[] {  "音频", "视频" };
+		return arr;
 	}
 
 	/**
@@ -40,16 +43,14 @@ public class CustomChatHelper implements ECCustomChatUIProvider,
 	 */
 	@Override
 	public int[] getCustomPlusDrawableArray(Context context) {
-
 		int[] arr = null;
-		/*if (DemoDataConstance.isShowCustom) {
-			arr = new int[] { R.drawable.custom_chattingfooter_file_selector,
-					R.drawable.custom_chattingfooter_image_selector,
-					R.drawable.custom_chattingfooter_takephoto_selector,
-			};
-			return arr;
-		}*/
-		return null;
+		arr = new int[] {
+				/*R.drawable.image_icon,
+				R.drawable.photograph_icon,*/
+				R.drawable.voip_call,
+				R.drawable.video_call
+		};
+		return arr;
 	}
     
 	/**
@@ -58,11 +59,21 @@ public class CustomChatHelper implements ECCustomChatUIProvider,
 	@Override
 	public boolean onPlusExtendedItemClick(Context context, String title,
 			int index) {
-		/*if (DemoDataConstance.isShowCustom) {
-			ToastUtil.showMessage("点击的是index=" + index + ";title=" + title);
-			return true;
-		}*/
-		return false;
+		/*if (DemoDataConstance.isShowCustom) {*/
+        if (index == 2) {
+            if (context.getClass().equals(ECChattingActivity.class)) {
+                ECChattingActivity aty = (ECChattingActivity) context;
+                VoipKitManager.makeVoiceCall("", "13520466999");
+                Log.d(AppConfig.TAG, "[CustomChatHelper-> onPlusExtendedItemClick] " + aty.getmRecipients());
+            }
+        } else if (index == 3) {
+            if(!ECDeviceKit.isInitialized()){
+                UIHelper.showToast("SDK未初始化");
+                return false;
+            }
+            VoipKitManager.makeVideoCall("", "18600283063");
+        }
+        return true;
 	}
 
 	/**
@@ -95,7 +106,7 @@ public class CustomChatHelper implements ECCustomChatUIProvider,
 	public boolean onMessagePortRaitClick(Context context, ECMessage message) {// ok
 		String udata = message.getUserData();
 		if (udata != null) {
-			Object obj = MsgUserDataUtil.getUserData(udata);
+			Object obj = UserDataUtil.getUserData(udata);
 			if (obj != null) {
 				if (obj.getClass().equals(CommonUserData.class)) {
 					CommonUserData uEntity = (CommonUserData) obj;
@@ -109,15 +120,15 @@ public class CustomChatHelper implements ECCustomChatUIProvider,
                         return false;
 					}
 
-					if (MsgUserDataUtil.isPatient(uEntity)) {
+					if (UserDataUtil.isPatient(uEntity)) {
                         PatientProfileActivity.startAty(context, from.getId());
-					} else if (MsgUserDataUtil.isGroup(uEntity)) {
+					} else if (UserDataUtil.isGroup(uEntity)) {
                         if (String.valueOf(0).equals(from.getType())) {
                             DoctorProfileActivity.startAty(context, from.getId());
                         } else if (String.valueOf(1).equals(from.getId())) {
                             PatientProfileActivity.startAty(context, from.getId());
                         }
-					} else if (MsgUserDataUtil.isDoctor(uEntity)) {
+					} else if (UserDataUtil.isDoctor(uEntity)) {
                         DoctorProfileActivity.startAty(context, from.getId());
 					}
 					return true;

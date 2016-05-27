@@ -25,10 +25,6 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showMyFavoriteAty(Context context) {
-        Intent intent = new Intent(context, MyFavoriteActivity.class);
-        context.startActivity(intent);
-    }
 
     public static void showPatientPlanAty(Context context, String id) {
         Intent intent = new Intent(context, CommonFragmentActivity.class);

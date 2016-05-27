@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.BaseAdapter;
 
 import com.google.gson.Gson;
 import com.yuntongxun.kitsdk.core.CCPAppManager;
@@ -12,10 +11,9 @@ import com.yuntongxun.kitsdk.db.ConversationSqlManager;
 import com.yuntongxun.kitsdk.db.GroupSqlManager;
 import com.yuntongxun.kitsdk.db.OnMessageChange;
 import com.yuntongxun.kitsdk.ui.chatting.model.ECConversation;
+import com.yuntongxun.kitsdk.ui.voip.NameHighLight;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,6 +24,14 @@ public class ConversationDataPool implements OnMessageChange {
     private static ConversationDataPool instance;
 
     private List<ECConversation> mConversations = new ArrayList<ECConversation>();
+
+    private List<ECConversation> mPConversations = new ArrayList<ECConversation>();
+
+    private List<ECConversation> mDConversations = new ArrayList<ECConversation>();
+
+    private List<ECConversation> mGConversations = new ArrayList<ECConversation>();
+
+    private List<ECConversation> mNConversations = new ArrayList<ECConversation>();
 
     private OnDataChangeListener onDataChangeListener;
 
@@ -82,6 +88,9 @@ public class ConversationDataPool implements OnMessageChange {
         if(cursor != null) {
             cursor.close();
         }
+
+        initConversations();
+
         Log.d("TAG", "[ConversationPool-> notifyChange]");
 
         if(onDataChangeListener != null) {
@@ -90,80 +99,73 @@ public class ConversationDataPool implements OnMessageChange {
         LocalBroadcastManager.getInstance(CCPAppManager.getContext()).sendBroadcast(new Intent("DATA_CHANGE"));
     }
 
+    private void initConversations() {
+        List<ECConversation> conversations = getInstance().mConversations;
+        for (ECConversation e : conversations) {
+            String udata = e.getUserdata();
+            if (udata == null) {
+                continue;
+            }
+            Object obj = UserDataUtil.getUserData(udata);
+            if (obj == null) continue;
+            if (obj.getClass().equals(CommonUserData.class)) {
+                CommonUserData cud = (CommonUserData) obj;
+                if (UserDataUtil.isPatient(cud)) {
+                    mPConversations.add(e);
+                } else if (UserDataUtil.isGroup(cud)) {
+                    mGConversations.add(e);
+                } else if (UserDataUtil.isDoctor(cud)) {
+                    mDConversations.add(e);
+                }
+            } else if (UserDataUtil.isNotice(obj)) {
+                mNConversations.add(e);
+            }
+        }
+    }
+
     public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener) {
         this.onDataChangeListener = onDataChangeListener;
     }
 
     public synchronized List<ECConversation> getConversationByType(int type) {
-        List<ECConversation> rdata = new ArrayList<ECConversation>();
-        List<ECConversation> conversations = getInstance().mConversations;
-        for (ECConversation e : conversations) {
-            String udata = e.getUserdata();
-            if (udata == null) {
-                continue;
-            }
-            Object obj = MsgUserDataUtil.getUserData(udata);
-            if (obj == null) continue;
-            if (obj.getClass().equals(CommonUserData.class)) {
-                CommonUserData cud = (CommonUserData) obj;
-                switch (type) {
-                    case 0:
-                        if (MsgUserDataUtil.isPatient(cud)) {
-                            rdata.add(e);
-                        }
-                        break;
-                    case 1:
-                        if (MsgUserDataUtil.isGroup(cud)) {
-                            rdata.add(e);
-                        }
-                        break;
-                    case 2:
-                        if (MsgUserDataUtil.isDoctor(cud)) {
-                            rdata.add(e);
-                        }
-                        break;
-                }
-            } else if (MsgUserDataUtil.isNotice(obj) && type == 3) {
-                rdata.add(e);
-            }
+        switch (type) {
+            case 0:
+                return mPConversations;
+            case 1:
+                return mGConversations;
+            case 2:
+                return mDConversations;
+            case 3:
+                return mNConversations;
         }
-        Log.d("TAG", "[ConversationPool-> getConversationByType],type " + type + ", " + new Gson().toJson(rdata));
-        return rdata;
+        return null;
     }
 
     public static int getConversationUnreadCount(int type) {
         int count = 0;
-        List<ECConversation> conversations = getInstance().mConversations;
-        for (ECConversation e : conversations) {
-            String udata = e.getUserdata();
-            if (udata == null) {
-                continue;
-            }
-            Object obj = MsgUserDataUtil.getUserData(udata);
-            if (obj == null) continue;
-            if (obj.getClass().equals(CommonUserData.class)) {
-                CommonUserData cud = (CommonUserData) obj;
-                switch (type) {
-                    case 0:
-                        if (MsgUserDataUtil.isPatient(cud)) {
-                            count += e.getUnreadCount();
-                        }
-                        break;
-                    case 1:
-                        if (MsgUserDataUtil.isGroup(cud)) {
-                            count += e.getUnreadCount();
-                        }
-                        break;
-                    case 2:
-                        if (MsgUserDataUtil.isDoctor(cud)) {
-                            count += e.getUnreadCount();
-                        }
-                        break;
+
+        switch (type) {
+            case 0:
+                for (ECConversation e : getInstance().mPConversations) {
+                    count += e.getUnreadCount();
                 }
-            } else if (MsgUserDataUtil.isNotice(obj) && type == 3) {
-                count += e.getUnreadCount();
-            }
+                break;
+            case 1:
+                for (ECConversation e : getInstance().mGConversations) {
+                    count += e.getUnreadCount();
+                }
+                break;
+            case 2:
+                for (ECConversation e : getInstance().mDConversations) {
+                    count += e.getUnreadCount();
+                }
+                break;
+            case 3:
+                for (ECConversation e : getInstance().mNConversations) {
+                    count += e.getUnreadCount();
+                }
         }
+
         Log.d("TAG", "[ConversationPool-> getConversationUnreadCount] type, unread " + type + ", " + count);
         return count;
     }
@@ -174,5 +176,9 @@ public class ConversationDataPool implements OnMessageChange {
 
     public void clearData() {
         mConversations.clear();
+        mPConversations.clear();
+        mDConversations.clear();
+        mGConversations.clear();
+        mNConversations.clear();
     }
 }

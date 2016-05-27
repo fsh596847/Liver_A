@@ -40,7 +40,7 @@ public abstract class ChatFooterPanel extends LinearLayout {
      *
      * @param listener The callback that will be invoked.
      */
-	protected void setOnEmojiItemClickListener(EmojiGrid.OnEmojiItemClickListener listener) {
+	public void setOnEmojiItemClickListener(EmojiGrid.OnEmojiItemClickListener listener) {
     	mItemClickListener = listener;
     }
 

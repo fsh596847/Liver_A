@@ -98,7 +98,7 @@ public class CustomeConversationListFragment extends BaseFragment implements
 					startActivity(intent);
 					return;
 				}
-				/*Object obju = MsgUserDataUtil.getUserData(conversation.getUserdata());
+				/*Object obju = UserDataUtil.getUserData(conversation.getUserdata());
 				if (obju != null && obju.getClass().equals(CommonUserData.class)) {
 					CommonUserData cud = (CommonUserData) obju;
 					Intent intent = new Intent(getActivity(), ECChattingActivity.class);

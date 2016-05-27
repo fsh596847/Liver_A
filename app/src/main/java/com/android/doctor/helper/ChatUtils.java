@@ -14,6 +14,7 @@ import com.android.doctor.model.User;
 import com.google.gson.Gson;
 import com.yuntongxun.kitsdk.custom.CommonUserData;
 import com.yuntongxun.kitsdk.core.ECKitConstant;
+import com.yuntongxun.kitsdk.db.ConversationSqlManager;
 import com.yuntongxun.kitsdk.db.IMessageSqlManager;
 import com.yuntongxun.kitsdk.ui.ECChattingActivity;
 
@@ -38,7 +39,7 @@ public class ChatUtils {
         CommonUserData udata = new CommonUserData(String.valueOf(0), to, from);
 
         String userdata = udata.toJson().toString();
-        //long sid = IMessageSqlManager.querySessionIdByUserData(userdata);
+        //long sid = ConversationSqlManager.querySessionIdByUserData(userdata);
 
         Intent intent = new Intent(context, ECChattingActivity.class);
         intent.putExtra(ECKitConstant.KIT_CONVERSATION_TARGET, _sid);
@@ -51,6 +52,7 @@ public class ChatUtils {
 
     public static void chat2(Context ctx, String sid, String userData) {
         if (TextUtils.isEmpty(userData)) {
+            Log.d(AppConfig.TAG, "[ChatUtils-> chat2] userData is null");
             return;
         }
         User.UserEntity userEntity = AppContext.context().getUser();

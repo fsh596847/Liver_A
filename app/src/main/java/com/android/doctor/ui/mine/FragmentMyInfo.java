@@ -79,9 +79,9 @@ public class FragmentMyInfo extends BaseFragment {
         UIHelper.showtAty(getActivity(), PubAnnocActivity.class);
     }
 
-    @OnClick(R.id.rl_my_diag)
+    @OnClick(R.id.rl_ask_my)
     protected void onMyDiag() {
-
+        UIHelper.showtAty(getActivity(), AskListActivity.class);
     }
 
     @OnClick(R.id.rl_tplan)

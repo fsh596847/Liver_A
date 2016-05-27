@@ -72,7 +72,7 @@ public class GroupMemberActivity extends BaseActivity {
     }
 
     private void setIfMyGroupView() {
-        boolean isMine = GroupProfileActivity.judgeGroupOwnerIsMe(mEntity.getOwner());
+        boolean isMine = GroupProfileActivity.judgeIamGroupOwner(mEntity.getOwner());
         mTvEdit.setVisibility(isMine ? View.VISIBLE : View.GONE);
         mTvAdd.setVisibility(isMine ? View.VISIBLE : View.GONE);
     }

@@ -1,7 +1,10 @@
 package com.android.doctor.ui.chat;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
@@ -11,15 +14,22 @@ import android.widget.ToggleButton;
 import com.android.doctor.R;
 import com.android.doctor.app.AppConfig;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.app.DataCacheManager;
+import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.UIHelper;
+import com.android.doctor.model.Constants;
+import com.android.doctor.model.ContactGroupList;
 import com.android.doctor.model.GroupDeta;
 import com.android.doctor.model.GroupList;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
 import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -60,7 +70,7 @@ public class GroupProfileActivity extends BaseActivity {
     protected AppCompatButton mBtnGroup;
     private GroupList.GroupsEntity mEntity;
     private String groupId;
-    private boolean mIsOwner;
+    private boolean mIsOwner, mIsMember;
 
     public static void startAty(Context context, String groupId) {
         Intent intent = new Intent(context, GroupProfileActivity.class);
@@ -109,9 +119,11 @@ public class GroupProfileActivity extends BaseActivity {
     }
 
     private void setIfOwnerView() {
-        mIsOwner = judgeGroupOwnerIsMe(mEntity.getOwner());
+        mIsOwner = judgeIamGroupOwner(mEntity.getOwner());
         mMyGroupView.setVisibility(mIsOwner ? View.VISIBLE : View.GONE);
-        mBtnGroup.setText(mIsOwner ? getString(R.string.manage_group) : getString(R.string.apply_for_join));
+        mIsMember = judgeIamGroupMember(mEntity.getGroupId());
+        mBtnGroup.setText(mIsOwner ? getString(R.string.manage_group)
+                : mIsMember ? getString(R.string.exit_group) : getString(R.string.apply_for_join));
         mTvGroupCard.setText(mEntity.getOwnernickname());
     }
 
@@ -132,12 +144,17 @@ public class GroupProfileActivity extends BaseActivity {
         });
     }
 
-    public static boolean judgeGroupOwnerIsMe(String ownerId) {
+    public static boolean judgeIamGroupOwner(String ownerId) {
         User.UserEntity userEntity = AppContext.context().getUser();
         if (userEntity != null && userEntity.getDuid() != null) {
             return userEntity.getDuid().equals(ownerId);
         }
         return false;
+    }
+
+    private boolean judgeIamGroupMember(String gid) {
+        ContactGroupList.GroupsEntity g = DataCacheManager.getInstance().findGroup(gid);
+        return g != null;
     }
 
     private Map<String,String> genIfReceiveMsgParam() {
@@ -174,27 +191,39 @@ public class GroupProfileActivity extends BaseActivity {
         return param;
     }
 
+    private Map<String,String> genExitGroupParam() {
+        Map<String, String> param = new HashMap<>();
+        User.UserEntity userEntity = AppContext.context().getUser();
+        if (userEntity != null) {
+            User.UserEntity.YtxsubaccountEntity account = userEntity.getYtxsubaccount();
+            param.put("sid", account.getSubaccountsid());
+            param.put("token", account.getSubtoken());
+            param.put("groupId", mEntity.getGroupId());
+            param.put("owneruid", mEntity.getOwner());
+        }
+        return param;
+    }
+
     private void onSetReceiveGroupMsg() {
         showProcessDialog();
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity> call = service.setGroupMsg(genIfReceiveMsgParam());
-        call.enqueue(new Callback<RespEntity>() {
+        call.enqueue(new RespHandler() {
             @Override
-            public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
+            public void onSucceed(RespEntity resp) {
                 dismissProcessDialog();
-                RespEntity r = response.body();
-                if (r != null) {
-                    UIHelper.showToast(r.getError_msg());
+                if (resp != null) {
+                    UIHelper.showToast(resp.getError_msg());
                 }
             }
 
             @Override
-            public void onFailure(Call<RespEntity> call, Throwable t) {
-                Log.d(AppConfig.TAG,"[GroupProfileActivity-> onSetReceiveGroupMsg-> onFailure]" + t.toString());
+            public void onFailed(RespEntity resp) {
                 dismissProcessDialog();
             }
         });
     }
+
 
     private void onApplyForJoinGroup() {
         showProcessDialog();
@@ -208,6 +237,7 @@ public class GroupProfileActivity extends BaseActivity {
                 if (r != null) {
                     UIHelper.showToast(r.getError_msg());
                 }
+                EventBus.getDefault().post(new MessageEvent(Constants.EVENT_MSG_UPDATE_CONTACT_GROUP));
             }
 
             @Override
@@ -217,6 +247,31 @@ public class GroupProfileActivity extends BaseActivity {
             }
         });
     }
+
+    private void onExitGroup() {
+        showProcessDialog();
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<Object>> call = service.exitGroup(genExitGroupParam());
+        call.enqueue(new RespHandler<Object>() {
+            @Override
+            public void onSucceed(RespEntity<Object> resp) {
+                dismissProcessDialog();
+                if (resp != null) {
+                    UIHelper.showToast(resp.getError_msg());
+                }
+                EventBus.getDefault().post(new MessageEvent(Constants.EVENT_MSG_UPDATE_CONTACT_GROUP));
+            }
+
+            @Override
+            public void onFailed(RespEntity resp) {
+                dismissProcessDialog();
+                if (resp != null) {
+                    UIHelper.showToast(resp.getError_msg());
+                }
+            }
+        });
+    }
+
 
     @OnClick(R.id.rl_group_member)
     protected void onClickMember(){
@@ -237,8 +292,24 @@ public class GroupProfileActivity extends BaseActivity {
     protected void onGroupOpera() {
         if (mIsOwner) {
             EditGroupActivity.startAtyForEdit(this, REQUEST_CODE_EDIT_GROUP, mEntity);
+        } else if (mIsMember){
+            showExitGroupDialog();
         } else {
             onApplyForJoinGroup();
         }
+    }
+
+    private void showExitGroupDialog() {
+        String msg_tip = getString(R.string.are_you_sure_to_exit_group);
+        AlertDialog.Builder builder = DialogUtils.getConfirmDialog(this, msg_tip,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        onExitGroup();
+                    }
+                }).setCancelable(false).setTitle(R.string.tips);
+        Dialog d = builder.create();
+        d.show();
     }
 }

@@ -55,7 +55,6 @@ public class FragmentGroupMemberList extends BaseRecyViewFragment {
     protected void setAdapter() {
         mAdapter = new GroupMemberListAdapter((GroupMemberActivity)getActivity());
         mAdapter.setItemOptionClickListener(this);
-        //((GroupMemberListAdapter)mAdapter).setOnListItemSlideListener((GroupMemberActivity)getActivity());
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -122,19 +121,20 @@ public class FragmentGroupMemberList extends BaseRecyViewFragment {
         map.put("groupId", e.getGroupId());
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity> call = service.deleteGroupMember(map);
-        call.enqueue(new Callback<RespEntity>() {
+        call.enqueue(new RespHandler() {
             @Override
-            public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
-                RespEntity r = response.body();
+            public void onSucceed(RespEntity r) {
                 if (r != null) {
                     UIHelper.showToast(r.getError_msg());
                 }
+                onRefresh();
             }
 
             @Override
-            public void onFailure(Call<RespEntity> call, Throwable t) {
-                Log.d(AppConfig.TAG,"[FragmentGroupMemberList-> onDelGroupMember-> onFailure]" + t.toString());
-
+            public void onFailed(RespEntity r) {
+                if (r != null) {
+                    UIHelper.showToast(r.getError_msg());
+                }
             }
         });
     }

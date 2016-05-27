@@ -59,10 +59,13 @@
             android:layout_height="wrap_content" />
 
         <ImageView
+            android:id="@+id/img_followup"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_icon_followup"/>
+
         <ImageView
+            android:id="@+id/img_archive"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginLeft="10dp"

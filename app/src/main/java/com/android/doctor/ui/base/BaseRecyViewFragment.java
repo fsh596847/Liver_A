@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.interf.OnScrollChangedListener;
 import com.android.doctor.ui.widget.EmptyLayout;
 import com.yuntongxun.kitsdk.utils.LogUtil;
 
@@ -35,6 +36,7 @@ public abstract class BaseRecyViewFragment<T>
 	protected LayoutManager layoutManager;
 	protected BaseRecyViewAdapter<T> mAdapter;
 	protected int mCurPage = 0;
+	protected OnScrollChangedListener scrollChangedListener;
 
     @Override
     protected void initView(View view) {
@@ -166,6 +168,10 @@ public abstract class BaseRecyViewFragment<T>
 		LogUtil.d(LogUtil.getLogUtilsTag(BaseRecyViewFragment.class), msg);
 	}
 
+	public void setScrollChangedListener(OnScrollChangedListener scrollChangedListener) {
+		this.scrollChangedListener = scrollChangedListener;
+	}
+
 	class RecycViewOnScrollListener extends RecyclerView.OnScrollListener {
 		
 		private LinearLayoutManager lManager;
@@ -182,12 +188,16 @@ public abstract class BaseRecyViewFragment<T>
 		@Override
 		public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 			super.onScrollStateChanged(recyclerView, newState);
-			
 			onScrollChanged();
 		}
 	}
 	
 	protected void onScrollChanged() {
+
+        if (scrollChangedListener != null) {
+            scrollChangedListener.onScrollChanged(recyclerView);
+        }
+
 		if (mAdapter == null ||
 			mAdapter.getItemCount() == 0) {
             return;
@@ -238,4 +248,16 @@ public abstract class BaseRecyViewFragment<T>
 	protected List<?> parseResponse(JSONObject jsonObject) {
 		return null;
 	};
+
+	public boolean isScrollTop() {
+        LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+        View firstView = lm.findViewByPosition(lm.findFirstVisibleItemPosition());
+        if (firstView == null || (firstView.getTop() == 0 && lm.findFirstVisibleItemPosition()==0 )) {
+            return true;
+        }
+        if (emptyLayout != null && emptyLayout.getVisibility() == View.VISIBLE) {
+            return true;
+        }
+        return false;
+	}
 }

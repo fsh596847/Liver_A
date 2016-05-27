@@ -22,7 +22,7 @@ import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
-import com.android.doctor.ui.topic.DataCache;
+import com.android.doctor.app.DataCacheManager;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -164,7 +164,7 @@ public class SuggDetaActivity extends BaseActivity {
 
     private boolean checkIsCollected() {
         if (extra == null) return false;
-        ArticleList.SuggestsEntity e = DataCache.getInstance().findArticlesByID(extra.getUniquecode());
+        ArticleList.SuggestsEntity e = DataCacheManager.getInstance().findArticlesByID(extra.getUniquecode());
         return  e != null;
     }
 
@@ -183,7 +183,7 @@ public class SuggDetaActivity extends BaseActivity {
             @Override
             public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
                 UIHelper.showToast(stat ? "取消收藏成功" : "收藏成功");
-                DataCache.getInstance().onLoadCollectArticles();
+                DataCacheManager.getInstance().onLoadCollectArticles();
                 favorBtn.setImageResource(stat ? R.drawable.star_unpressed : R.drawable.star_pressed);
             }
 

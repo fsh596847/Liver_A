@@ -96,13 +96,13 @@ public class AppLauncher extends Activity {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                AppContext.context().AppExit(AppLauncher.this);
+                                AppContext.context().AppExit();
                             }})
                         .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 AppLauncher.this.startActivityForResult(new Intent(Settings.ACTION_APPLICATION_SETTINGS), requestCode);
-                                AppContext.context().AppExit(AppLauncher.this);
+                                AppContext.context().AppExit();
                                 //finish();*/
                                 //ActivityCompat.requestPermissions(App.this, permissions, requestCode);
                             }}).show();

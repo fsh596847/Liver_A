@@ -20,7 +20,8 @@ public class AppConfig {
     public final static String APP_CONFIG = "config";
     public final static String CONF_SHARED_PREFERENCES = "shared_pref";
     public final static String APP_CONFIG_USER = "config.user";
-    public final static String APP_CONTACT_PEER = "contacts.peer";
+    public final static String APP_CONTACT_DOCTOR = "contacts.doctor";
+    public final static String APP_CONTACT_PATIENT = "contacts.patient";
     public final static String APP_CONTACT_GROUP = "contacts.group";
     public final static String APP_MY_COLLECT_ARTICLE = "articles.collect";
     public final static String APP_MY_SUBSCRIBE_SUBJECT= "subject.subscribe";
@@ -38,6 +39,8 @@ public class AppConfig {
             + File.separator
             + "doctor"
             + File.separator + "download" + File.separator;
+
+    public static final int PAGE_SIZE = 20;
 
     private Context mContext;
     private static AppConfig appConfig;

@@ -60,16 +60,15 @@ public class ECKitSDKCoreRouteManager implements ECDevice.InitListener,
 	}
 
 	@SuppressWarnings("static-access")
-	public static void init(Context ctx, ECInitParams.LoginMode mode,
+	public static void init(Context context, ECInitParams.LoginMode mode,
 			OnInitSDKListener l) {
 
 		LogUtil.d(TAG, "[init] start regist..");
-		ctx = CCPAppManager.getContext();
 		getInstance().mMode = mode;
 		getInstance().onInitSDKListener = l;
 		// 判断SDK是否已经初始化，没有初始化则先初始化SDK
 		if (!ECDevice.isInitialized()) {
-			ECDevice.initial(ctx, getInstance());
+			ECDevice.initial(context, getInstance());
 			return;
 		}
 		LogUtil.d(TAG, " SDK has inited , then regist..");

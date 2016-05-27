@@ -1,47 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:padding="6dp">
-	    <LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical" 
-	        android:gravity="center_horizontal">
-	        <TextView
-	            android:id="@+id/tv_sendtime"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	           	style="@style/chat_text_date_style"/>
-	    </LinearLayout>
-	    <RelativeLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp" >
-	         	<ImageView 
-		           android:id="@+id/iv_userhead" 
-		           android:layout_width="wrap_content"
-		           android:layout_height="wrap_content"
-		           android:focusable="false" 
-		           android:layout_alignParentLeft="true" 
-                   android:layout_alignParentTop="true" 
-		           android:background="@drawable/mini_avatar_shadow"/>
- 				<TextView 
-	            android:id="@+id/tv_chatcontent" 
-	            android:layout_toRightOf="@id/iv_userhead"
-	            android:layout_marginLeft="10dp"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/chatfrom_bg" 
-	          	style="@style/chat_content_date_style"/>   
-	            <TextView 
-	            android:id="@+id/tv_username" 
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_below="@id/iv_userhead"
-	            android:layout_alignParentLeft="true"
-	            android:layout_toLeftOf="@id/tv_chatcontent"
-	            style="@style/chat_text_name_style"/>
-	    </RelativeLayout>
-</LinearLayout>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+
+	<ImageView
+		android:id="@+id/iv_userhead"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:focusable="false"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/doctor_photo"/>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/iv_userhead"
+		android:layout_marginLeft="10dp"
+		android:orientation="vertical"
+		android:gravity="left">
+
+		<TextView
+			android:id="@+id/tv_username"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="14sp"
+			android:text=""
+			android:gravity="center"
+			android:textColor="@color/app_theme_primary_textcolor"/>
+
+		<TextView
+			android:id="@+id/tv_sendtime"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:padding="2dp"
+			android:text=""
+			android:textColor="#818181"
+			android:textSize="12sp" />
+
+		<com.android.doctor.ui.widget.bubblelayout.BubbleLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:padding="5dp"
+			app:bl_arrowDirection="left"
+			app:bl_arrowHeight="8dp"
+			app:bl_arrowPosition="10dp"
+			app:bl_arrowWidth="8dp"
+			app:bl_bubbleColor="@android:color/white"
+			app:bl_cornersRadius="0dp">
+
+			<com.yuntongxun.kitsdk.ui.chatting.view.CCPTextView
+				android:id="@+id/tv_chatcontent"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:maxWidth="200dp"
+				android:textSize="14sp"
+				android:text=""
+				android:textColor="@android:color/black"
+				android:gravity="left|center"
+				android:lineSpacingExtra="2dp"
+				android:clickable="true"
+				android:focusable="true"/>
+
+		</com.android.doctor.ui.widget.bubblelayout.BubbleLayout>
+	</LinearLayout>
+</RelativeLayout>

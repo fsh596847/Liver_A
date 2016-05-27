@@ -22,7 +22,9 @@ import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.helper.AnimUtils;
 import com.android.doctor.helper.DeviceHelper;
+import com.android.doctor.interf.OnScrollChangedListener;
 import com.android.doctor.model.DoctorKSLabelList;
 import com.android.doctor.model.DoctorList;
 import com.android.doctor.model.DoctorZCLabelList;
@@ -77,13 +79,15 @@ public class DoctorListActivity extends BaseActivity {
     protected ImageView mIvClear;
     @InjectView(R.id.edt_search_box)
     protected EditText mEdtSearch;
+    @InjectView(R.id.lsearch_view)
+    protected LinearLayout mLsearchView;
     @InjectView(R.id.tv_cancel)
     protected TextView mTvCancel;
 
     private int mCurTabPosition = -1;
     private List<DoctorZCLabelList.ZCLabelEntity> mZCLabelList;
     private List<DoctorKSLabelList.KSLabelEntity> mKSLabelList;
-    private FragmentDoctorList mFrgDocList;
+    private FragmentDoctorList mFragmentDocList;
     private boolean bZCLoad = false;
     private boolean bKSLoad = false;
 
@@ -107,13 +111,7 @@ public class DoctorListActivity extends BaseActivity {
         mPtrFrame.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                RecyclerView rcView = (RecyclerView) mFlContainer.findViewById(R.id.recyc_view);
-                LinearLayoutManager lm = (LinearLayoutManager) rcView.getLayoutManager();
-                if (lm.findFirstVisibleItemPosition() == 0 && mSlideMenuViews.getVisibility() != View.VISIBLE) {
-                    return true;
-                }
-                return false;
-                //return PtrDefaultHandler.checkContentCanBePulledDown(frame, mFlMain, header);
+                return isCanDoRefresh();
             }
 
             @Override
@@ -128,16 +126,48 @@ public class DoctorListActivity extends BaseActivity {
         });
     }
 
+    private boolean isCanDoRefresh() {
+        if (mFragmentDocList.isScrollTop()
+                && mLsearchView.getVisibility() == View.VISIBLE
+                && mSlideMenuViews.getVisibility() != View.VISIBLE ) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 初始化医生列表视图
      */
     private void initListView() {
-        mFrgDocList = new FragmentDoctorList();
+        mFragmentDocList = new FragmentDoctorList();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction trans = fm.beginTransaction();
-        trans.replace(R.id.fl_container, mFrgDocList).commitAllowingStateLoss();
+        trans.replace(R.id.fl_container, mFragmentDocList).commitAllowingStateLoss();
+        mFragmentDocList.setScrollChangedListener(new OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(RecyclerView recyclerView) {
+                if (mFragmentDocList.isScrollTop() && mSlideMenuViews.getVisibility() != View.VISIBLE ) {
+                    showSearchView();
+                } else {
+                    hideSearchView();
+                }
+            }
+        });
     }
 
+    private void showSearchView() {
+        if (mLsearchView.getVisibility() != View.VISIBLE) {
+            mLsearchView.setVisibility(View.VISIBLE);
+            //AnimUtils.expand(mLsearchView);
+        }
+    }
+
+    private void hideSearchView() {
+        if (mLsearchView.getVisibility() != View.GONE) {
+            mLsearchView.setVisibility(View.GONE);
+            //AnimUtils.collapse(mLsearchView);
+        }
+    }
     /***
      * 请求数据
      */
@@ -307,9 +337,9 @@ public class DoctorListActivity extends BaseActivity {
                         }
                     } else {
                         if (tabType == 0) {
-                            setTabText(mZCLabelList.get(i-1).getName());
+                            setTabText(mZCLabelList.get(position-1).getName());
                         } else if (tabType == 1) {
-                            setTabText(mKSLabelList.get(i-1).getName());
+                            setTabText(mKSLabelList.get(position-1).getName());
                         }
                     }
                 }
@@ -317,12 +347,12 @@ public class DoctorListActivity extends BaseActivity {
                 int checkPos = adapter.getCheckItemPosition();
                 if (checkPos == 0) continue;
                 if (tabType == 0) {
-                    map.put("titleid", mZCLabelList.get(i-1).getCode());
+                    map.put("titleid", mZCLabelList.get(position-1).getCode());
                 } else if (tabType == 1) {
-                    map.put("deptid", "" + mKSLabelList.get(i-1).getCode());
+                    map.put("deptid", "" + mKSLabelList.get(position-1).getCode());
                 }
             }
-            mFrgDocList.onFilter(map);
+            mFragmentDocList.onFilter(map);
         }
         closeMenu();
     }
@@ -340,7 +370,7 @@ public class DoctorListActivity extends BaseActivity {
     @OnClick(R.id.iv_clear)
     public void onClear() {
         mEdtSearch.setText("");
-        mFrgDocList.clearOption("username");
+        mFragmentDocList.clearOption("username");
     }
 
     @OnClick(R.id.view_mask)
@@ -369,7 +399,7 @@ public class DoctorListActivity extends BaseActivity {
             if (!TextUtils.isEmpty(word)) {
                 DeviceHelper.hideSoftKeyboard(v);
                 DoctorList.ColGLEntity glEntity = new DoctorList.ColGLEntity("username", word);
-                mFrgDocList.onSearch(glEntity);
+                mFragmentDocList.onSearch(glEntity);
             }
             return true;
         }
@@ -402,6 +432,7 @@ public class DoctorListActivity extends BaseActivity {
                     mCurTabPosition = i;
                     ((TextView) mLlTabMenu.getChildAt(i))
                             .setTextColor(getResources().getColor(R.color.pop_tab_text_selected_color));
+                    hideSearchView();
                 }
             } else {
                 ((TextView) mLlTabMenu.getChildAt(i))

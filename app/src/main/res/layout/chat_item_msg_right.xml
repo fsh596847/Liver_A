@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
        <ImageView
        android:id="@+id/iv_userhead"
@@ -26,11 +25,8 @@
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/iv_userhead"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/tv_chatcontent"
             android:textSize="14sp"
-            android:text="dddd"
+            android:text=""
             android:gravity="center"
             android:textColor="@color/app_theme_primary_textcolor"/>
 
@@ -38,22 +34,37 @@
             android:id="@+id/tv_sendtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:padding="2dp"
-            android:text="ddd"
+            android:text=""
             android:textColor="#818181"
             android:textSize="12sp" />
 
-        <TextView
+        <com.android.doctor.ui.widget.bubblelayout.BubbleLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
+            app:bl_arrowDirection="right"
+            app:bl_arrowHeight="8dp"
+            app:bl_arrowPosition="10dp"
+            app:bl_arrowWidth="8dp"
+            app:bl_bubbleColor="@android:color/holo_blue_light"
+            app:bl_cornersRadius="0dp">
+
+        <com.yuntongxun.kitsdk.ui.chatting.view.CCPTextView
             android:id="@+id/tv_chatcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/chatto_bg_focused"
+            android:maxWidth="200dp"
             android:textSize="14sp"
-            android:text="ddddd"
-            android:textColor="#ff000000"
+            android:text=""
+            android:textColor="@android:color/white"
             android:gravity="left|center"
             android:lineSpacingExtra="2dp"
             android:clickable="true"
             android:focusable="true"/>
+
+        </com.android.doctor.ui.widget.bubblelayout.BubbleLayout>
     </LinearLayout>
 </RelativeLayout>

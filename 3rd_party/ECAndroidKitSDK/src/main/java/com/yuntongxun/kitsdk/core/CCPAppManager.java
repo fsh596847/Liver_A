@@ -290,6 +290,11 @@ public class CCPAppManager {
         callVoIPAction(ctx , ECVoIPCallManager.CallType.VOICE , nickname , contactId,voipFrom,isCallBack );
     }
 
+    public static void callVideoAction(Context ctx , String nickname, String contactId, String voipFrom,boolean isCallBack) {
+        // VoIP呼叫
+        callVoIPAction(ctx , ECVoIPCallManager.CallType.VIDEO , nickname , contactId,voipFrom,isCallBack );
+    }
+
     /**
      * 根据呼叫类型通话
      * @param ctx 上下文

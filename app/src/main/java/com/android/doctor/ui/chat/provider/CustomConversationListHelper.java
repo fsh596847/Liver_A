@@ -5,14 +5,11 @@ import android.support.v4.app.Fragment;
 
 import com.android.doctor.helper.ChatUtils;
 import com.android.doctor.ui.chat.NoticeMsgActivity;
-import com.google.gson.Gson;
-import com.yuntongxun.kitsdk.custom.MsgUserDataUtil;
+import com.yuntongxun.kitsdk.custom.UserDataUtil;
 import com.yuntongxun.kitsdk.custom.NoticeUserData;
 import com.yuntongxun.kitsdk.custom.provider.conversation.ECCustomConversationListActionProvider;
 import com.yuntongxun.kitsdk.custom.provider.conversation.ECCustomConversationListUIProvider;
 import com.yuntongxun.kitsdk.ui.chatting.model.ECConversation;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -50,7 +47,7 @@ public class CustomConversationListHelper implements
 			ECConversation e) {
 		String udata = e.getUserdata();
 		if (udata != null) {
-            Object obj = MsgUserDataUtil.getUserData(udata);
+            Object obj = UserDataUtil.getUserData(udata);
             if (obj != null) {
                 if (obj.getClass().equals(NoticeUserData.class)) {
                     NoticeUserData uEntity = (NoticeUserData) obj;

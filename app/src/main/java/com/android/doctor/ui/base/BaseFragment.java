@@ -2,12 +2,12 @@ package com.android.doctor.ui.base;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import com.android.doctor.R;
 import com.android.doctor.ui.widget.EmptyLayout;
@@ -31,6 +31,7 @@ public abstract class BaseFragment extends Fragment
     protected EmptyLayout emptyLayout;
 	private long lastClickTime;
     protected View mRootView;
+    protected boolean isCreateView = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,13 +42,23 @@ public abstract class BaseFragment extends Fragment
                 mRootView = inflater.inflate(resId, container, false);
                 ButterKnife.inject(this, mRootView);
                 init();
-                initView(mRootView);
-                initData();
+                isCreateView = true;
             }
+        } else {
+            isCreateView = false;
         }
+
         return mRootView;
     }
-	
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (isCreateView) {
+            initView(mRootView);
+            initData();
+        }
+    }
 
     protected void init() {}
 
@@ -67,6 +78,7 @@ public abstract class BaseFragment extends Fragment
     public void onPause() {
         super.onPause();
     }
+
 
     @Override
     public void onDestroy() {

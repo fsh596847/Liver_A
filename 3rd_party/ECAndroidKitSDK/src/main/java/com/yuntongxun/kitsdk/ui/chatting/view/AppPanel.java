@@ -400,5 +400,12 @@ public class AppPanel extends LinearLayout implements
 
 		void OnSelectFileClick();
 
+		void OnSelectVoiceClick();
+
+		void OnSelectVideoClick();
+
+		void OnSelectFireMsgClick();
+
+		void OnSelectFireLocationClick();
 	}
 }

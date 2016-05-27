@@ -62,7 +62,7 @@
             android:layout_height="56dp"
             app:border_color="@color/white"
             app:border_width="2dip"
-            android:src="@drawable/ic_doctor_photo" />
+            android:src="@drawable/doctor_photo" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -118,7 +118,7 @@
                 style="@style/h_line" />
 
             <RelativeLayout
-                android:id="@+id/rl_my_diag"
+                android:id="@+id/rl_ask_my"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"

@@ -1,6 +1,8 @@
 package com.android.doctor.ui.app;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,18 +15,25 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
-import com.android.doctor.app.AppContext;
-import com.android.doctor.helper.SDKCoreHelper;
+import com.android.doctor.app.AppLauncher;
+import com.android.doctor.app.AppManager;
+import com.android.doctor.helper.ECSDKCoreHelper;
+import com.android.doctor.model.Constants;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.ui.base.BaseActivity;
 import com.android.doctor.ui.chat.FragmentMainMsg;
 import com.android.doctor.ui.chat.provider.CustomUIAndActionManager;
 import com.android.doctor.ui.tabs.MainTab;
-import com.android.doctor.ui.topic.DataCache;
+import com.android.doctor.app.DataCacheManager;
 import com.android.doctor.ui.widget.MainFragmentTabHost;
 import com.android.doctor.R;
 import com.yuntongxun.ecsdk.ECDevice;
+import com.yuntongxun.kitsdk.ECDeviceKit;
 import com.yuntongxun.kitsdk.custom.CustomeConversationListFragment;
 import com.yuntongxun.kitsdk.db.IMessageSqlManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 
@@ -56,23 +65,41 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     protected void initData() {
-        if (SDKCoreHelper.getConnectState() != ECDevice.ECConnectState.CONNECT_SUCCESS
-                && !SDKCoreHelper.isKickOff()) {
-            SDKCoreHelper.init(AppContext.context());
+        DataCacheManager.getInstance().onLoadContact(Constants.USER_TYPE_DOCTOR);
+        DataCacheManager.getInstance().onLoadContact(Constants.USER_TYPE_PATIENT);
+        DataCacheManager.getInstance().onLoadGroupContact();
+        DataCacheManager.getInstance().onLoadCollectArticles();
+        DataCacheManager.getInstance().onLoadSuggClassList();
+        //if (ECSDKCoreHelper.getConnectState() != ECDevice.ECConnectState.CONNECT_SUCCESS) {
+            ECSDKCoreHelper.getInstance().init(this);
             CustomUIAndActionManager.initCustomUI();
-        }
-        DataCache.getInstance().onLoadContact(0);
-        DataCache.getInstance().onLoadContact(1);
-        DataCache.getInstance().onLoadCollectArticles();
-        DataCache.getInstance().onLoadSuggClassList();
+        //}
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
 
+    @Subscribe
+    public void onMessageEvent(MessageEvent event){
+        if (event.message == Constants.EVENT_MSG_UPDATE_CONTACT_GROUP) {
+            DataCacheManager.getInstance().onLoadGroupContact();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
 	protected boolean hasActionBar() {
 		return false;
 	}
+
 
 	private void initTabs() {
         MainTab[] tabs = MainTab.values();
@@ -121,7 +148,29 @@ public class MainActivity extends BaseActivity implements
 			return;
 		}
 	}
-	
+
+    /**
+     * 网络注册状态改变
+     *
+     * @param connect
+     */
+    public void onNetWorkNotify(ECDevice.ECConnectState connect) {
+        Fragment tabView = getCurrentFragment();
+        if (tabView instanceof FragmentMainMsg && tabView.isAdded()) {
+            ((FragmentMainMsg) tabView).updateConnectState(connect);
+        }
+    }
+
+    public void handlerKickOff(String kickoffText) {
+        if (isFinishing()) {
+            return;
+        }
+        Fragment tabView = getCurrentFragment();
+        if (tabView instanceof FragmentMainMsg && tabView.isAdded()) {
+            ((FragmentMainMsg) tabView).handlerKickOff(kickoffText);
+        }
+    }
+
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {

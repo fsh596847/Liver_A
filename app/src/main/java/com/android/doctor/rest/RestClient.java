@@ -56,8 +56,8 @@ public class RestClient {
         }
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         httpClient.addInterceptor(logging);
-        httpClient.connectTimeout(1, TimeUnit.MINUTES);
-        httpClient.readTimeout(1, TimeUnit.MINUTES);
+        httpClient.connectTimeout(30, TimeUnit.SECONDS);
+        httpClient.readTimeout(30, TimeUnit.SECONDS);
         OkHttpClient client = httpClient.build();
         Retrofit retrofit = builder.client(client).build();
         return retrofit.create(serviceClass);

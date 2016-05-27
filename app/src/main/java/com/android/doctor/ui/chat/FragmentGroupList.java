@@ -7,7 +7,9 @@ import android.view.View;
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.ChatUtils;
+import com.android.doctor.model.Constants;
 import com.android.doctor.model.GroupList;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
@@ -16,6 +18,9 @@ import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.GroupListAdapter;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +58,25 @@ public class FragmentGroupList extends BaseRecyViewFragment {
         FragmentGroupList f = new FragmentGroupList();
         f.setArguments(b);
         return f;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(MessageEvent event){
+        if (event.message == Constants.EVENT_MSG_UPDATE_CONTACT_GROUP) {
+            onRefresh();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
