@@ -208,9 +208,9 @@ public class AndroidTreeView {
 
     public void toggleNode(TreeNode node) {
         if (node.isExpanded()) {
-            collapseNode(node, false);
+            collapseNode(node, true);
         } else {
-            expandNode(node, false);
+            expandNode(node, true);
         }
 
     }
@@ -230,6 +230,30 @@ public class AndroidTreeView {
                 collapseNode(n, includeSubnodes);
             }
         }
+    }
+
+    public void expandNodeFirst(final TreeNode node, boolean includeSubnodes) {
+        node.setExpanded(true);
+        final TreeNode.BaseNodeViewHolder parentViewHolder = getViewHolderForNode(node);
+        parentViewHolder.getNodeItemsView().removeAllViews();
+
+        Log.d("[AndroidTreeView-> ", "expandNode] " + node.getPath());
+        parentViewHolder.toggle(true);
+
+        for (final TreeNode n : node.getChildren()) {
+            addNode(parentViewHolder.getNodeItemsView(), n);
+
+            if (n.isExpanded() || includeSubnodes) {
+                expandNode(n, includeSubnodes);
+            }
+
+        }
+        if (mUseDefaultAnimation) {
+            expand(parentViewHolder.getNodeItemsView());
+        } else {
+            parentViewHolder.getNodeItemsView().setVisibility(View.VISIBLE);
+        }
+
     }
 
     public void expandNode(final TreeNode node, boolean includeSubnodes) {

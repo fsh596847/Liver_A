@@ -34,14 +34,6 @@
             android:layout_width="1dp"
             android:layout_height="16dp" />
 
-        <com.github.johnkil.print.PrintView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:iconText="@string/ic_check_circle_blank"
-            app:iconColor="#12558C"
-            app:iconFont="fonts/material-icon-font.ttf"
-            app:iconSize="16dp" />
-
         <View
             android:id="@+id/bot_line"
             android:background="#12558C"

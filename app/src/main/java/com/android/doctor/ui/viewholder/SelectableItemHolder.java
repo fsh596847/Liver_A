@@ -7,8 +7,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.unnamed.b.atv.model.TreeNode;
-import com.unnamed.b.atv.sample.R;
+import com.android.doctor.R;
+import com.android.doctor.ui.widget.treeview.model.TreeNode;
+
 
 /**
  * Created by Bogdan Melnychuk on 2/15/15.

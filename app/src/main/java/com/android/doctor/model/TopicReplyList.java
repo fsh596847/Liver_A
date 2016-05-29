@@ -1,11 +1,15 @@
 package com.android.doctor.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Yong on 2016/5/8.
  */
-public class TopicReplyList {
+public class TopicReplyList implements Parcelable {
 
     private int total;
 
@@ -27,7 +31,7 @@ public class TopicReplyList {
         this.topicreplies = topicreplies;
     }
 
-    public static class TopicRepliesEntity {
+    public static class TopicRepliesEntity implements Parcelable {
         private String _id;
         private String topicbarid;
         private String topicid;
@@ -174,9 +178,68 @@ public class TopicReplyList {
             this.replies = replies;
         }
 
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this._id);
+            dest.writeString(this.topicbarid);
+            dest.writeString(this.topicid);
+            dest.writeInt(this.replyuid);
+            dest.writeString(this.usertype);
+            dest.writeString(this.replynickname);
+            dest.writeString(this.replytime);
+            dest.writeString(this.content);
+            dest.writeString(this.source);
+            dest.writeInt(this.subreplies);
+            dest.writeInt(this.replystyle);
+            dest.writeString(this.replyid);
+            dest.writeInt(this.msgid);
+            dest.writeInt(this.pid);
+            dest.writeTypedList(this.attachments);
+            dest.writeTypedList(this.replies);
+        }
+
+        public TopicRepliesEntity() {
+        }
+
+        protected TopicRepliesEntity(Parcel in) {
+            this._id = in.readString();
+            this.topicbarid = in.readString();
+            this.topicid = in.readString();
+            this.replyuid = in.readInt();
+            this.usertype = in.readString();
+            this.replynickname = in.readString();
+            this.replytime = in.readString();
+            this.content = in.readString();
+            this.source = in.readString();
+            this.subreplies = in.readInt();
+            this.replystyle = in.readInt();
+            this.replyid = in.readString();
+            this.msgid = in.readInt();
+            this.pid = in.readInt();
+            this.attachments = in.createTypedArrayList(AttachmentsEntity.CREATOR);
+            this.replies = in.createTypedArrayList(TopicRepliesEntity.CREATOR);
+        }
+
+        public static final Parcelable.Creator<TopicRepliesEntity> CREATOR = new Parcelable.Creator<TopicRepliesEntity>() {
+            @Override
+            public TopicRepliesEntity createFromParcel(Parcel source) {
+                return new TopicRepliesEntity(source);
+            }
+
+            @Override
+            public TopicRepliesEntity[] newArray(int size) {
+                return new TopicRepliesEntity[size];
+            }
+        };
     }
 
-    public static class AttachmentsEntity {
+    public static class AttachmentsEntity implements Parcelable {
         private String attachid;
         private String attachurl;
         private int width;
@@ -213,7 +276,46 @@ public class TopicReplyList {
         public void setHeight(int height) {
             this.height = height;
         }
+
+
+        public AttachmentsEntity() {
+        }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.attachid);
+            dest.writeString(this.attachurl);
+            dest.writeInt(this.width);
+            dest.writeInt(this.height);
+        }
+
+        protected AttachmentsEntity(Parcel in) {
+            this.attachid = in.readString();
+            this.attachurl = in.readString();
+            this.width = in.readInt();
+            this.height = in.readInt();
+        }
+
+        public static final Creator<AttachmentsEntity> CREATOR = new Creator<AttachmentsEntity>() {
+            @Override
+            public AttachmentsEntity createFromParcel(Parcel source) {
+                return new AttachmentsEntity(source);
+            }
+
+            @Override
+            public AttachmentsEntity[] newArray(int size) {
+                return new AttachmentsEntity[size];
+            }
+        };
     }
+
+
 
     /*public static class RepliesEntity extends TopicRepliesEntity{
         *//*private String _id;
@@ -281,4 +383,35 @@ public class TopicReplyList {
         }
 
     }*/
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.total);
+        dest.writeTypedList(this.topicreplies);
+    }
+
+    public TopicReplyList() {
+    }
+
+    protected TopicReplyList(Parcel in) {
+        this.total = in.readInt();
+        this.topicreplies = in.createTypedArrayList(TopicRepliesEntity.CREATOR);
+    }
+
+    public static final Parcelable.Creator<TopicReplyList> CREATOR = new Parcelable.Creator<TopicReplyList>() {
+        @Override
+        public TopicReplyList createFromParcel(Parcel source) {
+            return new TopicReplyList(source);
+        }
+
+        @Override
+        public TopicReplyList[] newArray(int size) {
+            return new TopicReplyList[size];
+        }
+    };
 }

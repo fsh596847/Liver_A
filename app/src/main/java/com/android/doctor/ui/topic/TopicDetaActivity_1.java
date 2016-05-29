@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -76,16 +77,14 @@ import retrofit2.Call;
 /**
  * Created by Yong on 2016/4/6.
  */
-public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHolder.OnReplyContentClickListener, CameraResult {
+public class TopicDetaActivity_1 extends BaseActivity implements TopicReplyViewHolder.OnReplyContentClickListener, CameraResult {
 
     @InjectView(R.id.container)
     protected ViewGroup containerView;
     //@InjectView(R.id.scrollview)
     //protected ScrollView mScrollView;
 
-    private AndroidTreeView tView;
     private String mTpId;
-    private TreeNode root = TreeNode.root();
 
     @InjectView(R.id.chat_footer)
     protected TIChattingFooter mChatFooter;
@@ -108,9 +107,12 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         setContentView(R.layout.activity_topic_detail);
     }
 
-    public static void startAty(Context ctx, String tpid) {
+    public static void startAty(Context ctx, String tpid, TopicReplyList list) {
         Intent intent = new Intent(ctx, TopicDetaActivity.class);
-        intent.putExtra("tpid", tpid);
+        Bundle b = new Bundle();
+        b.putString("tpid", tpid);
+        b.putParcelable("list", list);
+        intent.putExtras(b);
         ctx.startActivity(intent);
     }
 
@@ -130,6 +132,8 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     protected void init() {
         super.init();
         mTpId = getIntent().getStringExtra("tpid");
+        List<TopicReplyList.TopicRepliesEntity> mRepList = getIntent().getParcelableExtra("list");
+
     }
 
     @Override
@@ -198,7 +202,7 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
             }
         });
         onLoadTopicInfo();
-        onLoadTpcReplyList();
+        //onLoadTpcReplyList();
     }
 
     private void setReplyFragment(List<TopicReplyList.TopicRepliesEntity> list) {
@@ -208,43 +212,6 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         FragmentTransaction trans = fm.beginTransaction();
         trans.replace(R.id.container, fragment);
         trans.commitAllowingStateLoss();
-    }
-
-    private void initTreeView() {
-       /* TreeNode baseNode= new TreeNode(mBaseTopic).setViewHolder(new TopicDetaHeaderViewHolder(this));
-        fillFolder(baseNode);
-        root.addChildren(baseNode);*/
-
-        tView = new AndroidTreeView(this, root);
-        tView.setDefaultAnimation(true);
-        tView.setDefaultViewHolder(TopicReplyViewHolder.class);
-        tView.setDefaultContainerStyle(R.style.TreeNodeStyleDivided, true);
-        //
-        tView.setUse2dScroll(false);
-
-        final View view = tView.getView(R.style.TreeNodeStyleDivided);
-        containerView.post(new Runnable() {
-            @Override
-            public void run() {
-                containerView.addView(view);
-                tView.expandAll();
-                List<TreeNode> childs = root.getChildren();
-                if (childs != null) {
-                    for (TreeNode treeNode : childs) {
-                        treeNode.getViewHolder().getView().performClick();
-                    }
-                }
-
-                setMaskLayout(View.GONE, EmptyLayout.HIDE_LAYOUT, "");
-            }
-        });
-        //root.getViewHolder().getNodeItemsView().invalidate();
-        //containerView.invalidate();
-        //tView.expandAll();
-        //tView.setUseAutoToggle(false);
-        //tView.collapseAll();
-        //tView.toggleNode(root);
-        //expandView(root);
     }
 
     private void fillFolder(TreeNode folder) {
@@ -277,40 +244,10 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         updateView();
     }
 
-    private void setSubReplyViewData(TreeNode trNode, List<TopicReplyList.TopicRepliesEntity> subRepList) {
-        if (subRepList == null || subRepList.isEmpty()) return;
-        for (TopicReplyList.TopicRepliesEntity reply: subRepList) {
-            TreeNode subNode = new TreeNode(reply);
-            TopicReplyViewHolder viewHolder = new TopicReplyViewHolder(this);
-            viewHolder.setItemClickListener(this);
-            subNode.setViewHolder(viewHolder);
-            setSubReplyViewData(subNode, reply.getReplies());
-            trNode.addChild(subNode);
-        }
-    }
-
-    private void setReplyViewData(List<TopicReplyList.TopicRepliesEntity> repList) {
-
-        if (repList != null) {
-            for (int i = 0; i < repList.size(); ++i) {
-                TopicReplyList.TopicRepliesEntity rep = repList.get(i);
-                //TopicReplyList.TopicRepliesEntity reply= new TopicReplyList.RepliesEntity(rep);
-                TreeNode replyNode = new TreeNode(rep);
-                TopicReplyViewHolder viewHolder = new TopicReplyViewHolder(this);
-                viewHolder.setItemClickListener(this);
-                replyNode.setViewHolder(viewHolder);
-                root.addChildren(replyNode);
-                setSubReplyViewData(replyNode, rep.getReplies());
-            }
-        }
-
-        isReplyViewLoad = true;
-        updateView();
-    }
 
     private void updateView() {
         if (isBaseViewLoad && isReplyViewLoad) {
-            initTreeView();
+            //initTreeView();
         }
     }
 
@@ -332,31 +269,7 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         });
     }
 
-    private void onLoadTpcReplyList() {
-        ApiService service = RestClient.createService(ApiService.class);
-        Call<RespEntity<TopicReplyList>> call = service.getTopicReplyList(mTpId);
-        call.enqueue(new RespHandler<TopicReplyList>() {
-            @Override
-            public void onSucceed(final RespEntity<TopicReplyList> resp) {
-                if (resp.getResponse_params() != null) {
-                     //setMaskLayout(View.GONE, EmptyLayout.HIDE_LAYOUT, "");
-                     //setReplyFragment(resp.getResponse_params().getTopicreplies());
-                    // setReplyViewData(resp.getResponse_params().getTopicreplies());
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            setReplyViewData(resp.getResponse_params().getTopicreplies());
-                        }
-                    });
-                }
-            }
 
-            @Override
-            public void onFailed(RespEntity<TopicReplyList> resp) {
-
-            }
-        });
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
