@@ -28,7 +28,7 @@ import retrofit2.Call;
  */
 public class FragmentVisitPatientList extends BaseRecyViewFragment {
 
-    private Map<String, String> queryParam = new HashMap<>();
+    private Map<String, Object> queryParam = new HashMap<>();
 
     @Override
     protected int getLayoutId() {
@@ -73,7 +73,7 @@ public class FragmentVisitPatientList extends BaseRecyViewFragment {
         queryParam.put(k, v);
     }
 
-    public Map<String,String> getQueryParam() {
+    public Map<String,Object> getQueryParam() {
         return queryParam;
     }
 

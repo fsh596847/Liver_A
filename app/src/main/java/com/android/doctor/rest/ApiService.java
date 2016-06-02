@@ -104,7 +104,7 @@ public interface ApiService {
     Call<RespEntity<Object>> updatePassword(@Body HashMap<String, String> param);
 
     @POST("/api/v1/link/advancemypatients.json")
-    Call<RespEntity<PatientList>> getPatientList(@Body Map<String, String> options);
+    Call<RespEntity<PatientList>> getPatientList(@Body Map<String, Object> options);
 
     @GET("/api/v1/doctorstat/getdoctorpstats.json")
     Call<RespEntity<PatientStats>> getDoctorPStats(@Query("duid") String duid);
@@ -171,7 +171,7 @@ public interface ApiService {
     Call getHospitalPatient(@QueryMap Map<String, String> map);
 
     @GET("/api/v1/doctor/hospitalPatientByDuid.json")
-    Call<RespEntity<HosPaitentList>> getHosPatientByDuid(@QueryMap Map<String, String> map);
+    Call<RespEntity<HosPaitentList>> getHosPatientByDuid(@QueryMap Map<String, Object> map);
 
     @POST("/api/v1/link/doctorsendinvite.json")
     Call<RespEntity> dSendInvite(@Body DSendInviteParam param);

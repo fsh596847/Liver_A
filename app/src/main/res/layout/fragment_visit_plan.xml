@@ -41,15 +41,17 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@null"
-                android:padding="10dp"
-                android:src="@drawable/ic_list"/>
+                android:padding="5dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/btn_list"/>
             <ImageButton
                 android:id="@+id/img_add"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@null"
                 android:layout_marginLeft="8dp"
-                android:padding="10dp"
+                android:padding="5dp"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_btn_add_white"/>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>

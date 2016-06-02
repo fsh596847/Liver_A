@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.helper.JsonUtil;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.interf.OnRefreshDataListener;
 import com.android.doctor.interf.OnScrollChangedListener;
@@ -37,7 +38,7 @@ import retrofit2.Response;
 public class FragmentPatientList extends BaseRecyViewFragment {
 
     private int mType = 1;
-    private Map<String, String> queryParam = new HashMap<>();
+    private Map<String, Object> queryParam = new HashMap<>();
     private String pname;
 
     public static FragmentPatientList newInstance(int type, String pname) {
@@ -136,7 +137,7 @@ public class FragmentPatientList extends BaseRecyViewFragment {
      * 获取医生的患者
      * @param option
      */
-    private void onLoadDoctorPatientRequest(Map<String, String> option) {
+    private void onLoadDoctorPatientRequest(Map<String, Object> option) {
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity<PatientList>> call = service.getPatientList(option);
         call.enqueue(new Callback<RespEntity<PatientList>>() {
@@ -169,7 +170,7 @@ public class FragmentPatientList extends BaseRecyViewFragment {
      * 获取待邀请的患者信息
      * @param option
      */
-    private void onLoadHosPatientRequest(Map<String, String> option) {
+    private void onLoadHosPatientRequest(Map<String, Object> option) {
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity<HosPaitentList>> call = service.getHosPatientByDuid(option);
         call.enqueue(new RespHandler<HosPaitentList>() {
@@ -214,7 +215,7 @@ public class FragmentPatientList extends BaseRecyViewFragment {
         if (groups.isEmpty()) {
             queryParam.remove("groups");
         } else {
-            queryParam.put("groups", new Gson().toJson(groups));
+            queryParam.put("groups", groups);
         }
         onRefresh();
     }
