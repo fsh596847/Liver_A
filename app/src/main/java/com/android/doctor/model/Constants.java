@@ -43,6 +43,7 @@ public class Constants {
     public static final int CONTACT_TYPE_GROUP = 0x025;
 
     public static final int REQ_CODE_FOR_CREATE = 0x26;
+    public static final int REQ_CODE_FOR_UPDATE = 0x27;
     public static final int REQ_CODE_FOR_LOOKUP = 0x08;
 
     public static final int NOTIFY_TYPE_CONTACT_ASSISTANT = 200;
@@ -54,4 +55,6 @@ public class Constants {
     public static final int EVENT_MSG_UPDATE_CONTACT_GROUP = 0x100;
     public static final int EVENT_MSG_UPDATE_CONTACT_DOCTOR = 0x102;
     public static final int EVENT_MSG_UPDATE_CONTACT_PATIENT = 0x103;
+
+    public static final int EVENT_MSG_UPDATE_SUGG_LIST = 0x200;
 }

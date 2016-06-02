@@ -130,13 +130,13 @@ public class BaseActivity extends AppCompatActivity {
 		return false;
 	}
 
-    protected void dismissProcessDialog() {
+    public void dismissProcessDialog() {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
     }
 
-    protected void showProcessDialog() {
+    public void showProcessDialog() {
         if (mProgressDialog != null) {
             mProgressDialog.show();
         }

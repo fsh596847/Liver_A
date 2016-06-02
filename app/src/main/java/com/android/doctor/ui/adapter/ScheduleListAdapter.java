@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.helper.DateUtils;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.model.RemindResultList;
 import com.android.doctor.ui.adapter.sticky_adapter.StickyRecyclerHeadersAdapter;
 import com.android.doctor.ui.base.BaseRecyViewAdapter;
 import com.android.doctor.ui.viewholder.ScheduleViewHolder;
+
+import java.util.Date;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -48,11 +51,13 @@ public class ScheduleListAdapter extends BaseRecyViewAdapter implements StickyRe
 
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Log.d("TAG", "ScheduleListAdapter-> onBindHeaderViewHolder: " + position);
+
         TextView textView = (TextView) holder.itemView;
         RemindResultList.RemindResultEntity remind= (RemindResultList.RemindResultEntity) getItem(position);
         if (remind != null) {
-            textView.setText(remind.getTimestr());
+            Date date = DateUtils.toDate(remind.getTimestr(), DateUtils.dateFormater3.get());
+            String strDate = String.format("%tm", date) + "月" + String.format("%td", date)  + "日";
+            textView.setText(strDate);
         }
     }
 

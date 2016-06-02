@@ -14,19 +14,31 @@ import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.FileUtils;
 import com.android.doctor.helper.ImageHelper;
 import com.android.doctor.helper.UIHelper;
+import com.android.doctor.helper.camera.CameraCore;
 import com.android.doctor.helper.camera.CameraProxy;
 import com.android.doctor.helper.camera.CameraResult;
 import com.android.doctor.model.Constants;
+import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
+import com.android.doctor.model.UserInfoEntity;
+import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RespHandler;
+import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.app.ChangePhoneNumActivity;
 import com.android.doctor.ui.base.BaseActivity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
 
 public class UserInfoActivity extends BaseActivity implements CameraResult {
 
@@ -69,7 +81,14 @@ public class UserInfoActivity extends BaseActivity implements CameraResult {
     protected void initData() {
         super.initData();
         cameraProxy = new CameraProxy(this,this);
-        userEntity = AppContext.context().getUser();
+        onLoadUserInfo();
+    }
+
+    private void setViewData(UserInfoEntity e) {
+        if (e == null) return;
+        userEntity = e.getData();
+        if (userEntity == null) return;
+
         mTvMblNum.setText(userEntity.getMobilephone());
         mTvName.setText(userEntity.getUsername());
         if (userEntity.getGender() == 0) {
@@ -83,6 +102,28 @@ public class UserInfoActivity extends BaseActivity implements CameraResult {
         mTvEduExp.setText(userEntity.getBase().getTeachexperience());
         mTvCarExp.setText(userEntity.getBase().getExperience());
         mTvFavor.setText(userEntity.getBase().getGood());
+
+        setUserFace();
+    }
+
+    private void setUserFace() {
+        if (userEntity == null) return;
+        AppContext.getImageLoader().displayImage(RestClient.getFaceURL(userEntity.getDuid()), mImgAvatar);
+    }
+
+    private void onLoadUserInfo() {
+        ApiService service = RestClient.createService(ApiService.class);
+        User.UserEntity ue = AppContext.context().getUser();
+        Call<RespEntity<UserInfoEntity>> call = service.getUserInfo(ue.getDuid());
+        call.enqueue(new RespHandler<UserInfoEntity>() {
+            @Override
+            public void onSucceed(RespEntity<UserInfoEntity> resp) {
+                setViewData(resp.getResponse_params());
+            }
+
+            @Override
+            public void onFailed(RespEntity<UserInfoEntity> resp) {}
+        });
     }
 
     @OnClick(R.id.tv_arrow1)
@@ -97,6 +138,7 @@ public class UserInfoActivity extends BaseActivity implements CameraResult {
 
     @OnClick(R.id.tv_arrow3)
     protected void setEduExp() {
+        if (userEntity == null) return;
         EditActivity.startAty(this,
                 Constants.REQUEST_CODE_EDIT_EDU_EXP,
                 userEntity.getBase().getTeachexperience());
@@ -104,6 +146,7 @@ public class UserInfoActivity extends BaseActivity implements CameraResult {
 
     @OnClick(R.id.tv_arrow4)
     protected void setCarExp() {
+        if (userEntity == null) return;
         EditActivity.startAty(this,
                 Constants.REQUEST_CODE_EDIT_CARRER_EXP,
                 userEntity.getBase().getExperience());
@@ -111,6 +154,7 @@ public class UserInfoActivity extends BaseActivity implements CameraResult {
 
     @OnClick(R.id.tv_arrow5)
     protected void setFavor() {
+        if (userEntity == null) return;
         EditActivity.startAty(this,
                 Constants.REQUEST_CODE_EDIT_FAVOR,
                 userEntity.getBase().getGood());
@@ -142,16 +186,49 @@ public class UserInfoActivity extends BaseActivity implements CameraResult {
                                  final Intent imageReturnIntent) {
         if (resultCode != Activity.RESULT_OK)
             return;
-        cameraProxy.onResult(requestCode, resultCode, imageReturnIntent);
+        if (requestCode == CameraCore.REQUEST_TAKE_PHOTO_CODE
+                || requestCode == CameraCore.REQUEST_TAKE_PICTRUE_CODE) {
+            cameraProxy.onResult(requestCode, resultCode, imageReturnIntent);
+        } else if (requestCode == Constants.REQ_CODE_FOR_UPDATE) {
+            onLoadUserInfo();
+        }
     }
 
     @Override
-    public void onSuccess(String path) {
-        Bitmap bitmap = ImageHelper.getBitmapByPath(path);
+    public void onSuccess(final String path) {
+
+        MediaType txMediaType = MediaType.parse("text/plain");
+        User.UserEntity u = AppContext.context().getUser();
+        Map<String,RequestBody> map = new HashMap<>();
+        map.put("useruuid", RequestBody.create(txMediaType,u.getDuid()));
+        map.put("facetype", RequestBody.create(txMediaType,"0"));
+        MediaType imgMediaType = MediaType.parse("image/*");
+
+        String fileName = FileUtils.getFileName(path);
+        map.put("files\"; filename=\""+ fileName +"\"", RequestBody.create(imgMediaType, new File(path)));
+
+        uptUserFace(map, new RespHandler() {
+            @Override
+            public void onSucceed(RespEntity resp) {
+                onProResult(resp);
+                setUserFace();
+            }
+
+            @Override
+            public void onFailed(RespEntity resp) {
+                onProResult(resp);
+            }
+        });
     }
 
     @Override
-    public void onFail(String path) {
+    public void onFail(String path) {}
 
+
+    private void uptUserFace(Map<String,RequestBody> params ,RespHandler respHandler) {
+        showProcessDialog();
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity> call = service.uptUserFace(params);
+        call.enqueue(respHandler);
     }
 }

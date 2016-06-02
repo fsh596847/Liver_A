@@ -113,9 +113,6 @@ public class UserProfileActivity extends BaseActivity {
         });
     }
 
-
-
-
     /***
      * 切换Fragment
      * @param fragment

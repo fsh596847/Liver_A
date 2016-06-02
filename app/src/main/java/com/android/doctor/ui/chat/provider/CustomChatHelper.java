@@ -10,19 +10,16 @@ import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.User;
 import com.android.doctor.ui.chat.DoctorProfileActivity;
 import com.android.doctor.ui.chat.GroupProfileActivity;
+import com.android.doctor.ui.chat.custome.CommonUserData;
+import com.android.doctor.ui.chat.custome.UserDataUtil;
 import com.android.doctor.ui.patient.PatientProfileActivity;
-import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.ecsdk.ECMessage;
-import com.yuntongxun.ecsdk.ECVoIPCallManager;
 import com.yuntongxun.kitsdk.ECDeviceKit;
 import com.yuntongxun.kitsdk.VoipKitManager;
-import com.yuntongxun.kitsdk.custom.CommonUserData;
-import com.yuntongxun.kitsdk.custom.UserDataUtil;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatActionProvider;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatPlusExtendProvider;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatUIProvider;
 import com.yuntongxun.kitsdk.ui.ECChattingActivity;
-import com.yuntongxun.kitsdk.utils.ToastUtil;
 
 
 public class CustomChatHelper implements ECCustomChatUIProvider,

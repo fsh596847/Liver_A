@@ -1,9 +1,12 @@
 package com.android.doctor.app;
 
 import com.android.doctor.helper.AppAsyncTask;
+import com.android.doctor.helper.HandlerHelper;
 import com.android.doctor.model.ArticleList;
+import com.android.doctor.model.Constants;
 import com.android.doctor.model.ContactGroupList;
 import com.android.doctor.model.ContactList;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.SuggClassList;
 import com.android.doctor.model.User;
@@ -12,6 +15,8 @@ import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -210,6 +215,12 @@ public class DataCacheManager {
             public void run() {
                 if (list == null) return;
                 AppContext.context().setProperty(AppConfig.APP_MY_SUBSCRIBE_SUBJECT, new Gson().toJson(list));
+                HandlerHelper.postRunnOnUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        EventBus.getDefault().post(new MessageEvent(Constants.EVENT_MSG_UPDATE_SUGG_LIST));
+                    }
+                });
             }
         });
     }

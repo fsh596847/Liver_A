@@ -8,8 +8,12 @@
         android:id="@+id/tv_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/view_padding"
-        android:background="@color/line_color"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@color/shadow"
+        android:textSize="12sp"
+        android:visibility="gone"
         android:textColor="@color/app_theme_primary_textcolor"/>
 
     <View style="@style/h_line" />
@@ -26,7 +30,8 @@
             android:id="@+id/tv_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/app_theme_secondary_textcolor"
+            android:textColor="@color/app_theme_primary_textcolor"
+            android:textSize="12sp"
             style="@style/view_padding"/>
 
     </LinearLayout>

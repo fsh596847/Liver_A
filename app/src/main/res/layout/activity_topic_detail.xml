@@ -102,7 +102,7 @@
             android:id="@+id/h_line"
             style="@style/h_line" />
 
-        <com.android.doctor.ui.widget.TIChattingFooter
+        <com.android.doctor.ui.widget.CustChattingFooter
             android:id="@+id/chat_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

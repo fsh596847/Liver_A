@@ -9,7 +9,8 @@ import com.android.doctor.R;
 import com.android.doctor.helper.DateUtils;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.model.TopicList;
-import com.yuntongxun.kitsdk.utils.DateUtil;
+import com.android.doctor.rest.RestClient;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.Date;
 import java.util.List;
@@ -60,6 +61,8 @@ public class TopicViewHolder extends RecyclerView.ViewHolder implements View.OnC
         List<TopicList.TopicEntity.AttachmentsEntity> atts = topic.getAttachments();
         if (atts != null && !atts.isEmpty()) {
             mImg.setVisibility(View.VISIBLE);
+            TopicList.TopicEntity.AttachmentsEntity att = atts.get(0);
+            ImageLoader.getInstance().displayImage(RestClient.getImgURL(att.getAttachurl(), att.getWidth(), att.getHeight()), mImg);
         }
     }
 

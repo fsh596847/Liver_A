@@ -13,9 +13,12 @@ import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppConfig;
+import com.android.doctor.app.AppContext;
 import com.android.doctor.app.AppManager;
 import com.android.doctor.helper.DeviceHelper;
 import com.android.doctor.helper.DialogUtils;
+import com.android.doctor.helper.JsonUtil;
+import com.android.doctor.helper.PreferenceUtils;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.model.AdjustPlanParam;
@@ -76,6 +79,7 @@ public class PlanDetaActivity extends BaseActivity implements OnListItemClickLis
         intent.putExtra("pid", pid);
         intent.putExtra("stat", status);
         context.startActivity(intent);
+        Log.d(AppConfig.TAG, "[PlanDetaActivity-> startAty] pid,status " + pid +" " + status);
     }
 
     @Override
@@ -143,7 +147,7 @@ public class PlanDetaActivity extends BaseActivity implements OnListItemClickLis
 
     private void setPlanViewData(List data) {
         if (data == null) return;
-        if (mPlItem != null) {
+        if (mPlItem != null && mPlanStatus != Constants.PLAN_STATUS_INIT) {
             data.add(0, mPlItem);
         }
         mAdapter.setmData(data);
@@ -321,10 +325,13 @@ public class PlanDetaActivity extends BaseActivity implements OnListItemClickLis
         int i = 0;
         PubPlanParam planParam = new PubPlanParam();
         if (mPlItem != null) {
-            planParam.setPid(mPlItem.getPid());
+            planParam.setPid(""+mPlItem.getPid());
             planParam.setRef_tplid(mPlItem.getRef_tplid());
             i = 1;
         } else {
+            mPid = PreferenceUtils.readString(AppContext.context(), "AddPlanActivity", "pid");
+            PreferenceUtils.clean(AppContext.context(), "AddPlanActivity");
+            planParam.setPid(mPid);
             planParam.setRef_tplid(mPid);
         }//模板基础上创建: 取tplid;    计划基础上:去ref_tplid
 
@@ -439,7 +446,8 @@ public class PlanDetaActivity extends BaseActivity implements OnListItemClickLis
     private void onStopPlan() {
         showProcessDialog();
         ApiService service = RestClient.createService(ApiService.class);
-        Call<RespEntity<Object>> call = service.terminatePlan(mPid);
+        String param = "{pid:" + mPid +"}";
+        Call<RespEntity<Object>> call = service.terminatePlan(JsonUtil.toJson(param));
         call.enqueue(new RespHandler<Object>() {
             @Override
             public void onSucceed(RespEntity<Object> resp) {
@@ -475,7 +483,7 @@ public class PlanDetaActivity extends BaseActivity implements OnListItemClickLis
     private void showInputNewNameDialog() {
         final View v = View.inflate(this, R.layout.edit_input, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("填写支持数量");
+        builder.setTitle("另存为");
         builder.setView(v);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -513,7 +521,8 @@ public class PlanDetaActivity extends BaseActivity implements OnListItemClickLis
     private void onDelPlDraft() {
         showProcessDialog();
         ApiService service = RestClient.createService(ApiService.class);
-        Call<RespEntity<Object>> call = service.delPlDraft(mPid);
+        String param = "{pid:" + mPid +"}";
+        Call<RespEntity<Object>> call = service.delPlDraft(JsonUtil.toJson(param));
         call.enqueue(new RespHandler<Object>() {
             @Override
             public void onSucceed(RespEntity<Object> resp) {

@@ -21,6 +21,7 @@
         android:layout_height="66dp"
         android:layout_marginRight="8dp"
         android:src="@drawable/ic_picture_occupy"
+        android:scaleType="fitXY"
         android:visibility="gone"/>
 
     <LinearLayout

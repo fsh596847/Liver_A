@@ -4,14 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Process;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -19,22 +15,21 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ScrollView;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppConfig;
 import com.android.doctor.app.AppContext;
-import com.android.doctor.helper.AppAsyncTask;
 import com.android.doctor.helper.DeviceHelper;
 import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.FileUtils;
+import com.android.doctor.helper.HandlerHelper;
 import com.android.doctor.helper.ImageHelper;
 import com.android.doctor.helper.PermissionUtil;
+import com.android.doctor.helper.UIHelper;
 import com.android.doctor.helper.camera.CameraProxy;
 import com.android.doctor.helper.camera.CameraResult;
 import com.android.doctor.model.RespEntity;
@@ -51,7 +46,7 @@ import com.android.doctor.ui.viewholder.SelectableItemHolder;
 import com.android.doctor.ui.viewholder.TopicDetaHeaderViewHolder;
 import com.android.doctor.ui.viewholder.TopicReplyViewHolder;
 import com.android.doctor.ui.widget.EmptyLayout;
-import com.android.doctor.ui.widget.TIChattingFooter;
+import com.android.doctor.ui.widget.CustChattingFooter;
 import com.android.doctor.ui.widget.treeview.model.TreeNode;
 import com.android.doctor.ui.widget.treeview.view.AndroidTreeView;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -63,7 +58,7 @@ import com.yuntongxun.kitsdk.utils.EmoticonUtil;
 import com.yuntongxun.kitsdk.utils.FileAccessor;
 import com.yuntongxun.kitsdk.utils.LogUtil;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +66,8 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -85,10 +82,10 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
 
     private AndroidTreeView tView;
     private String mTpId;
-    private TreeNode root = TreeNode.root();
+    private TreeNode root;
 
     @InjectView(R.id.chat_footer)
-    protected TIChattingFooter mChatFooter;
+    protected CustChattingFooter mChatFooter;
     private OnInputFooterListener mChattingFooterImpl = new OnInputFooterListener();
     private boolean isBaseViewLoad = false;
     private boolean isReplyViewLoad = false;
@@ -100,9 +97,7 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     private CameraProxy cameraProxy;
     private ImageGridAdapter mAdapter;
 
-    private Handler mHandler;
-    private Looper mLooper;
-
+    private HandlerHelper mHandlerHelp = new HandlerHelper();
     @Override
     protected void setContentLayout() {
         setContentView(R.layout.activity_topic_detail);
@@ -178,25 +173,25 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
                 }
             }
         });
-
         mChatFooter.setAttachPanel(mChatFooterAttach);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        HandlerThread thread = new HandlerThread("REPLY_ACTIVITY",
-                Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-        mLooper = thread.getLooper();
-        mHandler = new Handler(mLooper);
-        mHandler.post(new Runnable() {
+        mHandlerHelp.postRunnOnThead(new Runnable() {
             @Override
             public void run() {
                 doEmojiPanel();
                 Log.d(AppConfig.TAG, "HandlerThread-> run");
             }
         });
+        onLoadData();
+    }
+
+    private void onLoadData() {
+        containerView.removeAllViews();
+        root = TreeNode.root();
         onLoadTopicInfo();
         onLoadTpcReplyList();
     }
@@ -221,30 +216,23 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleDivided, true);
         //
         tView.setUse2dScroll(false);
-
         final View view = tView.getView(R.style.TreeNodeStyleDivided);
-        containerView.post(new Runnable() {
+        tView.expandAll();
+        HandlerHelper.postRunnOnUI(new Runnable() {
             @Override
             public void run() {
                 containerView.addView(view);
-                tView.expandAll();
                 List<TreeNode> childs = root.getChildren();
                 if (childs != null) {
                     for (TreeNode treeNode : childs) {
-                        treeNode.getViewHolder().getView().performClick();
+                       // tView.toggleNode(treeNode);
+                        //treeNode.getViewHolder().getView().performClick();
                     }
                 }
 
                 setMaskLayout(View.GONE, EmptyLayout.HIDE_LAYOUT, "");
             }
         });
-        //root.getViewHolder().getNodeItemsView().invalidate();
-        //containerView.invalidate();
-        //tView.expandAll();
-        //tView.setUseAutoToggle(false);
-        //tView.collapseAll();
-        //tView.toggleNode(root);
-        //expandView(root);
     }
 
     private void fillFolder(TreeNode folder) {
@@ -342,7 +330,7 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
                      //setMaskLayout(View.GONE, EmptyLayout.HIDE_LAYOUT, "");
                      //setReplyFragment(resp.getResponse_params().getTopicreplies());
                     // setReplyViewData(resp.getResponse_params().getTopicreplies());
-                    mHandler.post(new Runnable() {
+                    mHandlerHelp.postRunnOnThead(new Runnable() {
                         @Override
                         public void run() {
                             setReplyViewData(resp.getResponse_params().getTopicreplies());
@@ -380,52 +368,83 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
         }
     }
 
-    private Map<String, String> getReplyParam(TopicReplyList.TopicRepliesEntity obj, String content, int replyStyle) {
+    private Map<String, RequestBody> getReplyParam(TopicReplyList.TopicRepliesEntity obj, String content, int replyStyle) {
         if (obj == null) return null;
         User.UserEntity user = AppContext.context().getUser();
-        Map<String, String> map = new HashMap<>();
-        map.put("topicbarid", obj.getTopicbarid());
-        map.put("topicid", obj.getTopicid());
-        map.put("replyid", obj.getReplyid());
-        map.put("usertype", "0");
-        map.put("replystyle", "" + replyStyle);
-        map.put("uid", user.getDuid());
-        map.put("replynickname", obj.getReplynickname());
-        map.put("content", content);
-        map.put("attachstyle", "0");
+        Map<String, RequestBody> map = new HashMap<>();
+        MediaType txMediaType = MediaType.parse("text");
+        map.put("topicbarid", RequestBody.create(txMediaType,obj.getTopicbarid()));
+        map.put("topicid", RequestBody.create(txMediaType,obj.getTopicid()));
+        map.put("replyid", RequestBody.create(txMediaType,obj.getReplyid()));
+        map.put("usertype", RequestBody.create(txMediaType,"0"));
+        map.put("replystyle", RequestBody.create(txMediaType,"" + replyStyle));
+        map.put("uid", RequestBody.create(txMediaType,user.getDuid()));
+        map.put("replynickname", RequestBody.create(txMediaType,obj.getReplynickname()));
+        map.put("content", RequestBody.create(txMediaType,content));
+        map.put("attachstyle", RequestBody.create(txMediaType,"0"));
+
+        List<String> paths = mAdapter.getData();
+        if (paths != null) {
+            MediaType imgMediaType = MediaType.parse("image");
+            for (int i = 0; i < paths.size(); ++i) {
+                map.put("image_" + i, RequestBody.create(imgMediaType, new File(paths.get(i))));
+            }
+        }
         return map;
     }
 
-    private Map<String, String> getReplyParam(TopicList.TopicEntity obj, String content, int replyStyle) {
+    private Map<String, RequestBody> getReplyParam(TopicList.TopicEntity obj, String content, int replyStyle) {
         if (obj == null) return null;
         User.UserEntity user = AppContext.context().getUser();
-        Map<String, String> map = new HashMap<>();
-        map.put("topicbarid", obj.getTopicbarid());
-        map.put("topicid", obj.getTopicid());
-        map.put("usertype", "0");
-        map.put("replystyle", "" + replyStyle);
-        map.put("uid", user.getDuid());
-        map.put("replynickname", user.getNickname());
-        map.put("content", content);
-        map.put("attachstyle", "0");
+        Map<String, RequestBody> map = new HashMap<>();
+        MediaType txMediaType = MediaType.parse("text");
+        map.put("topicbarid", RequestBody.create(txMediaType,obj.getTopicbarid()));
+        map.put("topicid", RequestBody.create(txMediaType,obj.getTopicid()));
+        map.put("usertype", RequestBody.create(txMediaType,"0"));
+        map.put("replystyle", RequestBody.create(txMediaType, "" + replyStyle));
+        map.put("uid", RequestBody.create(txMediaType,user.getDuid()));
+        map.put("replynickname", RequestBody.create(txMediaType,user.getNickname()));
+        map.put("content", RequestBody.create(txMediaType,content));
+        map.put("attachstyle", RequestBody.create(txMediaType,"0"));
+
+        List<String> paths = mAdapter.getData();
+        if (paths != null) {
+            MediaType imgMediaType = MediaType.parse("image");
+            for (int i = 0; i < paths.size(); ++i) {
+                map.put("image_" + i, RequestBody.create(imgMediaType, new File(paths.get(i))));
+            }
+        }
         return map;
     }
 
-    private void onPubReply( Map<String, String> param) {
+    private void onPubReply( Map<String, RequestBody> param) {
+        mChatFooter.setVisibility(View.GONE);
         if (param == null) return;
+        showProcessDialog();
         ApiService service = RestClient.createService(ApiService.class);
-        Call<RespEntity> call = service.replyTopic(param);
-        call.enqueue(new RespHandler() {
+        Call<RespEntity<Object>> call = service.replyTopic(param);
+        call.enqueue(new RespHandler<Object>() {
             @Override
-            public void onSucceed(RespEntity resp) {
-                //onResult(resp);
+            public void onSucceed(RespEntity<Object> resp) {
+                onPubReplyResult(resp);
             }
 
             @Override
-            public void onFailed(RespEntity resp) {
-                //dismissProcessDialog();
+            public void onFailed(RespEntity<Object> resp) {
+                onPubReplyResult(resp);
             }
         });
+    }
+
+    private void onPubReplyResult(RespEntity<Object> resp) {
+        dismissProcessDialog();
+        if (resp != null) {
+            String text = resp.getError_msg();
+            UIHelper.showToast(text);
+            if (resp.getError_code() == 0) {
+                onLoadData();
+            }
+        }
     }
 
     protected void addPic() {
@@ -474,8 +493,6 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
     @Override
     public void onSuccess(String path) {
         Log.e(AppConfig.TAG, "PubTopicActivity-> select image onSuccess: " + path);
-        Bitmap bitmap = ImageHelper.getBitmapByPath(path);
-        //insertPic(bitmap, path);
         mAdapter.addItem(path);
     }
 
@@ -558,19 +575,10 @@ public class TopicDetaActivity extends BaseActivity implements TopicReplyViewHol
             mChattingFooterImpl = null;
         }
 
-        if(mLooper != null) {
-            mLooper.quit();
-            mLooper = null;
-        }
-
-        if(mHandler != null) {
-            mHandler.removeCallbacksAndMessages(null);
-            mHandler = null;
-        }
     }
 
 
-    private class OnInputFooterListener implements TIChattingFooter.OnChattingFooterLinstener {
+    private class OnInputFooterListener implements CustChattingFooter.OnChattingFooterLinstener {
 
         @Override
         public void OnInEditMode() {

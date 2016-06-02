@@ -9,6 +9,7 @@ import com.android.doctor.helper.FileUtils;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.Constants;
 import com.android.doctor.model.User;
+import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseFragment;
 import com.android.doctor.R;
 import com.android.doctor.ui.plan.TPlanListActivity;
@@ -27,9 +28,6 @@ public class FragmentMyInfo extends BaseFragment {
     protected CircleImageView mAvatar;
     @InjectView(R.id.tv_name)
     protected TextView mTvName;
-    protected RelativeLayout mRlAccountSecurity;
-
-    protected RelativeLayout mRlClearCache;
 
     protected TextView mTvCacheSize;
 
@@ -48,9 +46,10 @@ public class FragmentMyInfo extends BaseFragment {
     protected void initView(View view) {
         //((TextView)view.findViewById(R.id.toolbar_title)).setText(R.string.my);
         if (AppContext.context().isLogin()) {
-           User.UserEntity userEntity = AppContext.context().getUser();
-            if (userEntity != null) {
-                mTvName.setText(userEntity.getNickname());
+           User.UserEntity u = AppContext.context().getUser();
+            if (u != null) {
+                mTvName.setText(u.getNickname());
+                AppContext.getImageLoader().displayImage(RestClient.getFaceURL(u.getDuid()), mAvatar);
             }
         }
     }
@@ -68,6 +67,7 @@ public class FragmentMyInfo extends BaseFragment {
             cacheSize = FileUtils.formatFileSize(fileSize);
         mTvCacheSize.setText(cacheSize);
     }
+
 
     @OnClick(R.id.iv_avatar)
     protected void onLookPerInfo() {

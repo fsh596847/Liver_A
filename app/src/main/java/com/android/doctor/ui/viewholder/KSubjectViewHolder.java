@@ -1,16 +1,19 @@
 package com.android.doctor.ui.viewholder;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.app.AppContext;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.model.Constants;
 import com.android.doctor.model.SuggClassList;
 import com.android.doctor.app.DataCacheManager;
+import com.android.doctor.rest.RestClient;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -41,6 +44,9 @@ public class KSubjectViewHolder extends RecyclerView.ViewHolder implements View.
     public void setViewData(SuggClassList.SuggEntity o) {
         if (o == null) return;
         textView.setText(o.getName());
+        if (!TextUtils.isEmpty(o.getImgurl())) {
+            AppContext.getImageLoader().displayImage(RestClient.getImgURL(o.getImgurl(), 0, 0), imageView);
+        }
         if (imgBtn != null) {
             SuggClassList.SuggEntity sg = DataCacheManager.getInstance().findSubjectByCode(o.getCode());
             if (sg != null) {

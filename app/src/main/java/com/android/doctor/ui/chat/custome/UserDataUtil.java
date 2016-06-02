@@ -1,4 +1,4 @@
-package com.yuntongxun.kitsdk.custom;
+package com.android.doctor.ui.chat.custome;
 
 import android.text.TextUtils;
 

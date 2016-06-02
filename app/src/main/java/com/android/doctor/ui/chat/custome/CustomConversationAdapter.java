@@ -1,6 +1,5 @@
-package com.yuntongxun.kitsdk.custom;
+package com.android.doctor.ui.chat.custome;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -12,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.doctor.app.AppContext;
+import com.android.doctor.rest.RestClient;
 import com.google.gson.Gson;
 import com.yuntongxun.eckitsdk.R;
 import com.yuntongxun.ecsdk.ECMessage;
@@ -20,7 +21,6 @@ import com.yuntongxun.kitsdk.core.ECAsyncTask;
 import com.yuntongxun.kitsdk.db.GroupNoticeSqlManager;
 import com.yuntongxun.kitsdk.group.GroupNoticeHelper;
 import com.yuntongxun.kitsdk.ui.chatting.model.ECConversation;
-import com.yuntongxun.kitsdk.ui.chatting.model.ImgInfo;
 import com.yuntongxun.kitsdk.ui.chatting.view.CCPTextView;
 import com.yuntongxun.kitsdk.utils.DateUtil;
 import com.yuntongxun.kitsdk.utils.DemoUtils;
@@ -110,9 +110,9 @@ public class CustomConversationAdapter extends BaseAdapter {
      * @param conversation
      * @return
      */
-    protected final CharSequence getConversationTime(com.yuntongxun.kitsdk.ui.chatting.model.ECConversation conversation) {
+    protected final CharSequence getConversationTime(ECConversation conversation) {
         if (conversation.getSendStatus() == ECMessage.MessageStatus.SENDING.ordinal()) {
-            return mContext.getString(com.yuntongxun.eckitsdk.R.string.conv_msg_sending);
+            return mContext.getString(R.string.conv_msg_sending);
         }
         if (conversation.getDateTime() <= 0) {
             return "";
@@ -127,7 +127,7 @@ public class CustomConversationAdapter extends BaseAdapter {
      * @param conversation
      * @return
      */
-    protected final CharSequence getConversationSnippet(com.yuntongxun.kitsdk.ui.chatting.model.ECConversation conversation) {
+    protected final CharSequence getConversationSnippet(ECConversation conversation) {
         if (conversation == null) {
             return "";
         }
@@ -135,13 +135,13 @@ public class CustomConversationAdapter extends BaseAdapter {
             return GroupNoticeHelper.getNoticeContent(conversation.getContent());
         }
         if (conversation.getMsgType() == ECMessage.Type.VOICE.ordinal()) {
-            return mContext.getString(com.yuntongxun.eckitsdk.R.string.app_voice);
+            return mContext.getString(R.string.app_voice);
         } else if (conversation.getMsgType() == ECMessage.Type.FILE.ordinal()) {
-            return mContext.getString(com.yuntongxun.eckitsdk.R.string.app_file);
+            return mContext.getString(R.string.app_file);
         } else if (conversation.getMsgType() == ECMessage.Type.IMAGE.ordinal()) {
-            return mContext.getString(com.yuntongxun.eckitsdk.R.string.app_pic);
+            return mContext.getString(R.string.app_pic);
         } else if (conversation.getMsgType() == ECMessage.Type.VIDEO.ordinal()) {
-            return mContext.getString(com.yuntongxun.eckitsdk.R.string.app_video);
+            return mContext.getString(R.string.app_video);
         }
         return conversation.getContent();
     }
@@ -153,11 +153,11 @@ public class CustomConversationAdapter extends BaseAdapter {
      * @param conversation
      * @return
      */
-    public static Drawable getChattingSnippentCompoundDrawables(Context context, com.yuntongxun.kitsdk.ui.chatting.model.ECConversation conversation) {
+    public static Drawable getChattingSnippentCompoundDrawables(Context context, ECConversation conversation) {
         if (conversation.getSendStatus() == ECMessage.MessageStatus.FAILED.ordinal()) {
-            return DemoUtils.getDrawables(context, com.yuntongxun.eckitsdk.R.drawable.msg_state_failed);
+            return DemoUtils.getDrawables(context, R.drawable.msg_state_failed);
         } else if (conversation.getSendStatus() == ECMessage.MessageStatus.SENDING.ordinal()) {
-            return DemoUtils.getDrawables(context, com.yuntongxun.eckitsdk.R.drawable.msg_state_sending);
+            return DemoUtils.getDrawables(context, R.drawable.msg_state_sending);
         } else {
             return null;
         }
@@ -170,27 +170,27 @@ public class CustomConversationAdapter extends BaseAdapter {
         View view;
         ViewHolder mViewHolder;
         if (convertView == null || convertView.getTag() == null) {
-            view = View.inflate(mContext, com.yuntongxun.eckitsdk.R.layout.ytx_conversation_item, null);
+            view = View.inflate(mContext, R.layout.ytx_conversation_item, null);
 
             mViewHolder = new ViewHolder();
-            mViewHolder.user_avatar = (ImageView) view.findViewById(com.yuntongxun.eckitsdk.R.id.avatar_iv);
-            mViewHolder.prospect_iv = (ImageView) view.findViewById(com.yuntongxun.eckitsdk.R.id.avatar_prospect_iv);
-            mViewHolder.nickname_tv = (TextView) view.findViewById(com.yuntongxun.eckitsdk.R.id.nickname_tv);
-            mViewHolder.tipcnt_tv = (TextView) view.findViewById(com.yuntongxun.eckitsdk.R.id.tipcnt_tv);
-            mViewHolder.update_time_tv = (TextView) view.findViewById(com.yuntongxun.eckitsdk.R.id.update_time_tv);
-            mViewHolder.last_msg_tv = (CCPTextView) view.findViewById(com.yuntongxun.eckitsdk.R.id.last_msg_tv);
-            mViewHolder.image_input_text = (ImageView) view.findViewById(com.yuntongxun.eckitsdk.R.id.image_input_text);
+            mViewHolder.user_avatar = (ImageView) view.findViewById(R.id.avatar_iv);
+            mViewHolder.prospect_iv = (ImageView) view.findViewById(R.id.avatar_prospect_iv);
+            mViewHolder.nickname_tv = (TextView) view.findViewById(R.id.nickname_tv);
+            mViewHolder.tipcnt_tv = (TextView) view.findViewById(R.id.tipcnt_tv);
+            mViewHolder.update_time_tv = (TextView) view.findViewById(R.id.update_time_tv);
+            mViewHolder.last_msg_tv = (CCPTextView) view.findViewById(R.id.last_msg_tv);
+            mViewHolder.image_input_text = (ImageView) view.findViewById(R.id.image_input_text);
             view.setTag(mViewHolder);
         } else {
             view = convertView;
             mViewHolder = (ViewHolder) view.getTag();
         }
 
-        com.yuntongxun.kitsdk.ui.chatting.model.ECConversation conversation = getItem(position);
+        ECConversation conversation = getItem(position);
         if (conversation != null) {
 
             Gson g = new Gson();
-            String userName = null;
+            String userName = null, uuid = null;
             String userdata = conversation.getUserdata();
             if (userdata != null) {
                 if (mConvType == CONV_TYPE_NOTICE) {
@@ -199,6 +199,7 @@ public class CustomConversationAdapter extends BaseAdapter {
                 } else {
                     CommonUserData uEntity = g.fromJson(userdata, CommonUserData.class);
                     userName = uEntity.getFrom().getName();
+                    uuid = uEntity.getFrom().getUuid();
                 }
             }
             if (!TextUtils.isEmpty(userName)) {
@@ -220,6 +221,10 @@ public class CustomConversationAdapter extends BaseAdapter {
                 if (conversation.getSessionId().equals(GroupNoticeSqlManager.CONTACT_ID)) {
                 } else {
                 }
+            }
+
+            if (!TextUtils.isEmpty(uuid)) {
+                AppContext.getImageLoader().displayImage(RestClient.getFaceURL(uuid), mViewHolder.user_avatar);
             }
         }
 

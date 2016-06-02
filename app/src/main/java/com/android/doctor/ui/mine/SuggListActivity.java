@@ -122,7 +122,7 @@ public class SuggListActivity extends BaseActivity {
             public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
                 //UIHelper.showToast(status == 0 ? "收藏成功" : "取消收藏成功");
                 setToobarRightText(isSubs ? R.string.unsubscribe : R.string.subscribe);
-                DataCacheManager.getInstance().onLoadCollectArticles();
+                DataCacheManager.getInstance().onLoadSuggClassList();
             }
 
             @Override
@@ -148,12 +148,11 @@ public class SuggListActivity extends BaseActivity {
             codeList.add(suggEntity.getCode());
         } else {
             if (collects == null) return null;
-            for (int i = 0; i < collects.size(); ++i) {
-                SuggClassList.SuggEntity sg = collects.get(i);
-                if (sg.getCode().equals(suggEntity.getCode())) {
-                    continue;
+            for (int i = 0; i < codeList.size(); ++i) {
+                if (suggEntity.getCode().equals(codeList.get(i))) {
+                    codeList.remove(i);
+                    break;
                 }
-                codeList.add(sg.getCode());
             }
         }
         User.UserEntity u = AppContext.context().getUser();

@@ -9,7 +9,7 @@
  *  An additional intellectual property rights grant can be found
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
- */package com.yuntongxun.kitsdk.custom;
+ */package com.android.doctor.ui.chat.custome;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -134,9 +134,9 @@ public class CustomeConversationListFragment extends BaseFragment implements
 				if (obj != null) {
 					boolean result= obj.onCustonConversationLongClick(getActivity(),
 							conversation);
-					
+
 					if(result){
-					
+
 					return false;
 					}
 				}

@@ -1,7 +1,6 @@
 package com.android.doctor.ui.app;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,21 +14,18 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
-import com.android.doctor.app.AppLauncher;
-import com.android.doctor.app.AppManager;
 import com.android.doctor.helper.ECSDKCoreHelper;
 import com.android.doctor.model.Constants;
 import com.android.doctor.model.MessageEvent;
 import com.android.doctor.ui.base.BaseActivity;
 import com.android.doctor.ui.chat.FragmentMainMsg;
+import com.android.doctor.ui.chat.custome.CustomeConversationListFragment;
 import com.android.doctor.ui.chat.provider.CustomUIAndActionManager;
 import com.android.doctor.ui.tabs.MainTab;
 import com.android.doctor.app.DataCacheManager;
 import com.android.doctor.ui.widget.MainFragmentTabHost;
 import com.android.doctor.R;
 import com.yuntongxun.ecsdk.ECDevice;
-import com.yuntongxun.kitsdk.ECDeviceKit;
-import com.yuntongxun.kitsdk.custom.CustomeConversationListFragment;
 import com.yuntongxun.kitsdk.db.IMessageSqlManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -167,7 +163,7 @@ public class MainActivity extends BaseActivity implements
         }
         Fragment tabView = getCurrentFragment();
         if (tabView instanceof FragmentMainMsg && tabView.isAdded()) {
-            ((FragmentMainMsg) tabView).handlerKickOff(kickoffText);
+            AlertDialogActivity.startAty(this, kickoffText);
         }
     }
 

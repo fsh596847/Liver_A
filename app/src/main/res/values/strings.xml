@@ -256,7 +256,7 @@
     <string name="close_this">关闭该项</string>
     <string name="slide_to_delete_item">滑动可删除单项</string>
     <string name="new_project">新建项目</string>
-    <string name="new_project_title_hint">名称(必填)</string>
+    <string name="new_project_title_hint">名称</string>
     <string name="content">内容</string>
     <string name="add_new_project">添加新项目</string>
     <string name="are_you_sure_to_delete_this_item">确定要删除该项吗？</string>

@@ -58,7 +58,7 @@ public class FragmentDoctorList extends BaseRecyViewFragment {
         queryMap.put("page_size", "" + limit);
         if (pageNum == 0) {
             queryMap.put("page_value_max", "" + 0);
-        } else {
+        } else if (mState == PAGE_STATE_LOADMORE) {
            List<DoctorList.DoctorEntity> data = mAdapter.getData();
             if (data != null) {
                DoctorList.DoctorEntity de = data.get(data.size()-1);

@@ -78,6 +78,7 @@ public class HosPaitentList {
         private String phone;
         private int hosid;
         private int pid;
+        private String puid;
         private int patientid;
         private String casecode;
         private String birthday;
@@ -151,6 +152,14 @@ public class HosPaitentList {
 
         public void setHospitalPatientId(int hospitalPatientId) {
             this.hospitalPatientId = hospitalPatientId;
+        }
+
+        public String getPuid() {
+            return puid;
+        }
+
+        public void setPuid(String puid) {
+            this.puid = puid;
         }
 
         public String getPuuid() {
@@ -576,6 +585,7 @@ public class HosPaitentList {
             dest.writeString(this.phone);
             dest.writeInt(this.hosid);
             dest.writeInt(this.pid);
+            dest.writeString(this.puid);
             dest.writeInt(this.patientid);
             dest.writeString(this.casecode);
             dest.writeString(this.birthday);
@@ -616,6 +626,7 @@ public class HosPaitentList {
             this.phone = in.readString();
             this.hosid = in.readInt();
             this.pid = in.readInt();
+            this.puid = in.readString();
             this.patientid = in.readInt();
             this.casecode = in.readString();
             this.birthday = in.readString();

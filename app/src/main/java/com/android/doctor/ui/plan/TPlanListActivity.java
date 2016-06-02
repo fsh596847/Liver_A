@@ -38,7 +38,8 @@ public class TPlanListActivity extends BaseActivity {
         setActionBar(R.string.visit_scheme);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ts = fm.beginTransaction();
-        FragmentTPlanList fg = FragmentTPlanList.newInstance(getIntent().getIntExtra("rcode", 0));
+        Intent intent = getIntent();
+        FragmentTPlanList fg = FragmentTPlanList.newInstance(intent.getIntExtra("rcode", 0)/*, intent.getStringExtra("pid")*/);
 
         ts.add(R.id.fl_container, fg);
         ts.commitAllowingStateLoss();

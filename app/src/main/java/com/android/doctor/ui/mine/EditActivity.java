@@ -1,17 +1,27 @@
 package com.android.doctor.ui.mine;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.app.AppContext;
 import com.android.doctor.model.Constants;
+import com.android.doctor.model.RespEntity;
+import com.android.doctor.model.User;
+import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RespHandler;
+import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import retrofit2.Call;
 
 public class EditActivity extends BaseActivity {
 
@@ -21,12 +31,12 @@ public class EditActivity extends BaseActivity {
     protected TextView mTvTips;
     private int type;
 
-    public static void startAty(Context c, int type, String text) {
+    public static void startAty(Activity c, int type, String text) {
         Intent intent = new Intent();
         intent.setClass(c, EditActivity.class);
         intent.putExtra("type", type);
         intent.putExtra("content", text);
-        c.startActivity(intent);
+        c.startActivityForResult(intent, Constants.REQ_CODE_FOR_UPDATE);
     }
 
 	@Override
@@ -60,6 +70,36 @@ public class EditActivity extends BaseActivity {
 
 	@OnClick(R.id.img_complete)
 	protected void onComp() {
-
+        onSave();
 	}
+
+    private void onSave() {
+        showProcessDialog();
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity> call = service.uptsingle(getParam());
+        call.enqueue(new RespHandler() {
+            @Override
+            public void onSucceed(RespEntity resp) {
+                onProResult(resp);
+                setResult(RESULT_OK);
+            }
+
+            @Override
+            public void onFailed(RespEntity resp) {
+                onProResult(resp);
+            }
+        });
+    }
+
+    public Map<String,String> getParam() {
+        User.UserEntity u = AppContext.context().getUser();
+        Map<String, String> map = new HashMap<>();
+        map.put("duid", u.getDuid());
+        if (type == Constants.REQUEST_CODE_EDIT_CARRER_EXP) {
+            map.put("experience", mEditText.getText().toString());
+        } else if (type == Constants.REQUEST_CODE_EDIT_FAVOR) {
+            map.put("good", mEditText.getText().toString());
+        }
+        return map;
+    }
 }

@@ -7,8 +7,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.doctor.R;
+import com.android.doctor.helper.DateUtils;
 import com.android.doctor.interf.OnListItemClickListener;
 import com.android.doctor.model.RemindResultList;
+
+import java.util.Date;
 
 /**
  * Created by Yong on 2016-02-14.
@@ -33,8 +36,7 @@ public class ScheduleViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     public void setData(boolean showLabel, RemindResultList.RemindResultEntity obj) {
-        date_tv.setText(obj.getTimestr());
-        date_tv.setVisibility(showLabel ? View.VISIBLE : View.GONE);
+        date_tv.setVisibility(View.GONE);
         String content = obj.getPname() + "    " + obj.getContent();
         tv_content.setText(content);
     }

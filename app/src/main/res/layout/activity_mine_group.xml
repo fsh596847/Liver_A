@@ -51,7 +51,8 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingLeft="15dp"
-        android:text="我创建的群"/>
+        android:text="我创建的群"
+        android:textColor="@color/app_theme_primary_textcolor"/>
 
 
     <FrameLayout

@@ -54,6 +54,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".app.AppContext"
@@ -317,6 +318,10 @@
 
         <activity android:name=".ui.mine.AskReplyListActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.app.AlertDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog"/>
 
         // 配置所需的activity
         <activity

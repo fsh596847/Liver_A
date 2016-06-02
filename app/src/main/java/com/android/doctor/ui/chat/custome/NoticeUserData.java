@@ -1,4 +1,4 @@
-package com.yuntongxun.kitsdk.custom;
+package com.android.doctor.ui.chat.custome;
 
 /**
  * Created by Yong on 2016/4/21.

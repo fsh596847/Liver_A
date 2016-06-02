@@ -25,6 +25,7 @@ import com.android.doctor.helper.PermissionUtil;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.helper.camera.CameraProxy;
 import com.android.doctor.helper.camera.CameraResult;
+import com.android.doctor.model.Constants;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
@@ -37,6 +38,7 @@ import com.yuntongxun.kitsdk.setting.ECPreferenceSettings;
 import com.yuntongxun.kitsdk.setting.ECPreferences;
 import com.yuntongxun.kitsdk.ui.ECImagePreviewActivity;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,8 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,11 +69,11 @@ public class PubTopicActivity extends BaseActivity implements CameraResult {
     private ImageGridAdapter mAdapter;
     private String mBarId, mBarName;
 
-    public static void startAtyForCreate(Context aty, String barId, String barName) {
+    public static void startAtyForCreate(Activity aty, String barId, String barName) {
         Intent intent = new Intent(aty, PubTopicActivity.class);
         intent.putExtra("barid", barId);
         intent.putExtra("barname", barName);
-        aty.startActivity(intent);
+        aty.startActivityForResult(intent, Constants.REQ_CODE_FOR_CREATE);
     }
 
     @Override
@@ -153,8 +157,7 @@ public class PubTopicActivity extends BaseActivity implements CameraResult {
 
     @Override
     public void onSuccess(String path) {
-        Log.e(AppConfig.TAG, "PubTopicActivity-> select image onSuccess: " + path);
-        Bitmap bitmap = ImageHelper.getBitmapByPath(path);
+        Log.d(AppConfig.TAG, "PubTopicActivity-> select image onSuccess: " + path);
         //insertPic(bitmap, path);
         mAdapter.addItem(path);
     }
@@ -173,25 +176,29 @@ public class PubTopicActivity extends BaseActivity implements CameraResult {
         cameraProxy.onResult(requestCode, resultCode, imageReturnIntent);
     }
 
-    private Map<String, Object> getPubTopicParam() {
+    private Map<String, RequestBody> getPubTopicParam() {
         String title = mEdtTitle.getText().toString();
         if (TextUtils.isEmpty(title)) {
             UIHelper.showToast("请输入标题");
             return null;
         }
+        MediaType txMediaType = MediaType.parse("text/plain");
         User.UserEntity u = AppContext.context().getUser();
-        Map<String,Object> map = new HashMap<>();
-        map.put("uid", u.getDuid());
-        map.put("title", title);
-        map.put("content", mEdtContent.getText().toString());
-        map.put("topicbarid", mBarId);
-        map.put("usertype", "0");
-        map.put("createnickname", u.getNickname());
+        Map<String,RequestBody> map = new HashMap<>();
+        map.put("uid", RequestBody.create(txMediaType,u.getDuid()));
+        map.put("title", RequestBody.create(txMediaType,title));
+        map.put("content", RequestBody.create(txMediaType,mEdtContent.getText().toString()));
+        map.put("topicbarid", RequestBody.create(txMediaType,mBarId));
+        map.put("usertype", RequestBody.create(txMediaType,"0"));
+        map.put("createnickname", RequestBody.create(txMediaType,u.getNickname()));
 
         List<String> paths = mAdapter.getData();
         if (paths != null) {
+            MediaType imgMediaType = MediaType.parse("image/*");
             for (int i = 0; i < paths.size(); ++i) {
-                map.put("" + i, ImageHelper.getBitmapByPath(paths.get(i)));
+                String path = paths.get(i);
+                String fileName = FileUtils.getFileName(path);
+                map.put("files\"; filename=\""+ fileName +"\"", RequestBody.create(imgMediaType, new File(path)));
             }
         }
         return map;
@@ -199,7 +206,7 @@ public class PubTopicActivity extends BaseActivity implements CameraResult {
 
     @OnClick(R.id.tv_pub)
     protected void onPub() {
-        Map<String,Object> param = getPubTopicParam();
+        Map<String,RequestBody> param = getPubTopicParam();
         showProcessDialog();
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity> call = service.pubTopic(param);
@@ -211,12 +218,14 @@ public class PubTopicActivity extends BaseActivity implements CameraResult {
                 if (r != null) {
                     UIHelper.showToast(r.getError_msg());
                     onProResult(r);
+                    setResult(RESULT_OK);
                 }
             }
 
             @Override
             public void onFailure(Call<RespEntity> call, Throwable t) {
                 dismissProcessDialog();
+                UIHelper.showToast("发布失败");
             }
         });
     }

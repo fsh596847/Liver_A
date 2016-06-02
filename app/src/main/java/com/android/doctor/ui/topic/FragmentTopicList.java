@@ -32,8 +32,6 @@ public class FragmentTopicList extends BaseRecyViewFragment {
     private int mType = 1;
     private String mTopicBarId;
 
-    private Map<String, String> queryMap = new HashMap<>();
-
     public static FragmentTopicList newInstance(int tp) {
         Bundle b = new Bundle();
         b.putInt("type", tp);
@@ -90,7 +88,7 @@ public class FragmentTopicList extends BaseRecyViewFragment {
         if (u == null) return null;
 
         queryMap.put("page_size", "" + limit);
-        if (mAdapter != null) {
+        if (mAdapter != null && mState == PAGE_STATE_LOADMORE) {
             TopicList.TopicEntity lItem = (TopicList.TopicEntity) mAdapter.getLastItem();
             if (lItem != null)
                 queryMap.put("page_value_min", "" + lItem.getLastreplytime());
@@ -113,7 +111,6 @@ public class FragmentTopicList extends BaseRecyViewFragment {
             public void onSucceed(RespEntity<TopicList> resp) {
                 if (resp == null || resp.getResponse_params() == null) {
                     onSuccess(new ArrayList());
-                    return;
                 } else  {
                     onSuccess(resp.getResponse_params().getTopics());
                 }

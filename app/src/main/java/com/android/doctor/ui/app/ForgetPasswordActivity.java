@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.doctor.R;
+import com.android.doctor.app.AppManager;
 import com.android.doctor.helper.DeviceHelper;
 import com.android.doctor.helper.StringHelper;
 import com.android.doctor.helper.UIHelper;
@@ -71,6 +72,10 @@ public class ForgetPasswordActivity extends BaseActivity {
 			UIHelper.showToast("请输入手机号");
 			return;
 		}
+        if (!StringHelper.isPhoneNumber(phoneNumber)) {
+            UIHelper.showToast("请输入正确的手机号");
+            return;
+        }
 		timer.start();
 		ApiService api = RestClient.createService(ApiService.class);
 		String did = DeviceHelper.getDeviceId(this);
@@ -132,14 +137,13 @@ public class ForgetPasswordActivity extends BaseActivity {
             public void onResponse(Call<RespEntity<Object>> call, retrofit2.Response<RespEntity<Object>> response) {
                 btnReset.setEnabled(true);
                 UIHelper.showToast("密码修改成功");
-                LogUtil.d(TAG, response.body().toString());
+                AppManager.getAppManager().finishActivity(ForgetPasswordActivity.class);
             }
 
             @Override
             public void onFailure(Call<RespEntity<Object>> call, Throwable t) {
                 btnReset.setEnabled(true);
                 UIHelper.showToast("密码修改失败");
-                LogUtil.e(LogUtil.getLogUtilsTag(RegisterPhoneActivity.class), t.getMessage());
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.android.doctor.model;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -12,13 +13,13 @@ public class ScheduleCountList {
      * D20160523 : {"day":23,"eventcount":9}
      */
 
-    private Map<String, DayEventCountEntity> data;
+    private LinkedHashMap<String, DayEventCountEntity> data;
 
-    public Map<String, DayEventCountEntity> getData() {
+    public LinkedHashMap<String, DayEventCountEntity> getData() {
         return data;
     }
 
-    public void setData(Map<String, DayEventCountEntity> data) {
+    public void setData(LinkedHashMap<String, DayEventCountEntity> data) {
         this.data = data;
     }
 

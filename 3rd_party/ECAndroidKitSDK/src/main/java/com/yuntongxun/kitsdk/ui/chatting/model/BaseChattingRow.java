@@ -20,8 +20,6 @@ import android.view.View;
 import com.yuntongxun.eckitsdk.R;
 import com.yuntongxun.ecsdk.ECMessage;
 import com.yuntongxun.kitsdk.core.ECKitCustomProviderManager;
-import com.yuntongxun.kitsdk.custom.CommonUserData;
-import com.yuntongxun.kitsdk.custom.UserDataUtil;
 import com.yuntongxun.kitsdk.custom.provider.chat.ECCustomChatActionProvider;
 import com.yuntongxun.kitsdk.ui.ECChattingActivity;
 import com.yuntongxun.kitsdk.ui.chatting.holder.BaseHolder;
@@ -139,13 +137,13 @@ public abstract class BaseChattingRow implements IChattingRow {
 //			} else {
 //				setDisplayName(baseHolder, detail.getForm());
 //			}
-			String userData = detail.getUserData();
+			/*String userData = detail.getUserData();
 			Object obj = UserDataUtil.getUserData(userData);
 			if (obj != null && obj.getClass().equals(CommonUserData.class)) {
 				CommonUserData cud = (CommonUserData) obj;
                 setDisplayName(baseHolder, cud.getFrom().getName());
-			}
-			//setDisplayName(baseHolder, detail.getForm());
+			}*/
+			setDisplayName(baseHolder, detail.getForm());
 		}
 		setContactPhotoClickListener(context, baseHolder, detail);
 	}

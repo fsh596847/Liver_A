@@ -36,8 +36,6 @@ import retrofit2.Response;
  */
 public class FragmentPatientList extends BaseRecyViewFragment {
 
-    private OnRefreshDataListener refreshDataListener;
-
     private int mType = 1;
     private Map<String, String> queryParam = new HashMap<>();
     private String pname;
@@ -83,9 +81,6 @@ public class FragmentPatientList extends BaseRecyViewFragment {
         recyclerView.setAdapter(mAdapter);
     }
 
-    public void setRefreshDataListener(OnRefreshDataListener refreshDataListener) {
-        this.refreshDataListener = refreshDataListener;
-    }
 
 
     @Override
@@ -111,7 +106,7 @@ public class FragmentPatientList extends BaseRecyViewFragment {
 
         queryParam.put("duid", "" + u.getDuid());
         queryParam.put("page_size", "" + limit);
-        if (mCurPage != 0) {
+        if (mCurPage != 0 && mState == PAGE_STATE_LOADMORE) {
             Object obj = mAdapter.getLastItem();
             if (obj != null) {
                 if (PatientList.DataEntity.class.equals(obj.getClass())) {
@@ -120,7 +115,10 @@ public class FragmentPatientList extends BaseRecyViewFragment {
                     queryParam.put("page_value_max", "" + ((HosPaitentList.HosPatientEntity)obj).getHospitalPatientId());
                 }
             }
+        } else {
+            queryParam.remove("page_value_max");
         }
+
         if (mType != Constants.PATIENT_TYPE_IS_DOCTOR) { //我的患者
             queryParam.put("hosid", "" + u.getHosid());
             if (mType == Constants.PATIENT_TYPE_OUT_ZY) { //住院患者
@@ -200,17 +198,11 @@ public class FragmentPatientList extends BaseRecyViewFragment {
     @Override
     protected void onSuccess(List d) {
         super.onSuccess(d);
-        if (refreshDataListener != null) {
-            refreshDataListener.onRefreshComplete("success");
-        }
     }
 
     @Override
     protected void onFail(String msg) {
         super.onFail(msg);
-        if (refreshDataListener != null) {
-            refreshDataListener.onRefreshComplete(msg);
-        }
     }
 
     public void onSearch(String key, String keywords) {
@@ -328,9 +320,4 @@ public class FragmentPatientList extends BaseRecyViewFragment {
         });
     }
 
-    private void onProResult(RespEntity r) {
-        if (r != null) {
-
-        }
-    }
 }

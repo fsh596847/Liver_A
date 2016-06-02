@@ -1,6 +1,5 @@
 package com.android.doctor.helper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -8,14 +7,10 @@ import android.util.Log;
 
 import com.android.doctor.app.AppConfig;
 import com.android.doctor.app.AppContext;
-import com.android.doctor.model.ContactGroupList;
-import com.android.doctor.model.ContactList;
 import com.android.doctor.model.User;
+import com.android.doctor.ui.chat.custome.CommonUserData;
 import com.google.gson.Gson;
-import com.yuntongxun.kitsdk.custom.CommonUserData;
 import com.yuntongxun.kitsdk.core.ECKitConstant;
-import com.yuntongxun.kitsdk.db.ConversationSqlManager;
-import com.yuntongxun.kitsdk.db.IMessageSqlManager;
 import com.yuntongxun.kitsdk.ui.ECChattingActivity;
 
 /**

@@ -25,6 +25,7 @@ import com.p_v.flexiblecalendar.view.SquareCellView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,9 @@ public class FragmentVisitPlan extends BaseFragment implements FlexibleCalendarV
                     cellView = (BaseCellView) inflater.inflate(R.layout.calendar_date_cell_view, null);
                 }
                 if(cellType == BaseCellView.OUTSIDE_MONTH){
-                    cellView.setTextColor(getResources().getColor(R.color.divider_color));
+                    cellView.setTextColor(getResources().getColor(R.color.app_theme_secondary_textcolor));
+                } else {
+                    cellView.setTextColor(getResources().getColor(R.color.app_theme_primary_textcolor));
                 }
                 return cellView;
             }
@@ -101,11 +104,12 @@ public class FragmentVisitPlan extends BaseFragment implements FlexibleCalendarV
         calendarView.setOnDateClickListener(this);
     }
 
-    private void updateTitle(int year, int month){
-        month = month + 1;
-
-        String tx = year + " " + month;
-        mTvTitle.setText(tx);
+    private void updateView(Calendar calendar){
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        Date date = calendar.getTime();
+        String strDate = String.format("%ty", date) + "." + String.format("%tm", date);
+        mTvTitle.setText(strDate);
 
         onLoadSchedule(year, month);
         fragmentRemind.onLoadRemindList(year ,month);
@@ -120,7 +124,7 @@ public class FragmentVisitPlan extends BaseFragment implements FlexibleCalendarV
     public void onMonthChange(int year, int month, @FlexibleCalendarView.Direction int direction) {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, 1);
-        updateTitle(year, month);
+        updateView(cal);
     }
 
 
@@ -133,7 +137,7 @@ public class FragmentVisitPlan extends BaseFragment implements FlexibleCalendarV
                 for (final ScheduleCountList.DayEventCountEntity v : map.values()) {
                     if (year == y && month + 1 == m && day == v.getDay()) {
                         List<CalendarEvent> eventColors = new ArrayList<>(1);
-                        eventColors.add(new CalendarEvent(android.R.color.holo_purple));
+                        //eventColors.add(new CalendarEvent(android.R.color.holo_purple));
                         eventColors.add(new CalendarEvent(android.R.color.holo_red_dark));
                         return eventColors;
                     }
@@ -148,9 +152,8 @@ public class FragmentVisitPlan extends BaseFragment implements FlexibleCalendarV
     protected void initData() {
         super.initData();
         Calendar cal = Calendar.getInstance();
-        int y = cal.get(Calendar.YEAR);
-        int m = cal.get(Calendar.MONTH);
-        updateTitle(y, m);
+        updateView(cal);
+
     }
 
 

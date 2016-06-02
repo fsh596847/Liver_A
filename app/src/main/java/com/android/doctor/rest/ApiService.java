@@ -58,17 +58,22 @@ import com.android.doctor.model.TopicReplyList;
 import com.android.doctor.model.TreatPlanList;
 import com.android.doctor.model.UpdatePlanDetaParam;
 import com.android.doctor.model.User;
+import com.android.doctor.model.UserInfoEntity;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -79,6 +84,12 @@ public interface ApiService {
 
     @POST("/api/v1/user/uregverifycode.json")
     Call<RespError> getURegVCode(@Body JsonObject jsonObject);
+
+    @POST("/api/v1/user/updatephoneverifycode.json")
+    Call<RespError> genUptPhNumVcode(@Body JsonObject jsonObject);
+
+    @POST("/api/v1/user/updatephone.json")
+    Call<RespEntity> uptPhoneNum(@Body Map<String, String> map);
 
     @POST("/api/v1/user/uregister.json")
     Call<ResponseBody> signup(@Body Map<String, String> map);
@@ -97,6 +108,9 @@ public interface ApiService {
 
     @GET("/api/v1/doctorstat/getdoctorpstats.json")
     Call<RespEntity<PatientStats>> getDoctorPStats(@Query("duid") String duid);
+
+    @GET("/api/v1/user/dget.json")
+    Call<RespEntity<UserInfoEntity>> getUserInfo(@Query("duid") String duid);
 
     @GET("/api/v1/followupplan/followupplans.json")
     Call<RespEntity<PlanList>> getPlanList(@QueryMap Map<String, String> option);
@@ -139,7 +153,7 @@ public interface ApiService {
     Call<RespEntity<PlanDeta>> pubPlan(@Body /*AdjustPlanParam*/ PubPlanParam param);
 
     @POST("/api/v1/followupplan/finish.json")
-    Call<RespEntity<Object>> terminatePlan(@Body String pid);
+    Call<RespEntity<Object>> terminatePlan(@Body JsonObject pid);
 
     @POST("/api/v1/followupplan/draft.json")
     Call<RespEntity<Object>> savePlAsDraft(@Body AsPlDraftParam para);
@@ -148,7 +162,7 @@ public interface ApiService {
     Call<RespEntity<Object>> savePlAsMyPl(@Body AsMyPlParam param);
 
     @POST("/api/v1/followupplan/deldraft.json")
-    Call<RespEntity<Object>> delPlDraft(@Body String pid);
+    Call<RespEntity<Object>> delPlDraft(@Body JsonObject pid);
 
     @POST("/api/v1/followup/createmytpl.json")
     Call<RespEntity<Object>> crtNewPlan(@Body CrtPlanParam param);
@@ -258,6 +272,9 @@ public interface ApiService {
     @POST("/api/v1/followupplan/getdoctorschedule.json")
     Call<RespEntity<ScheduleCountList>> getDoctorSchedule(@Body Map<String, Object> params);
 
+    @POST("/api/v1/followupplan/init.json")
+    Call<RespEntity<JsonObject>> initPlan(@Body Map<String, String> params);
+
     @GET("/api/v1/doctor/remindresults.json")
     Call<RespEntity<RemindResultList>> getDoctorRemindResultList(@QueryMap Map<String, String> map);
 
@@ -294,8 +311,9 @@ public interface ApiService {
     @GET("/api/v1/topic/getreplies.json")
     Call<RespEntity<TopicReplyList>> getTopicReplyList(@Query("topicid")String topicId);
 
+    @Multipart
     @POST("/api/v1/topic/reply.json")
-    Call<RespEntity> replyTopic(@Body Map<String, String> params);
+    Call<RespEntity<Object>> replyTopic(@PartMap Map<String, RequestBody> params);
 
     @GET("/api/v1/user/getsugg.json")
     Call<RespEntity<ArticleList>> getSuggList(@Query("uid")String uid);
@@ -312,8 +330,9 @@ public interface ApiService {
     @POST("/api/v1/sugg/collect.json")
     Call<RespEntity> collect(@Body Map<String, String> params);
 
+    @Multipart
     @POST("/api/v1/topic/pub.json")
-    Call<RespEntity> pubTopic(@Body Map<String, Object> params);
+    Call<RespEntity> pubTopic(@PartMap Map<String, RequestBody> params);
 
     @GET("/api/v1/sugg/kget.json")
     Call<RespEntity<ArticleList>> getArticleList(@QueryMap Map<String,String> queryMap);
@@ -344,4 +363,14 @@ public interface ApiService {
 
     @POST("/api/v1/ask/reply.json")
     Call<RespEntity> askReply(@Body Map<String, String> params);
+
+    @POST("/api/v1/user/uptsingle.json")
+    Call<RespEntity> uptsingle(@Body Map<String, String> params);
+
+    @POST("/api/v1/user/duupdatepwd.json")
+    Call<RespEntity> updatepwd(@Body Map<String, String> params);
+
+    @Multipart
+    @POST("/api/v1/user/faceupd.json")
+    Call<RespEntity> uptUserFace(Map<String, RequestBody> params);
 }

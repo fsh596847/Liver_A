@@ -89,7 +89,7 @@
             android:id="@+id/img_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_doctor_photo"
+            android:src="@drawable/doctor_photo"
             android:layout_toLeftOf="@id/tv_arrow1" />
     </RelativeLayout>
 

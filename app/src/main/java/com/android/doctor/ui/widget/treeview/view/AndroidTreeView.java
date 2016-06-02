@@ -261,7 +261,6 @@ public class AndroidTreeView {
         final TreeNode.BaseNodeViewHolder parentViewHolder = getViewHolderForNode(node);
         parentViewHolder.getNodeItemsView().removeAllViews();
 
-        Log.d("[AndroidTreeView-> ", "expandNode] " + node.getPath());
         parentViewHolder.toggle(true);
 
         for (final TreeNode n : node.getChildren()) {

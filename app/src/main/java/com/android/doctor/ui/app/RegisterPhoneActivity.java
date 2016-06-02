@@ -102,27 +102,16 @@ public class RegisterPhoneActivity extends BaseActivity {
      **/
     @OnClick(R.id.btn_register)
     protected void onRegister() {
-		mBtnRegister.setEnabled(false);
-        DeviceHelper.hideSoftKeyboard(getCurrentFocus());
 
+        DeviceHelper.hideSoftKeyboard(getCurrentFocus());
 		final String phoneNumber = mEdtUser.getText().toString().trim();
         final String password = mEdtPassword.getText().toString().trim();
-        if (!StringHelper.isValidPhoneNumber(this, phoneNumber)) {
-            mBtnRegister.setEnabled(true);
-            return ;
-        }
-
-        if (!StringHelper.isValidPassword(this, password)) {
-            mBtnRegister.setEnabled(true);
-            return;
-        }
-
         String vcode = mEdtvCode.getText().toString();
-        if (TextUtils.isEmpty(vcode)) {
-            mBtnRegister.setEnabled(true);
+        if (!checkPhNum() || !StringHelper.isValidPassword(this, password) || TextUtils.isEmpty(vcode)) {
             return;
         }
 
+        mBtnRegister.setClickable(false);
         Map<String, String> map = new HashMap<>();
         map.put("username", phoneNumber);
         map.put("password", password);
@@ -132,39 +121,51 @@ public class RegisterPhoneActivity extends BaseActivity {
         map.put("version", "1.0");
         map.put("device_type", "3");
 
+        showProcessDialog();
 		ApiService api = RestClient.createService(ApiService.class);
 		Call<ResponseBody> call = api.signup(map);
 		call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                mBtnRegister.setEnabled(true);
+                mBtnRegister.setClickable(true);
                 UIHelper.showToast("注册成功");
-                LogUtil.d(TAG, response.body().toString());
+                dismissProcessDialog();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                mBtnRegister.setEnabled(true);
+                mBtnRegister.setClickable(true);
                 UIHelper.showToast("注册失败");
-                LogUtil.e(LogUtil.getLogUtilsTag(RegisterPhoneActivity.class), t.getMessage());
+                dismissProcessDialog();
             }
         });
 	}
+
+    private boolean checkPhNum() {
+        String phoneNumber = mEdtUser.getText().toString();
+        if (TextUtils.isEmpty(phoneNumber)) {
+            UIHelper.showToast("请输入手机号");
+            return false;
+        }
+        if (!StringHelper.isPhoneNumber(phoneNumber)) {
+            UIHelper.showToast("请输入正确的手机号");
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * 获取验证码
      **/
     @OnClick(R.id.btn_regain)
     protected void onGenVCode() {
-        String phoneNumber = mEdtUser.getText().toString();
-        if (TextUtils.isEmpty(phoneNumber)) {
-            UIHelper.showToast("请输入手机号");
-            return;
-        }
+        if (!checkPhNum()) return;
+
         timer.start();
         ApiService api = RestClient.createService(ApiService.class);
         String did = DeviceHelper.getDeviceId(this);
-
+        String phoneNumber = mEdtUser.getText().toString();
         String jstr = "{username:" + phoneNumber + ",uuid:" + did + ",source:android}";
         LogUtil.d(LogUtil.getLogUtilsTag(RegisterPhoneActivity.class), jstr);
         Call<RespError> call = api.getURegVCode(JsonUtil.toJson(jstr));
@@ -176,7 +177,6 @@ public class RegisterPhoneActivity extends BaseActivity {
             @Override
             public void onFailure(Call<RespError> call, Throwable t) {
                 UIHelper.showToast("验证码发送失败");
-                LogUtil.e(LogUtil.getLogUtilsTag(RegisterPhoneActivity.class), t.getMessage());
             }
         });
     }

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
+import com.android.doctor.R;
 import com.android.doctor.helper.ECSDKCoreHelper;
 import com.android.doctor.model.User;
 import com.android.doctor.ui.app.MainActivity;
@@ -99,7 +100,7 @@ public class AppContext extends Application {
 		imageOptions = new DisplayImageOptions.Builder()
 			//.showStubImage(R.drawable.image_holder_color)
 			//.showImageForEmptyUri(R.drawable.image_holder_color)
-			//.showImageOnFail(R.drawable.image_holder_color)
+			.showImageOnFail(R.drawable.ic_picture_occupy)
 			.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
 			.cacheInMemory(false)
 			.cacheOnDisc(true)
@@ -277,7 +278,7 @@ public class AppContext extends Application {
 	public void logout() {
         isLogin  = false;
         clearUser();
-		clearAppCache();
+		//clearAppCache();
         ECSDKCoreHelper.logout(false);
 	}
 

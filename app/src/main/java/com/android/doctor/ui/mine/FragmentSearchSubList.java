@@ -7,8 +7,10 @@ import android.view.View;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.ArticleList;
 import com.android.doctor.model.Constants;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.SuggClassList;
 import com.android.doctor.model.User;
@@ -20,6 +22,9 @@ import com.android.doctor.ui.adapter.sticky_adapter.StickyRecyclerHeadersAdapter
 import com.android.doctor.ui.adapter.sticky_adapter.StickyRecyclerHeadersDecoration;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
 import com.android.doctor.app.DataCacheManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +49,8 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
     private String puid ;
     private String keywords;
 
+    private SearchSubjectActivity activity;
+
     public static FragmentSearchSubList newInstance(String id) {
         FragmentSearchSubList f = new FragmentSearchSubList();
         Bundle b = new Bundle();
@@ -65,6 +72,7 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
             mType = b.getInt(EXTRA_PARAM);
             puid = b.getString("id");
         }
+        this.activity = (SearchSubjectActivity) getActivity();
     }
 
     @Override
@@ -81,6 +89,32 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
                 headersDecor.invalidateHeaders();
             }
         });
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    /**
+     * 销毁事件订阅
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 处理事件
+     * @param event
+     */
+    @Subscribe
+    public void onMessageEvent(MessageEvent event){
+        if (event.message == Constants.EVENT_MSG_UPDATE_SUGG_LIST) {
+            onRefresh();
+        }
     }
 
     public void setKeywords(String keywords) {
@@ -134,6 +168,7 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
     private void onSuggClassLoaded() {
         mState = PAGE_STATE_LOADMORE;
         onLoadArticlesByClass(1, PAGE_SIZE);
+        activity.dismissProcessDialog();
     }
 
     private void onLoadArticlesByClass(int pageNum, int limit) {
@@ -200,19 +235,19 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
     }
 
     protected void processSubs( Map<String,Object> param){
-
+        activity.showProcessDialog();
         ApiService apiService = RestClient.createService(ApiService.class);
         Call<RespEntity> call = apiService.subOrUnSub(param);
         call.enqueue(new Callback<RespEntity>() {
             @Override
             public void onResponse(Call<RespEntity> call, Response<RespEntity> response) {
-                //UIHelper.showToast(status == 0 ? "收藏成功" : "取消收藏成功");
-                DataCacheManager.getInstance().onLoadCollectArticles();
+                DataCacheManager.getInstance().onLoadSuggClassList();
             }
 
             @Override
             public void onFailure(Call<RespEntity> call, Throwable t) {
-                //UIHelper.showToast(status == 0 ? "收藏失败" : "取消收藏失败");
+                UIHelper.showToast("操作失败");
+                activity.dismissProcessDialog();
             }
         });
     }
@@ -228,16 +263,15 @@ public class FragmentSearchSubList extends BaseRecyViewFragment {
             }
         }
 
-        if (subState == Constants.KBASE_SUBJECT_STATE_UNSUBSCRIBED) {
+        if (subState == Constants.KBASE_SUBJECT_STATE_UNSUBSCRIBED) {//未订阅->订阅
             codeList.add(se.getCode());
-        } else {
+        } else { //已订阅->取消
             if (collects == null) return null;
-            for (int i = 0; i < collects.size(); ++i) {
-                SuggClassList.SuggEntity sg = collects.get(i);
-                if (sg.getCode().equals(se.getCode())) {
-                    continue;
+            for (int i = 0; i < codeList.size(); ++i) {
+                if (se.getCode().equals(codeList.get(i))) {
+                    codeList.remove(i);
+                    break;
                 }
-                codeList.add(sg.getCode());
             }
         }
         User.UserEntity u = AppContext.context().getUser();

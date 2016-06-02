@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 
 import com.android.doctor.helper.ChatUtils;
 import com.android.doctor.ui.chat.NoticeMsgActivity;
-import com.yuntongxun.kitsdk.custom.UserDataUtil;
-import com.yuntongxun.kitsdk.custom.NoticeUserData;
+import com.android.doctor.ui.chat.custome.NoticeUserData;
+import com.android.doctor.ui.chat.custome.UserDataUtil;
 import com.yuntongxun.kitsdk.custom.provider.conversation.ECCustomConversationListActionProvider;
 import com.yuntongxun.kitsdk.custom.provider.conversation.ECCustomConversationListUIProvider;
 import com.yuntongxun.kitsdk.ui.chatting.model.ECConversation;

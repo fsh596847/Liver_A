@@ -79,6 +79,15 @@ public class DeviceHelper {
 		}
 	}
 
+    //sp = px / (ppi / 160)
+    public static float pixelsToSp(float px) {
+        float scaledDensity = getDisplayMetrics().scaledDensity;
+        return px/scaledDensity;
+    }
+    // dp = px / (dpi / 160)
+    public static float pixelsToDp(float f) {
+        return f * 160 / (getDisplayMetrics().densityDpi);
+    }
 
     public static float dpToPixels(float dp) {
         return dp * (getDisplayMetrics().densityDpi);
@@ -297,10 +306,6 @@ public class DeviceHelper {
             _isTablet = Boolean.valueOf(flag);
         }
         return _isTablet.booleanValue();
-    }
-
-    public static float pixelsToDp(float f) {
-        return f / (getDisplayMetrics().densityDpi / 160F);
     }
 
     public static void showAnimatedView(View view) {

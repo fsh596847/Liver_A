@@ -1,17 +1,15 @@
-package com.yuntongxun.kitsdk.custom;
+package com.android.doctor.ui.chat.custome;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.yuntongxun.kitsdk.core.CCPAppManager;
 import com.yuntongxun.kitsdk.db.ConversationSqlManager;
 import com.yuntongxun.kitsdk.db.GroupSqlManager;
 import com.yuntongxun.kitsdk.db.OnMessageChange;
 import com.yuntongxun.kitsdk.ui.chatting.model.ECConversation;
-import com.yuntongxun.kitsdk.ui.voip.NameHighLight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +49,8 @@ public class ConversationDataPool implements OnMessageChange {
         notifyChange();
     }
 
-    public com.yuntongxun.kitsdk.ui.chatting.model.ECConversation getItem(Cursor cursor) {
-        com.yuntongxun.kitsdk.ui.chatting.model.ECConversation conversation = new com.yuntongxun.kitsdk.ui.chatting.model.ECConversation();
+    public ECConversation getItem(Cursor cursor) {
+        ECConversation conversation = new ECConversation();
         conversation.setCursor(cursor);
 
         if(conversation.getSessionId().equals("10089")){

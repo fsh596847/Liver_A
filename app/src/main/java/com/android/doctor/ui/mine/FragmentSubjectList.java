@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
+import com.android.doctor.app.DataCacheManager;
+import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.Constants;
+import com.android.doctor.model.MessageEvent;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.SuggClassList;
 import com.android.doctor.model.User;
@@ -18,9 +22,17 @@ import com.android.doctor.ui.adapter.KBaseListAdapter;
 import com.android.doctor.ui.base.BaseRecyViewFragment;
 import com.android.doctor.ui.widget.GridSpacingItemDecoration;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Yong on 2016/3/8.
@@ -48,6 +60,32 @@ public class FragmentSubjectList extends BaseRecyViewFragment {
         Bundle b = getArguments();
         if (b != null) {
             mType = b.getInt("param");
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    /**
+     * 销毁事件订阅
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 处理事件
+     * @param event
+     */
+    @Subscribe
+    public void onMessageEvent(MessageEvent event){
+        if (event.message == Constants.EVENT_MSG_UPDATE_SUGG_LIST) {
+            onRefresh();
         }
     }
 
@@ -99,7 +137,13 @@ public class FragmentSubjectList extends BaseRecyViewFragment {
     @Override
     public void onItemClick(int position, View view) {
         SuggClassList.SuggEntity sugg = (SuggClassList.SuggEntity) mAdapter.getItem(position);
-        if (sugg != null)
-        SuggListActivity.startAty(getActivity(), sugg);
+        if (sugg == null) return;
+        /*if (view.getId() == R.id.img_subs) {
+            SuggClassList.SuggEntity sg = DataCacheManager.getInstance().findSubjectByCode(sugg.getCode());
+            processSubs(getParam(sugg, sg == null));
+        } else {*/
+            SuggListActivity.startAty(getActivity(), sugg);
+        //}
     }
+
 }

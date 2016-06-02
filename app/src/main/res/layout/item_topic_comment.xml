@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:minHeight="48dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
+    android:layout_marginTop="3dp"
     android:paddingLeft="15dp"
-    android:paddingRight="15dp"
     android:background="@android:color/white">
 
 
@@ -14,6 +12,7 @@
         android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingRight="15dp"
         android:gravity="center_vertical">
 
         <ImageView
@@ -32,7 +31,7 @@
             android:layout_toRightOf="@id/arrow_icon"
             android:layout_centerVertical="true"
             android:textColor="@color/appThemePrimary"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:text=""/>
 
         <TextView
@@ -41,8 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text=""
-            android:textSize="14sp"
-            android:textColor="@color/app_theme_secondary_textcolor"/>
+            android:textSize="12sp"
+            android:textColor="@color/app_theme_primary_textcolor"/>
     </RelativeLayout>
 
     <View
@@ -57,17 +56,19 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="3dp"
         android:animateLayoutChanges="true">
 
         <TextView
             android:id="@+id/tv_reply_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_below="@id/h_line"
-            android:text="bbbb"
-            android:textSize="14sp"
-            android:textColor="@color/app_theme_secondary_textcolor"/>
+            android:text=""
+            android:textSize="12sp"
+            android:textColor="@color/app_theme_primary_textcolor"/>
 
         <LinearLayout
             android:id="@+id/ll_images"
@@ -77,4 +78,11 @@
 
     </LinearLayout>
 
+    <include
+        android:id="@+id/include_reply_action"
+        android:visibility="gone"
+        layout="@layout/topic_reply_oper"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_below="@id/ll_reply_content"/>
 </RelativeLayout>

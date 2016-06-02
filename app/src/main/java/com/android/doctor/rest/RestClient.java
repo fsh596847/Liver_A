@@ -1,10 +1,13 @@
 package com.android.doctor.rest;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapterFactory;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -66,5 +69,31 @@ public class RestClient {
     public ApiService getApiService()
     {
         return apiService;
+    }
+
+    public static String getImgURL(String imgurl, float w, float h) {
+        if (TextUtils.isEmpty(imgurl)) return null;
+        if (imgurl.startsWith("http")) {
+            if (w > 0 && h > 0) {
+                String str = String.format(Locale.CHINA, "?imageView2/1/w/%f/h/%f", w, h);
+                return imgurl.concat(str);
+            } else {
+                return imgurl;
+            }
+        } else {
+            StringBuffer sb = new StringBuffer(API_BASE_URL);
+            sb.append("api/v1/livercrm/").append(imgurl);
+            if (w > 0 && h > 0) {
+                String str = String.format(Locale.CHINA, "?w=%f&h=%f", w, h);
+                sb.append(str);
+            }
+            return sb.toString();
+        }
+    }
+
+    public static String getFaceURL(String uuid) {
+        return new StringBuffer(API_BASE_URL)
+                .append("api/v1/user/face.json?uuid=")
+                .append(uuid).toString();
     }
 }

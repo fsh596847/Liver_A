@@ -14,6 +14,7 @@ import com.android.doctor.R;
 import com.android.doctor.model.RespEntity;
 import com.android.doctor.model.User;
 import com.android.doctor.rest.ApiService;
+import com.android.doctor.rest.RespHandler;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.base.BaseActivity;
 
@@ -132,28 +133,18 @@ public class LoginActivity extends BaseActivity {
         map.put("device_type", "3");
         map.put("password", passwd);
         map.put("username", userName);
-
+        showProcessDialog();
         ApiService service = RestClient.createService(ApiService.class);
         Call<RespEntity<User>> call = service.login(map);
-        call.enqueue(new Callback<RespEntity<User>>() {
+        call.enqueue(new RespHandler<User>() {
             @Override
-            public void onResponse(Call<RespEntity<User>> call, Response<RespEntity<User>> response) {
-                //GitUser user = gson.fromJson(response.body().charStream(), GitUser.class);
-                RespEntity<User> entity = response.body();
-                if (entity != null) {
-                    if (entity.getError_code() == 0) {
-                        onSuccess(entity.getResponse_params());
-                    } else {
-                        onFail(entity.getError_msg());
-                    }
-                } else {
-                    onFail("登录失败");
-                }
+            public void onSucceed(RespEntity<User> resp) {
+                onSuccess(resp.getResponse_params());
             }
 
             @Override
-            public void onFailure(Call<RespEntity<User>> call, Throwable t) {
-                onFail("登录失败, 请检查网络连接");
+            public void onFailed(RespEntity<User> resp) {
+                onFail("登录失败");
             }
         });
 	}
@@ -163,10 +154,12 @@ public class LoginActivity extends BaseActivity {
         AppManager.getAppManager().finishActivity(LoginEntryActivity.class);
         AppManager.getAppManager().finishActivity(this);
         UIHelper.showtAty(this, MainActivity.class);
+        dismissProcessDialog();
     }
 
     private void onFail(String t) {
         UIHelper.showToast(this, t, 3000);
+        dismissProcessDialog();
     }
 
 }

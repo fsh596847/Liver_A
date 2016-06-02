@@ -14,7 +14,6 @@ import android.os.Process;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,19 +39,16 @@ import com.android.doctor.rest.ApiService;
 import com.android.doctor.rest.RestClient;
 import com.android.doctor.ui.adapter.ImageGridAdapter;
 import com.android.doctor.ui.base.BaseActivity;
-import com.android.doctor.ui.topic.OnEditTextFooterImpl;
-import com.android.doctor.ui.widget.TIChattingFooter;
+import com.android.doctor.ui.widget.CustChattingFooter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.yuntongxun.kitsdk.setting.ECPreferenceSettings;
 import com.yuntongxun.kitsdk.setting.ECPreferences;
 import com.yuntongxun.kitsdk.ui.ECImagePreviewActivity;
-import com.yuntongxun.kitsdk.ui.chatting.view.SmileyPanel;
 import com.yuntongxun.kitsdk.utils.EmoticonUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.InjectView;
@@ -65,7 +61,7 @@ import retrofit2.Response;
  */
 public class AskReplyListActivity extends BaseActivity implements CameraResult {
     @InjectView(R.id.chat_footer)
-    protected TIChattingFooter mChatFooter;
+    protected CustChattingFooter mChatFooter;
     private OnInputFooterListener mChattingFooterImpl = new OnInputFooterListener();
     protected GridView mChatFooterAttach;
     private CameraProxy cameraProxy;
@@ -302,7 +298,7 @@ public class AskReplyListActivity extends BaseActivity implements CameraResult {
         });
     }
 
-    private class OnInputFooterListener implements TIChattingFooter.OnChattingFooterLinstener {
+    private class OnInputFooterListener implements CustChattingFooter.OnChattingFooterLinstener {
 
         @Override
         public void OnInEditMode() {

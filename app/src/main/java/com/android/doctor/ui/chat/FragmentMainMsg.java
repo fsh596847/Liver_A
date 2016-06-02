@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,20 +25,16 @@ import android.widget.TextView;
 import com.android.doctor.R;
 import com.android.doctor.app.AppConfig;
 import com.android.doctor.app.AppContext;
-import com.android.doctor.helper.AppAsyncTask;
-import com.android.doctor.helper.DialogUtils;
 import com.android.doctor.helper.ECSDKCoreHelper;
 import com.android.doctor.helper.MenuHelper;
 import com.android.doctor.helper.UIHelper;
-import com.android.doctor.ui.app.MainActivity;
 import com.android.doctor.ui.base.BaseFragment;
+import com.android.doctor.ui.chat.custome.ConversationDataPool;
+import com.android.doctor.ui.chat.custome.CustomeConversationListFragment;
 import com.android.doctor.ui.widget.PageEnableViewPager;
 import com.yuntongxun.ecsdk.ECDevice;
-import com.yuntongxun.kitsdk.custom.ConversationDataPool;
-import com.yuntongxun.kitsdk.custom.CustomeConversationListFragment;
 import com.yuntongxun.kitsdk.db.IMessageSqlManager;
 import com.yuntongxun.kitsdk.utils.ECNotificationManager;
-import com.yuntongxun.kitsdk.view.ECAlertDialog;
 import com.yuntongxun.kitsdk.view.NetWarnBannerView;
 
 import java.util.Arrays;
@@ -98,29 +95,6 @@ public class FragmentMainMsg extends BaseFragment {
                 reTryConnect();
             }
         });
-    }
-
-    public void handlerKickOff(String kickoffText) {
-        if (getActivity().isFinishing()) {
-            return;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(kickoffText);
-        builder.setPositiveButton("重新登录", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ECNotificationManager.getInstance().forceCancelNotification();
-                AppContext.context().restartAPP();
-            }
-        });
-        builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                AppContext.context().AppExit();
-            }
-        });
-        builder.setCancelable(false);
-        builder.show();
     }
 
     private void reTryConnect() {

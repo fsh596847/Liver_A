@@ -26,6 +26,13 @@ public class DateUtils {
 		}
 	};
 
+	public final static ThreadLocal<SimpleDateFormat> dateFormater3 = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+		}
+	};
+
 	/**
 	 * 将字符串转位日期类型
 	 *

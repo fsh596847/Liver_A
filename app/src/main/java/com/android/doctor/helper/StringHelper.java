@@ -2,6 +2,7 @@ package com.android.doctor.helper;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.android.doctor.R;
 

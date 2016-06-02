@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.android.doctor.R;
 import com.android.doctor.interf.OnListItemClickListener;
+import com.android.doctor.interf.OnRefreshDataListener;
 import com.android.doctor.interf.OnScrollChangedListener;
 import com.android.doctor.ui.widget.EmptyLayout;
 import com.yuntongxun.kitsdk.utils.LogUtil;
@@ -37,6 +38,7 @@ public abstract class BaseRecyViewFragment<T>
 	protected BaseRecyViewAdapter<T> mAdapter;
 	protected int mCurPage = 0;
 	protected OnScrollChangedListener scrollChangedListener;
+    protected OnRefreshDataListener refreshDataListener;
 
     @Override
     protected void initView(View view) {
@@ -159,6 +161,9 @@ public abstract class BaseRecyViewFragment<T>
 		setAdapterState(d);
 		setViewStateNone(iState);
 		setAdapterData(d, iState);
+        if (refreshDataListener != null) {
+            refreshDataListener.onRefreshComplete("success");
+        }
 	}
 
 	protected void onFail(String msg) {
@@ -166,6 +171,9 @@ public abstract class BaseRecyViewFragment<T>
 		setViewStateNone(mState);
         setMaskLayout(View.VISIBLE, EmptyLayout.OTHER_ERROR, msg);
 		LogUtil.d(LogUtil.getLogUtilsTag(BaseRecyViewFragment.class), msg);
+        if (refreshDataListener != null) {
+            refreshDataListener.onRefreshComplete(msg);
+        }
 	}
 
 	public void setScrollChangedListener(OnScrollChangedListener scrollChangedListener) {
@@ -259,5 +267,9 @@ public abstract class BaseRecyViewFragment<T>
             return true;
         }
         return false;
+	}
+
+	public void setRefreshDataListener(OnRefreshDataListener refreshDataListener) {
+		this.refreshDataListener = refreshDataListener;
 	}
 }

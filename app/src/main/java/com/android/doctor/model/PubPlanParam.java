@@ -7,15 +7,15 @@ import java.util.List;
  */
 public class PubPlanParam {
 
-    private int pid;
+    private String pid;
     private String ref_tplid;
     private List<PlanDeta.PlanDetaEntity> tpldetails;
 
-    public int getPid() {
+    public String getPid() {
         return pid;
     }
 
-    public void setPid(int pid) {
+    public void setPid(String pid) {
         this.pid = pid;
     }
 

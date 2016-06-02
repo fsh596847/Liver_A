@@ -30,6 +30,9 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnTextChanged;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 
 /**
  * 联系人选择页面
@@ -54,7 +57,8 @@ public class PlanListActivity extends AppCompatActivity  {
     protected ImageView mIvClear;
     @InjectView(R.id.edt_search_box)
     protected EditText mEdtSearch;
-
+    @InjectView(R.id.header_view_frame)
+    protected PtrClassicFrameLayout mPtrFrame;
 
     public static void startAty(Context context, String uid) {
         Intent intent = new Intent(context, PlanListActivity.class);
@@ -87,7 +91,30 @@ public class PlanListActivity extends AppCompatActivity  {
         mTabHost.addTab(mTabHost.newTabSpec(TAB3).setIndicator(TAB3), FragmentDoctorPlanList.class, getBundle(FragmentDoctorPlanList.TYPE_STATE_FINISHED, uid));
 
         setTab1();
+        initPRefreshView();
     }
+
+    private void initPRefreshView() {
+        mPtrFrame.setLastUpdateTimeRelateObject(this);
+        mPtrFrame.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return ((FragmentDoctorPlanList)getCurrentFragment()).isScrollTop();
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                mPtrFrame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((FragmentDoctorPlanList)getCurrentFragment()).onRefresh();
+                        mPtrFrame.refreshComplete();
+                    }
+                }, 500);
+            }
+        });
+    }
+
 
     private void setActionBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

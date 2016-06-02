@@ -25,7 +25,7 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="10dp">
 
-            <com.android.doctor.ui.widget.TIChattingFooter
+            <com.android.doctor.ui.widget.CustChattingFooter
                 android:id="@+id/chat_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

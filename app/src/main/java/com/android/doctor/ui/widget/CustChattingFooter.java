@@ -15,8 +15,6 @@ package com.android.doctor.ui.widget;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -37,12 +35,10 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.doctor.R;
-import com.yuntongxun.kitsdk.core.CCPAppManager;
 import com.yuntongxun.kitsdk.setting.ECPreferenceSettings;
 import com.yuntongxun.kitsdk.setting.ECPreferences;
 import com.yuntongxun.kitsdk.ui.chatting.view.AppPanel;
@@ -61,10 +57,10 @@ import java.io.File;
  * @date 2014-12-10
  * @version 4.0
  */
-public class TIChattingFooter extends LinearLayout {
+public class CustChattingFooter extends LinearLayout {
 
 
-    private static final String TAG = LogUtil.getLogUtilsTag(TIChattingFooter.class);
+    private static final String TAG = LogUtil.getLogUtilsTag(CustChattingFooter.class);
     private static final int WHAT_ON_DIMISS_DIALOG = 0x1;
 
     // cancel recording sliding distance field.
@@ -326,7 +322,7 @@ public class TIChattingFooter extends LinearLayout {
     /**
      * @param context
      */
-    public TIChattingFooter(Context context) {
+    public CustChattingFooter(Context context) {
         this(context , null);
     }
 
@@ -334,7 +330,7 @@ public class TIChattingFooter extends LinearLayout {
      * @param context
      * @param attrs
      */
-    public TIChattingFooter(Context context, AttributeSet attrs) {
+    public CustChattingFooter(Context context, AttributeSet attrs) {
         this(context, attrs ,0);
     }
 
@@ -343,7 +339,7 @@ public class TIChattingFooter extends LinearLayout {
      * @param attrs
      * @param defStyle
      */
-    public TIChattingFooter(Context context, AttributeSet attrs, int defStyle) {
+    public CustChattingFooter(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
 
         mInputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -501,7 +497,7 @@ public class TIChattingFooter extends LinearLayout {
      * If it is possible to enable the send button
      * @param canSend
      */
-    private void enableChattingSend(boolean canSend) {
+    public void enableChattingSend(boolean canSend) {
         if(mChattingAttach == null || mChattingSend == null) {
             return ;
         }

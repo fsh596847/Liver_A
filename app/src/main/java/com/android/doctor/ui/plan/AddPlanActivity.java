@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.android.doctor.R;
 import com.android.doctor.app.AppContext;
 import com.android.doctor.helper.DateUtils;
+import com.android.doctor.helper.PreferenceUtils;
 import com.android.doctor.helper.UIHelper;
 import com.android.doctor.model.DiagList;
 import com.android.doctor.model.HosPaitentList;
@@ -25,6 +26,8 @@ import com.android.doctor.ui.base.BaseActivity;
 import com.android.doctor.ui.patient.VisitPatientListActivity;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -53,11 +56,11 @@ public class AddPlanActivity extends BaseActivity  {
     @InjectView(R.id.btn_select)
     protected AppCompatButton mBtn;
     private SlideDateTimePicker mDateTimePicker;
-
+    private HosPaitentList.HosPatientEntity hosPatient;
     private PlanList.PlanBaseEntity mPlanBase;
 
     public static void startAty(Context context, PlanList.PlanBaseEntity pItem) {
-        Intent intent = new Intent(context, PlanDetaActivity.class);
+        Intent intent = new Intent(context, AddPlanActivity.class);
         intent.putExtra("data", pItem);
         context.startActivity(intent);
     }
@@ -89,7 +92,7 @@ public class AddPlanActivity extends BaseActivity  {
 
     private void setViewData(PlanList.PlanBaseEntity planBase, int plancnt) {
         if (planBase != null ) {
-            //mTvPatient.setText(planBase.getPname());
+            mTvPatient.setText(planBase.getPname());
             mTvStartDate.setText(planBase.getTime());
             mEdtMainDiag.setText(planBase.getMaindiagnose());
             mEdtOtherDiag.setText(planBase.getOtherdiagnose());
@@ -119,7 +122,8 @@ public class AddPlanActivity extends BaseActivity  {
                 dismissProcessDialog();
                 if (resp.getResponse_params() != null) {
                     mPlanBase = resp.getResponse_params().getPlan();
-                    setViewData(mPlanBase, resp.getResponse_params().getPlancount());
+                    int plancnt = resp.getResponse_params().getPlancount();
+                    setViewData(plancnt == 0 ? null : mPlanBase, plancnt);
                 }
             }
 
@@ -128,6 +132,37 @@ public class AddPlanActivity extends BaseActivity  {
                 onProResult(resp);
             }
         });
+    }
+
+    public Map<String,String> getInitPlanParam() {
+        User.UserEntity u = AppContext.context().getUser();
+        Map<String,String> map = new HashMap<>();
+        map.put("disease", "肝病");
+        map.put("duid", u.getDuid());
+        map.put("dname", u.getUsername());
+        map.put("pname", mTvPatient.getText().toString());
+        map.put("date", mTvStartDate.getText().toString());
+        map.put("followtype", "随访计划");
+        map.put("maindiagnose", mEdtMainDiag.getText().toString());
+        map.put("otherdiagnose", mEdtOtherDiag.getText().toString());
+        map.put("treatmentmodality", mEdtTreat.getText().toString());
+        if (hosPatient != null) {
+            if (TextUtils.isEmpty(hosPatient.getPuuid())) {
+                map.put("puid", "" + hosPatient.getPuid());
+            } else {
+                map.put("puid", "" + hosPatient.getPid());
+                map.put("puuid", hosPatient.getPuuid());
+                map.put("card", hosPatient.getCard());
+            }
+        }
+        return map;
+    }
+
+    private void onInitPlan(RespHandler<JsonObject> respHandler) {
+        showProcessDialog();
+        ApiService service = RestClient.createService(ApiService.class);
+        Call<RespEntity<JsonObject>> call = service.initPlan(getInitPlanParam());
+        call.enqueue(respHandler);
     }
 
     @OnClick(R.id.rl_select_patient)
@@ -157,9 +192,9 @@ public class AddPlanActivity extends BaseActivity  {
         switch (requestCode) {
             case VisitPatientListActivity.REQUEST_CODE_SELECT_PATIENT:
                 clearData();
-                HosPaitentList.HosPatientEntity hosEntity = data.getParcelableExtra("data");
-                onLoadRunPlan(hosEntity.getPuuid());
-                mTvPatient.setText(hosEntity.getName());
+                hosPatient = data.getParcelableExtra("data");
+                onLoadRunPlan(hosPatient.getPuuid());
+                mTvPatient.setText(hosPatient.getName());
                 break;
             case FragmentTxItemList.REQUEST_LOAD_TYPE_MAIN_DIAG:
                 DiagList.DiagEntity mdiag = data.getParcelableExtra("data");
@@ -214,12 +249,28 @@ public class AddPlanActivity extends BaseActivity  {
     protected void onSelectPlan() {
         if (checkHasNull()) return;
 
-        if (mPlanBase == null ||mPlanBase.getStatus() == -200) {
-            TPlanListActivity.startAty(this, 0);
+        if (mPlanBase == null) {
+            onInitPlan(new RespHandler<JsonObject>() {
+                @Override
+                public void onSucceed(RespEntity<JsonObject> resp) {
+                    dismissProcessDialog();
+                    JsonObject jsonObj = resp.getResponse_params();
+                    if (jsonObj != null && jsonObj.get("data") != null) {
+                        Gson g = new Gson();
+                        PlanList.PlanBaseEntity base = g.fromJson(jsonObj.get("data"), PlanList.PlanBaseEntity.class);
+                        TPlanListActivity.startAty(AddPlanActivity.this, 0);
+                        PreferenceUtils.write(AppContext.context(), "AddPlanActivity", "pid", "" + base.getPid());
+                    }
+                }
+
+                @Override
+                public void onFailed(RespEntity<JsonObject> resp) {
+                    onProResult(resp);
+                }
+            });
+
         } else {
-            if (mPlanBase != null) {
-                PlanDetaActivity.startAty(this, "" + mPlanBase.getPid(), mPlanBase.getStatus(), mPlanBase);
-            }
+            PlanDetaActivity.startAty(this, "" + mPlanBase.getPid(), mPlanBase.getStatus(), mPlanBase);
         }
     }
 
@@ -233,6 +284,5 @@ public class AddPlanActivity extends BaseActivity  {
         super.onDestroy();
         mDateTimePicker = null;
     }
-
 
 }
